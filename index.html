@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CashPay All - Votre Argent, Sans Frontières</title>
+    <link rel="icon" type="image/png" href="public/images/favicon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="container nav-container">
+            <div class="brand">
+                <img src="public/images/logo1.png" alt="CashPay All" style="height: 48px;" onerror="this.src='https://placehold.co/180x48/000E38/ffffff?text=CashPay+All'">
+            </div>
+            
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#services" data-i18n="nav-services">Services</a></li>
+                <li><a href="#finance" data-i18n="nav-finance">Finance</a></li>
+                <li><a href="#business" data-i18n="nav-business">Business</a></li>
+                <li><a href="#download" data-i18n="nav-apps">Applications</a></li>
+                <li class="mobile-only"><a href="https://app.cashpay-all.com" data-i18n="nav-signin">S'inscrire</a></li>
+            </ul>
+
+            <div class="nav-cta">
+                <div class="lang-switcher">
+                    <button id="lang-btn-fr" class="lang-btn active" onclick="setLanguage('fr')">FR</button>
+                    <span class="lang-sep">|</span>
+                    <button id="lang-btn-en" class="lang-btn" onclick="setLanguage('en')">EN</button>
+                </div>
+                
+                <a href="https://cashpay-all.com" class="btn-nav" id="main-cta-btn" data-i18n="nav-web-access">Accès Web</a>
+                
+                <!-- Mobile Toggle -->
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-inner">
+            <h1 data-i18n="hero-title">Services de paiements nationaux et internationaux <br><span class="highlight">en multi-devises mondiales.</span></h1>
+            <p data-i18n="hero-desc">L'expérience ultime pour la gestion de vos finances et de vos activités commerciales. Centralisez vos paiements et vos échanges au sein d'un écosystème souverain conçu pour votre croissance.</p>
+            <div class="hero-btns">
+                <a href="#download" class="btn-primary" data-i18n="btn-download">Télécharger l'App</a>
+                <a href="https://app.cashpay-all.com" class="btn-outline-white" data-i18n="btn-open-account">Ouvrir un compte</a>
+            </div>
+            <div class="hero-mockup">
+                <img src="public/images/app_wallet.png" alt="CashPay App" class="floating-png" onerror="this.src='https://placehold.co/400x700/f4f7fa/000E38?text=Wallet+Preview'">
+            </div>
+        </div>
+    </header>
+
+    <!-- Partners Logos -->
+    <section class="partners">
+        <div class="container">
+            <div class="partners-grid">
+                <img src="public/images/visa.png" alt="Visa">
+                <img src="public/images/mc.png" alt="Mastercard">
+                <img src="public/images/mpesa.png" alt="M-Pesa">
+                <img src="public/images/airtelmoney.png" alt="Airtel">
+                <img src="public/images/orangemoney.png" alt="Orange">
+                <img src="public/images/africellmoney.png" alt="Africell">
+                <img src="public/images/paypal.png" alt="paypal">
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Services Grid -->
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-i18n="services-title">Un écosystème de services <span class="highlight">illimités</span></h2>
+                <p data-i18n="services-subtitle">Découvrez comment CashPay All simplifie votre quotidien financier.</p>
+            </div>
+            
+            <div class="grid-3">
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-paper-plane"></i></div>
+                    <h3 data-i18n="service-transfer-title">Transferts & Envois</h3>
+                    <p data-i18n="service-transfer-desc">Envoyez de l'argent à vos proches instantanément, au niveau national et international (WU, MG, Ria) aux meilleurs taux.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-receipt"></i></div>
+                    <h3 data-i18n="service-bills-title">Factures & TV</h3>
+                    <p data-i18n="service-bills-desc">Réglez vos abonnements Canal+, StarTimes ou Starlink et payez vos factures d'eau (REGIDESO) et d'électricité en 2 clics.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+                    <h3 data-i18n="service-jojo-title">JoJo Shopping</h3>
+                    <p data-i18n="service-jojo-desc">Le market public souverain. Commandez des produits certifiés et payez directement avec votre solde numérique.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-plane"></i></div>
+                    <h3 data-i18n="service-airlines-title">Jojo Airlines</h3>
+                    <p data-i18n="service-airlines-desc">Réservez vos vols nationaux et internationaux directement. Émission instantanée de votre PNR et e-billet.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-comments-dollar"></i></div>
+                    <h3 data-i18n="service-onchat-title">OnChat Social</h3>
+                    <p data-i18n="service-onchat-desc">La fusion entre messagerie et finance. Discutez avec vos amis et transférez des fonds au sein même du chat.</p>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-mobile-screen"></i></div>
+                    <h3 data-i18n="service-airtime-title">Crédit Mobile</h3>
+                    <p data-i18n="service-airtime-desc">Rechargez votre crédit téléphonique ou celui de vos proches pour tous les opérateurs (Airtel, Orange, Vodacom, MTN).</p>
+                </div>
+
+                <!-- NEW: CashPay Vault USB -->
+                <div class="service-card">
+                    <div class="service-icon"><i class="fa-solid fa-vault"></i></div>
+                    <h3 data-i18n="service-vault-title">CashPay Vault USB</h3>
+                    <p data-i18n="service-vault-desc">Sécurisez vos actifs hors-ligne. Transformez votre support USB en un coffre-fort financier impénétrable avec la technologie .CPK.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advanced Finance Section -->
+    <section id="finance" class="feature-split" style="background-color: var(--bg-soft);">
+        <div class="container split-box">
+            <div class="feature-image">
+                <img src="public/images/transfer_preview.png" alt="Finance Preview" class="floating-png" onerror="this.src='https://placehold.co/400x300/FF6600/ffffff?text=Finance+Preview'">
+            </div>
+            <div class="feature-content">
+                <p class="tag" data-i18n="finance-tag">SERVICES FINANCIERS</p>
+                <h2 data-i18n="finance-title">Gérez et empruntez <br>en toute <span class="highlight">souveraineté.</span></h2>
+                <p data-i18n="finance-desc">CashPay All vous offre des outils financiers avancés pour gérer votre capital et soutenir vos projets commerciaux.</p>
+                <ul class="check-list">
+                    <li data-i18n="finance-loan-title"><i class="fa-solid fa-check"></i> Prêts Instantanés</li>
+                    <li data-i18n="finance-dat-title"><i class="fa-solid fa-check"></i> Dépôts à Terme (DAT)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- JIT Cards Section -->
+    <section class="feature-split reverse">
+        <div class="container split-box">
+            <div class="feature-image">
+                <img src="public/images/service_card.png" alt="JIT Cards" class="floating-png" onerror="this.src='https://placehold.co/400x300/000E38/ffffff?text=JIT+Cards'">
+            </div>
+            <div class="feature-content">
+                <p class="tag" data-i18n="cards-tag">CARTES INTERNATIONALES</p>
+                <h2 data-i18n="cards-title">Visa & Mastercard <span class="highlight">JIT.</span></h2>
+                <p data-i18n="cards-desc">Nos cartes innovantes "Just-In-Time" n'ont pas de solde propre. Elles utilisent directement votre portefeuille CashPay pour chaque transaction, garantissant une sécurité maximale.</p>
+                <ul class="check-list">
+                    <li data-i18n="cards-li-1"><i class="fa-solid fa-check"></i> Aucun solde stocker sur la carte</li>
+                    <li data-i18n="cards-li-2"><i class="fa-solid fa-check"></i> Activation/Désactivation instantanée</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Center -->
+    <section id="download" class="downloads">
+        <div class="downloads-bg-overlay"></div>
+        <div class="container text-center relative z-10">
+            <h2 data-i18n="dl-title">Prêt à révolutionner vos finances ?</h2>
+            <p data-i18n="dl-subtitle">Téléchargez l'expérience CashPay All sur toutes vos plateformes.</p>
+            
+            <div class="download-cards-container">
+                <!-- Standard Android -->
+                <div class="dl-card">
+                    <div class="dl-header">
+                        <i class="fa-brands fa-android"></i>
+                        <h4 data-i18n="dl-android-std">Android Standard</h4>
+                    </div>
+                    <p class="dl-desc" data-i18n="dl-android-std-desc">L'expérience complète. Recommandée pour tous.</p>
+                    <div class="dl-actions">
+                        <a href="#" class="btn-store-badge"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Play Store"></a>
+                        <a href="public/downloads/cashpay_lite_v1.0.apk" class="btn-dl-secondary"><i class="fa-solid fa-download"></i> <span data-i18n="dl-btn-apk">Télécharger APK</span></a>
+                    </div>
+                </div>
+                
+                <!-- JoJo AI Windows -->
+                <div class="dl-card accent-card">
+                    <div class="dl-header">
+                        <i class="fa-brands fa-windows"></i>
+                        <h4 data-i18n="dl-windows">Windows Desktop</h4>
+                    </div>
+                    <p class="dl-desc" data-i18n="dl-windows-desc">JoJo AI et gestion de compte sur votre PC.</p>
+                    <div class="dl-actions">
+                        <a href="public/downloads/wim.exe" class="btn-primary" style="min-width: 100%;"><i class="fa-solid fa-download"></i> <span data-i18n="dl-btn-exe">Télécharger .EXE</span></a>
+                        <p class="dl-note" data-i18n="dl-windows-note">Version stable Windows 10/11</p>
+                    </div>
+                </div>
+
+                <!-- iOS -->
+                <div class="dl-card">
+                    <div class="dl-header">
+                        <i class="fa-brands fa-apple"></i>
+                        <h4 data-i18n="dl-ios">Apple iOS</h4>
+                    </div>
+                    <p class="dl-desc" data-i18n="dl-ios-desc">Disponible pour iPhone et iPad.</p>
+                    <div class="dl-actions">
+                        <a href="#" class="btn-store-badge"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store"></a>
+                        <p class="dl-note" data-i18n="dl-ios-note">Compatible avec processeurs M1/M2</p>
+                    </div>
+                </div>
+
+                <!-- Lite Android -->
+                <div class="dl-card">
+                    <div class="dl-header">
+                        <i class="fa-solid fa-bolt-lightning"></i>
+                        <h4 data-i18n="dl-lite">Version Lite</h4>
+                    </div>
+                    <p class="dl-desc" data-i18n="dl-lite-desc">Optimisée pour les connexions 2G/3G.</p>
+                    <div class="dl-actions">
+                        <a href="public/downloads/cashpay_lite_v1.0.apk" class="btn-dl-secondary" style="background: var(--accent-orange); color: white;"><i class="fa-solid fa-bolt"></i> <span data-i18n="dl-btn-lite">APK Lite</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="public/images/logo.png" alt="Logo" class="footer-logo">
+                    <p data-i18n="footer-brand-desc">Le premier réseau financier souverain interconnecté. Une marque de FINUSECO SARL.</p>
+                    <div class="socials">
+                        <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h5 data-i18n="footer-col-1">Écosystème</h5>
+                    <ul>
+                        <li><a href="https://web.cashpay-all.com" data-i18n="footer-link-web">Portefeuille Web</a></li>
+                        <li><a href="#services" data-i18n="footer-link-jojo">JoJo Market</a></li>
+                        <li><a href="/about" data-i18n="footer-link-about">À propos</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5 data-i18n="footer-col-2">Pro</h5>
+                    <ul>
+                        <li><a href="https://developer.cashpay-all.com" data-i18n="footer-link-dev">Développeurs</a></li>
+                        <li><a href="/agent/login" data-i18n="footer-link-agent">Espace Agent</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5 data-i18n="footer-col-3">Légal</h5>
+                    <ul>
+                        <li><a href="#" data-i18n="footer-link-privacy">Confidentialité</a></li>
+                        <li><a href="#" data-i18n="footer-link-tos">CGU</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 FINUSECO SARL. <span data-i18n="footer-copyright">Tous droits réservés.</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
