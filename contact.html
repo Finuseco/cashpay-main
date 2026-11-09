@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="t.contact">Contact — CashPay All</title>
+    <meta name="description" content="Contactez CashPay All par e-mail professionnel ou WhatsApp : info@cashpay-all.com, +243 85 386 80 21.">
+    <link rel="icon" type="image/png" href="public/images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="contact">
+    <header id="site-header"></header>
+    <main>
+        <section class="page-hero">
+            <div class="container">
+                <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">Accueil</a> / <span data-i18n="nav.contact">Contact</span></div>
+                <h1 data-i18n="ct.title">Contactez-<span class="highlight">nous</span></h1>
+                <p data-i18n="ct.lead">Une question, un partenariat ou un projet ? Écrivez-nous par e-mail ou sur WhatsApp.</p>
+                
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container contact-grid">
+                <div class="contact-info">
+                    <a class="info-card" href="mailto:info@cashpay-all.com" data-reveal>
+                        <div class="icon-bubble"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
+                        <div><b data-i18n="ct.mail">E-mail professionnel</b><span>info@cashpay-all.com</span></div>
+                    </a>
+                    <a class="info-card" href="https://wa.me/243853868021" target="_blank" rel="noopener" data-reveal>
+                        <div class="icon-bubble"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
+                        <div><b data-i18n="ct.wa">WhatsApp</b><span>+243 85 386 80 21</span></div>
+                    </a>
+                    <a class="info-card" href="https://www.cashpay-all.com" data-reveal>
+                        <div class="icon-bubble"><i class="fa-solid fa-globe" aria-hidden="true"></i></div>
+                        <div><b data-i18n="ct.web">Site web</b><span>www.cashpay-all.com</span></div>
+                    </a>
+                    <p class="form-note" data-i18n="ct.hours">Nous répondons dans les meilleurs délais.</p>
+                </div>
+                <form class="form" id="contact-form" data-reveal novalidate>
+                    <h3 data-i18n="ct.form.title">Envoyez-nous un message</h3>
+                    <div class="form-row">
+                        <div class="field"><label for="f-name" data-i18n="ct.name">Nom complet</label><input id="f-name" name="name" type="text" autocomplete="name" data-i18n-ph="ct.ph.name" placeholder="Votre nom" required></div>
+                        <div class="field"><label for="f-email" data-i18n="ct.email">Votre e-mail</label><input id="f-email" name="email" type="email" autocomplete="email" data-i18n-ph="ct.ph.email" placeholder="vous@exemple.com"></div>
+                    </div>
+                    <div class="field"><label for="f-subject" data-i18n="ct.subject">Sujet</label>
+                        <select id="f-subject" name="subject">
+                            <option data-i18n="ct.s1">Question générale</option>
+                            <option data-i18n="ct.s2">Partenariat</option>
+                            <option data-i18n="ct.s3">Développeur / API</option>
+                            <option data-i18n="ct.s4">Cartes B2B</option>
+                            <option data-i18n="ct.s5">Devis pour un projet</option>
+                            <option data-i18n="ct.s6">Assistance</option>
+                        </select>
+                    </div>
+                    <div class="field"><label for="f-msg" data-i18n="ct.msg">Message</label><textarea id="f-msg" name="message" data-i18n-ph="ct.ph.msg" placeholder="Comment pouvons-nous vous aider ?" required></textarea></div>
+                    <div class="hero-btns">
+                        <button class="btn btn-primary" type="submit"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> <span data-i18n="ct.send">Envoyer par e-mail</span></button>
+                        <button class="btn btn-wa" type="button" id="contact-wa"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> <span data-i18n="ct.sendwa">Envoyer sur WhatsApp</span></button>
+                    </div>
+                    <p class="form-note" data-i18n="ct.note">Votre application e-mail s'ouvrira avec le message prêt à envoyer.</p>
+                </form>
+            </div>
+        </section>
+    </main>
+    <footer id="site-footer"></footer>
+    <script src="js/i18n.js"></script>
+    <script src="js/services-data.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

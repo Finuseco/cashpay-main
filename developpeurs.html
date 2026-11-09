@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="t.developers">Développeurs — CashPay All</title>
+    <meta name="description" content="Portail développeur CashPay : API de paiement, décaissement, KYC, cartes, SMS, WhatsApp, taux de change, sandbox et webhooks.">
+    <link rel="icon" type="image/png" href="public/images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="developers">
+    <header id="site-header"></header>
+    <main>
+        <section class="page-hero">
+            <div class="container">
+                <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">Accueil</a> / <span data-i18n="nav.developers">Développeurs</span></div>
+                <h1 data-i18n="dv.title">L'espace <span class="highlight">développeur</span></h1>
+                <p data-i18n="dv.lead">Un seul portail pour accepter des paiements, déplacer de l'argent, vérifier des identités, émettre des cartes et joindre vos utilisateurs, partout dans le monde.</p>
+                <div class="hero-btns" style="justify-content:center;margin-top:28px">
+                    <a class="btn btn-primary" href="https://developer.cashpay-all.com" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> <span data-i18n="dv.portal">Ouvrir le portail développeur</span></a>
+                    <a class="btn btn-ghost" href="https://developer.cashpay-all.com/dev/docs/introduction" target="_blank" rel="noopener"><i class="fa-solid fa-book" aria-hidden="true"></i> <span data-i18n="dv.docs">Lire la documentation</span></a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section dark">
+            <div class="container">
+            <div class="section-title" data-reveal>
+                
+                <h2 data-i18n="dv.api.title">Une suite complète d'<span class="highlight">API B2B</span></h2>
+                <p data-i18n="dv.api.sub">Cinq familles de services, documentées et prêtes à intégrer.</p>
+            </div>
+
+                <div class="api-groups">
+                <article class="api-card" data-reveal>
+                    <div class="icon-bubble"><i class="fa-solid fa-wallet" aria-hidden="true"></i></div>
+                    <h3 data-i18n="dv.g1.t">Paiements & passerelle</h3>
+                    <p data-i18n="dv.g1.d">Acceptez des paiements dans le monde entier par carte, portefeuille et mobile money.</p>
+                    <ul><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g1.1">Paiement hébergé (web)</span></li><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g1.2">Paiement direct par carte</span></li><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g1.3">Prélèvements serveur à serveur</span></li><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g1.4">SDK natif Android</span></li><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g1.5">Transferts portefeuille à portefeuille</span></li></ul>
+                </article>
+                <article class="api-card" data-reveal>
+                    <div class="icon-bubble"><i class="fa-solid fa-landmark" aria-hidden="true"></i></div>
+                    <h3 data-i18n="dv.g2.t">Banque & décaissements</h3>
+                    <p data-i18n="dv.g2.d">Déplacez des fonds entre banques et réseaux mobile money.</p>
+                    <ul><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g2.1">Virements bancaires internationaux</span></li><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g2.2">Décaissements vers mobile money ou banque</span></li><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g2.3">Paiement de factures</span></li></ul>
+                </article>
+                <article class="api-card" data-reveal>
+                    <div class="icon-bubble"><i class="fa-solid fa-user-shield" aria-hidden="true"></i></div>
+                    <h3 data-i18n="dv.g3.t">Identité & sécurité</h3>
+                    <p data-i18n="dv.g3.d">Vérifiez les identités et gérez des actifs matériels sécurisés.</p>
+                    <ul><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g3.1">Identité & KYC</span></li><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g3.2">Coffre USB HSM</span></li><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g3.3">Émission de cartes</span></li><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g3.4">Litiges</span></li></ul>
+                </article>
+                <article class="api-card" data-reveal>
+                    <div class="icon-bubble"><i class="fa-solid fa-microchip" aria-hidden="true"></i></div>
+                    <h3 data-i18n="dv.g4.t">Matériel & IoT</h3>
+                    <p data-i18n="dv.g4.d">Intégrez des appareils physiques à l'écosystème CashPay.</p>
+                    <ul><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g4.1">Réseau de stations intelligentes</span></li><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g4.2">Contrôleurs de station & télémétrie</span></li></ul>
+                </article>
+                <article class="api-card" data-reveal>
+                    <div class="icon-bubble"><i class="fa-solid fa-message" aria-hidden="true"></i></div>
+                    <h3 data-i18n="dv.g5.t">Services à valeur ajoutée</h3>
+                    <p data-i18n="dv.g5.d">Engagez vos clients par SMS, WhatsApp et recharge de crédit.</p>
+                    <ul><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g5.1">API SMS avec ID expéditeur personnalisé</span></li><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g5.2">API WhatsApp</span></li><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g5.3">API recharge de crédit</span></li><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g5.4">Taux de change en temps réel</span></li><li><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><span data-i18n="dv.g5.5">Réseau publicitaire</span></li></ul>
+                </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section light">
+            <div class="container split">
+                <div data-reveal>
+                    <span class="tag" data-i18n="dv.code.tag">DE L'IDÉE À LA PREMIÈRE REQUÊTE</span>
+                    <h2 data-i18n="dv.code.title">Intégrez en quelques <span class="highlight">minutes</span></h2>
+                    <p data-i18n="dv.code.desc">Créez votre compte, récupérez vos clés API depuis le tableau de bord, testez dans le sandbox puis passez en production. Chaque endpoint est documenté avec des exemples de requêtes et de réponses.</p>
+                    <div class="badges">
+                        <span class="badge"><i class="fa-solid fa-flask" aria-hidden="true"></i> <span data-i18n="dv.b1">Sandbox</span></span>
+                        <span class="badge"><i class="fa-solid fa-bell" aria-hidden="true"></i> <span data-i18n="dv.b2">Webhooks</span></span>
+                        <span class="badge"><i class="fa-solid fa-cubes" aria-hidden="true"></i> <span data-i18n="dv.b3">SDK</span></span>
+                        <span class="badge"><i class="fa-brands fa-wordpress" aria-hidden="true"></i> <span data-i18n="dv.b4">Plugin WordPress</span></span>
+                        <span class="badge"><i class="fa-solid fa-hashtag" aria-hidden="true"></i> <span data-i18n="dv.b5">Passerelle USSD</span></span>
+                        <span class="badge"><i class="fa-solid fa-bolt" aria-hidden="true"></i> <span data-i18n="dv.b6">Financement JIT</span></span>
+                    </div>
+                </div>
+                <div class="terminal" data-reveal>
+                    <div class="terminal-bar"><i></i><i></i><i></i><span>POST /api/v1/b2b/cards/issue</span></div>
+<pre><span class="c"># Issue a virtual Visa card for one of your users</span>
+<span class="k">POST</span> /api/v1/b2b/cards/issue
+<span class="n">Authorization</span>: Bearer <span class="s">&lt;YOUR_API_KEY&gt;</span>
+<span class="n">Content-Type</span>: application/json
+
+{
+  <span class="n">"user"</span>: {
+    <span class="n">"partnerUserId"</span>: <span class="s">"USER_12345"</span>,
+    <span class="n">"firstName"</span>: <span class="s">"John"</span>,
+    <span class="n">"lastName"</span>: <span class="s">"Doe"</span>,
+    <span class="n">"email"</span>: <span class="s">"john.doe@example.com"</span>
+  },
+  <span class="n">"card"</span>: {
+    <span class="n">"type"</span>: <span class="s">"VIRTUAL"</span>,
+    <span class="n">"brand"</span>: <span class="s">"VISA"</span>,
+    <span class="n">"currency"</span>: <span class="s">"USD"</span>
+  }
+}<span class="cursor"></span></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section soft">
+            <div class="container">
+            <div class="section-title" data-reveal>
+                
+                <h2 data-i18n="dv.price.title">Des <span class="highlight">tarifs</span> transparents</h2>
+                <p data-i18n="dv.price.sub">Les prix se configurent depuis votre propre tableau de bord.</p>
+            </div>
+
+                <div class="grid grid-2">
+                <article class="card" data-reveal>
+                    <div class="icon-bubble"><i class="fa-solid fa-comment-sms" aria-hidden="true"></i></div>
+                    <h3 data-i18n="dv.p1.t">API SMS</h3>
+                    <p data-i18n="dv.p1.d">ID expéditeur personnalisé. 0,036 $ par SMS, soit 36 $ pour 1 000 SMS.</p>
+                </article>
+                <article class="card" data-reveal>
+                    <div class="icon-bubble"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
+                    <h3 data-i18n="dv.p2.t">API WhatsApp</h3>
+                    <p data-i18n="dv.p2.d">8 $ par mois pour écrire à vos clients sur WhatsApp.</p>
+                </article>
+                <article class="card" data-reveal>
+                    <div class="icon-bubble"><i class="fa-solid fa-money-bill-wave" aria-hidden="true"></i></div>
+                    <h3 data-i18n="dv.p3.t">Paiements & décaissements</h3>
+                    <p data-i18n="dv.p3.d">Collecte, décaissement et cartes prépayées B2B avec des prix configurés depuis votre système.</p>
+                </article>
+                <article class="card" data-reveal>
+                    <div class="icon-bubble"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></div>
+                    <h3 data-i18n="dv.p4.t">Taux de change</h3>
+                    <p data-i18n="dv.p4.d">Taux en temps réel pour plus de 195 pays et devises.</p>
+                </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-band">
+            <div class="container" data-reveal>
+                <h2 data-i18n="dv.cta.title">Prêt à construire ?</h2>
+                <p data-i18n="dv.cta.desc">Récupérez vos clés API depuis le tableau de bord développeur et faites votre première requête vers le réseau CashPay.</p>
+                <div class="hero-btns" style="justify-content:center">
+                    <a class="btn btn-light" href="https://developer.cashpay-all.com/dev/signup" target="_blank" rel="noopener"><i class="fa-solid fa-user-plus" aria-hidden="true"></i> <span data-i18n="dv.cta.btn">Créer un compte développeur</span></a>
+                    <a class="btn btn-ghost" href="contact.html"><i class="fa-solid fa-envelope" aria-hidden="true"></i> <span data-i18n="cta.btn">Nous contacter</span></a>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer id="site-footer"></footer>
+    <script src="js/i18n.js"></script>
+    <script src="js/services-data.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

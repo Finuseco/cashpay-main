@@ -1,309 +1,113 @@
-// CashPay All Showcase - Interaction & Translation Logic
-
-const translations = {
-    'fr': {
-        'nav-services': 'Services',
-        'nav-finance': 'Finance',
-        'nav-business': 'Business',
-        'nav-apps': 'Applications',
-        'nav-web-access': 'Login',
-        'nav-signin': 'S\'inscrire',
-        'hero-title': 'Services de paiements nationaux et internationaux <br><span class="highlight">en multi-devises mondiales.</span>',
-        'hero-desc': 'L\'expérience ultime pour la gestion de vos finances et de vos activités commerciales. Centralisez vos paiements et vos échanges au sein d\'un écosystème souverain conçu pour votre croissance.',
-        'btn-download': 'Télécharger l\'App',
-        'btn-open-account': 'Ouvrir un compte',
-        'services-title': 'Un écosystème de services <span class="highlight">illimités</span>',
-        'services-subtitle': 'Découvrez comment CashPay All simplifie votre quotidien financier.',
-        'service-transfer-title': 'Transferts & Envois',
-        'service-transfer-desc': 'Envoyez de l\'argent à vos proches instantanément, au niveau national et international (WU, MG, Ria) aux meilleurs taux.',
-        'service-bills-title': 'Factures & TV',
-        'service-bills-desc': 'Réglez vos abonnements Canal+, StarTimes ou Starlink et payez vos factures d\'eau (REGIDESO) et d\'électricité en 2 clics.',
-        'service-jojo-title': 'JoJo Shopping',
-        'service-jojo-desc': 'Le market public souverain. Commandez des produits certifiés et payez directement avec votre solde numérique.',
-        'service-airlines-title': 'Jojo Airlines',
-        'service-airlines-desc': 'Réservez vos vols nationaux et internationaux directement. Émission instantanée de votre PNR et e-billet.',
-        'service-onchat-title': 'OnChat Social',
-        'service-onchat-desc': 'La fusion entre messagerie et finance. Discutez avec vos amis et transférez des fonds au sein même du chat.',
-        'service-airtime-title': 'Crédit Mobile',
-        'service-airtime-desc': 'Rechargez votre crédit téléphonique ou celui de vos proches pour tous les opérateurs (Airtel, Orange, Vodacom, MTN).',
-        'service-vault-title': 'CashPay Vault USB',
-        'service-vault-desc': 'Sécurisez vos actifs hors-ligne. Transformez votre support USB en un coffre-fort financier impénétrable avec la technologie .CPK.',
-        'g-pay-title': 'Paiements & transferts',
-        'g-fin-title': 'Finance & épargne',
-        'g-life-title': 'Commerce & quotidien',
-        'g-biz-title': 'Business & développeurs',
-        'service-qr-title': 'Paiement par QR',
-        'service-qr-desc': 'Payez en boutique en scannant un code QR, sans cash et sans monnaie à rendre.',
-        'service-momo-title': 'Mobile Money',
-        'service-momo-desc': 'Connecté à M-Pesa, Airtel Money, Orange Money, Africell Money et MTN pour vos dépôts et retraits.',
-        'service-fx-title': 'Multi-devises & Change',
-        'service-fx-desc': 'Plus de 195 devises avec des taux de change en temps réel pour envoyer, recevoir et échanger.',
-        'service-ussd-title': 'USSD *2704#',
-        'service-ussd-desc': 'Solde, transferts, retraits, recharge et prêts depuis n\'importe quel téléphone, sans internet, validés par code PIN.',
-        'service-loanme-title': 'Loan Me',
-        'service-loanme-desc': 'Prêts individuels, d\'entreprise ou de groupe, demandés et remboursés depuis l\'application ou le USSD.',
-        'service-dat-title': 'Dépôts à Terme (DAT)',
-        'service-dat-desc': 'Placez votre capital et faites-le fructifier avec des dépôts à terme gérés dans votre portefeuille.',
-        'service-cards-title': 'Cartes Visa & Mastercard',
-        'service-cards-desc': 'Cartes virtuelles et prépayées alimentées par votre solde CashPay, le Vault USB ou le Bitcoin.',
-        'service-crypto-title': 'Crypto & Mini Blockchain',
-        'service-crypto-desc': 'Recevez, envoyez et gérez vos cryptomonnaies (BTC, USDT…) depuis le même compte CashPay.',
-        'service-monpays-title': 'MonPays',
-        'service-monpays-desc': 'Créez la page de votre entreprise et présentez vos produits et services à toute la communauté.',
-        'service-chess-title': 'Échecs en ligne',
-        'service-chess-desc': 'Affrontez d\'autres joueurs en temps réel, avec ou sans mise : le gagnant empoche le pot.',
-        'service-jojoai-title': 'JoJo AI',
-        'service-jojoai-desc': 'Votre assistant intelligent et la gestion de votre compte sur ordinateur Windows.',
-        'service-devapi-title': 'API Développeurs',
-        'service-devapi-desc': 'SMS, WhatsApp, paiements, taux de change, comptes flott JIT et plugin WordPress pour vos applications.',
-        'service-agents-title': 'Réseau d\'agents',
-        'service-agents-desc': 'Déposez et retirez votre argent chez des agents agréés, près de chez vous.',
-        'nav-about': 'Qui sommes-nous',
-        'about-tag': 'QUI SOMMES-NOUS',
-        'about-title': 'Qui sommes-<span class="highlight">nous ?</span>',
-        'about-intro': 'CashPay All est une marque de FINUSECO SARL, Service Financier Numérique Congolais. Notre mission : réduire le cash et la liquidité en rendant les paiements numériques accessibles à tous.',
-        'about-leaders-title': 'Notre direction',
-        'leader-ceo-role': 'Président-Directeur Général (CEO)',
-        'leader-ceo-desc': 'Dirige la vision, la stratégie et le développement de FINUSECO SARL et de l\'écosystème CashPay All.',
-        'leader-manager-role': 'Manager',
-        'leader-manager-desc': 'Coordonne les équipes et assure le suivi des opérations au quotidien.',
-        'finance-tag': 'SERVICES FINANCIERS',
-        'finance-title': 'Gérez et empruntez <br>en toute <span class="highlight">souveraineté.</span>',
-        'finance-desc': 'CashPay All vous offre des outils financiers avancés pour gérer votre capital et soutenir vos projets commerciaux.',
-        'finance-loan-title': 'Prêts Instantanés',
-        'finance-dat-title': 'Dépôts à Terme (DAT)',
-        'cards-tag': 'CARTES INTERNATIONALES',
-        'cards-title': 'Visa & Mastercard <span class="highlight">JIT.</span>',
-        'cards-desc': 'Nos cartes innovantes "Just-In-Time" n\'ont pas de solde propre. Elles utilisent directement votre portefeuille CashPay pour chaque transaction, garantissant une sécurité maximale.',
-        'cards-li-1': '<i class="fa-solid fa-check"></i> Aucun solde stocker sur la carte',
-        'cards-li-2': '<i class="fa-solid fa-check"></i> Activation/Désactivation instantanée',
-        'dl-title': 'Prêt à révolutionner vos finances ?',
-        'dl-subtitle': 'Téléchargez l\'expérience CashPay All sur toutes vos plateformes.',
-        'dl-android-std': 'Android Standard',
-        'dl-android-std-desc': 'L\'expérience complète. Recommandée pour tous.',
-        'dl-btn-apk': 'Télécharger APK',
-        'dl-btn-exe': 'Télécharger .EXE',
-        'dl-windows': 'Windows Desktop',
-        'dl-windows-desc': 'JoJo AI et gestion de compte sur votre PC.',
-        'dl-windows-note': 'Version stable Windows 10/11',
-        'dl-ios': 'Apple iOS',
-        'dl-ios-desc': 'Disponible pour iPhone et iPad.',
-        'dl-ios-note': 'Compatible avec processeurs M1/M2',
-        'dl-lite': 'Version Lite',
-        'dl-lite-desc': 'Optimisée pour les connexions 2G/3G.',
-        'dl-btn-lite': 'APK Lite',
-        'footer-brand-desc': 'Le premier réseau financier souverain interconnecté. Une marque de FINUSECO SARL.',
-        'footer-col-1': 'Écosystème',
-        'footer-col-2': 'Pro',
-        'footer-col-3': 'Légal',
-        'footer-link-web': 'Portefeuille Web',
-        'footer-link-jojo': 'JoJo Market',
-        'footer-link-about': 'Qui sommes-nous',
-        'footer-link-dev': 'Développeurs',
-        'footer-link-agent': 'Espace Agent',
-        'footer-link-privacy': 'Confidentialité',
-        'footer-link-tos': 'Conditions d\'utilisation',
-        'footer-copyright': 'Tous droits réservés.',
-    },
-    'en': {
-        'nav-services': 'Services',
-        'nav-finance': 'Finance',
-        'nav-business': 'Business',
-        'nav-apps': 'Apps',
-        'nav-web-access': 'Login',
-        'nav-signin': 'Sign Up',
-        'hero-title': 'International and national payment services <br><span class="highlight">in global multi-currencies.</span>',
-        'hero-desc': 'The ultimate experience for managing your finances and business activities. Centralize your payments and exchanges within a sovereign ecosystem designed for your growth.',
-        'btn-download': 'Download App',
-        'btn-open-account': 'Open Account',
-        'services-title': 'An ecosystem of <span class="highlight">unlimited</span> services',
-        'services-subtitle': 'Discover how CashPay All simplifies your daily financial life.',
-        'service-transfer-title': 'Transfers & Remittances',
-        'service-transfer-desc': 'Send money to loved ones instantly, nationally and internationally (WU, MG, Ria) at the best rates.',
-        'service-bills-title': 'Bills & TV',
-        'service-bills-desc': 'Pay your Canal+, StarTimes or Starlink subscriptions and water/electricity bills in 2 clicks.',
-        'service-jojo-title': 'JoJo Shopping',
-        'service-jojo-desc': 'The sovereign public market. Order certified products and pay directly with your digital balance.',
-        'service-airlines-title': 'Jojo Airlines',
-        'service-airlines-desc': 'Book national and international flights directly. Instant PNR and e-ticket issuance.',
-        'service-onchat-title': 'OnChat Social',
-        'service-onchat-desc': 'The fusion between messaging and finance. Chat with friends and transfer funds right within the chat.',
-        'service-airtime-title': 'Mobile Credit',
-        'service-airtime-desc': 'Top up your phone credit or that of your loved ones for all operators (Airtel, Orange, Vodacom, MTN).',
-        'service-vault-title': 'CashPay Vault USB',
-        'service-vault-desc': 'Secure your assets offline. Transform your USB drive into an impenetrable financial vault with .CPK technology.',
-        'g-pay-title': 'Payments & transfers',
-        'g-fin-title': 'Finance & savings',
-        'g-life-title': 'Commerce & daily life',
-        'g-biz-title': 'Business & developers',
-        'service-qr-title': 'QR Payment',
-        'service-qr-desc': 'Pay in store by scanning a QR code: no cash, no change to give back.',
-        'service-momo-title': 'Mobile Money',
-        'service-momo-desc': 'Connected to M-Pesa, Airtel Money, Orange Money, Africell Money and MTN for deposits and withdrawals.',
-        'service-fx-title': 'Multi-currency & Exchange',
-        'service-fx-desc': 'Over 195 currencies with real-time exchange rates to send, receive and exchange.',
-        'service-ussd-title': 'USSD *2704#',
-        'service-ussd-desc': 'Balance, transfers, withdrawals, top-ups and loans from any phone, no internet needed, validated by PIN.',
-        'service-loanme-title': 'Loan Me',
-        'service-loanme-desc': 'Individual, business or group loans, requested and repaid from the app or USSD.',
-        'service-dat-title': 'Term Deposits (DAT)',
-        'service-dat-desc': 'Put your capital to work with term deposits managed from your wallet.',
-        'service-cards-title': 'Visa & Mastercard Cards',
-        'service-cards-desc': 'Virtual and prepaid cards funded by your CashPay balance, the USB Vault or Bitcoin.',
-        'service-crypto-title': 'Crypto & Mini Blockchain',
-        'service-crypto-desc': 'Receive, send and manage your cryptocurrencies (BTC, USDT…) from the same CashPay account.',
-        'service-monpays-title': 'MonPays',
-        'service-monpays-desc': 'Create your business page and showcase your products and services to the whole community.',
-        'service-chess-title': 'Online Chess',
-        'service-chess-desc': 'Play other players in real time, with or without stakes: the winner takes the pot.',
-        'service-jojoai-title': 'JoJo AI',
-        'service-jojoai-desc': 'Your smart assistant and account management on your Windows computer.',
-        'service-devapi-title': 'Developer APIs',
-        'service-devapi-desc': 'SMS, WhatsApp, payments, exchange rates, JIT float accounts and a WordPress plugin for your apps.',
-        'service-agents-title': 'Agent Network',
-        'service-agents-desc': 'Deposit and withdraw your money with authorised agents near you.',
-        'nav-about': 'About Us',
-        'about-tag': 'ABOUT US',
-        'about-title': 'Who we <span class="highlight">are</span>',
-        'about-intro': 'CashPay All is a brand of FINUSECO SARL, Service Financier Numérique Congolais (Congolese Digital Financial Service). Our mission: reduce cash and liquidity by making digital payments accessible to everyone.',
-        'about-leaders-title': 'Our leadership',
-        'leader-ceo-role': 'Chief Executive Officer (CEO)',
-        'leader-ceo-desc': 'Leads the vision, strategy and growth of FINUSECO SARL and the CashPay All ecosystem.',
-        'leader-manager-role': 'Manager',
-        'leader-manager-desc': 'Coordinates the teams and oversees day-to-day operations.',
-        'finance-tag': 'FINANCIAL SERVICES',
-        'finance-title': 'Manage and borrow <br>with full <span class="highlight">sovereignty.</span>',
-        'finance-desc': 'CashPay All offers you advanced financial tools to manage your capital and support your commercial projects.',
-        'finance-loan-title': 'Instant Loans',
-        'finance-dat-title': 'Term Deposits (DAT)',
-        'cards-tag': 'INTERNATIONAL CARDS',
-        'cards-title': 'JIT Visa & Mastercard <span class="highlight">Cards.</span>',
-        'cards-desc': 'Our innovative "Just-In-Time" cards don\'t have their own balance. They use your CashPay wallet directly for each transaction, ensuring maximum security.',
-        'cards-li-1': '<i class="fa-solid fa-check"></i> No balance stored on card',
-        'cards-li-2': '<i class="fa-solid fa-check"></i> Instant activation/deactivation',
-        'dl-title': 'Ready to revolutionize your finances?',
-        'dl-subtitle': 'Download the CashPay All experience on all your platforms.',
-        'dl-android-std': 'Android Standard',
-        'dl-android-std-desc': 'The full experience. Recommended for everyone.',
-        'dl-btn-apk': 'Download APK',
-        'dl-btn-exe': 'Download .EXE',
-        'dl-windows': 'Windows Desktop',
-        'dl-windows-desc': 'JoJo AI and account management on your PC.',
-        'dl-windows-note': 'Stable version Windows 10/11',
-        'dl-ios': 'Apple iOS',
-        'dl-ios-desc': 'Available for iPhone and iPad.',
-        'dl-ios-note': 'Compatible with M1/M2 processors',
-        'dl-lite': 'Lite Version',
-        'dl-lite-desc': 'Optimized for 2G/3G connections.',
-        'dl-btn-lite': 'APK Lite',
-        'footer-brand-desc': 'The first interconnected sovereign financial network. A brand of FINUSECO SARL.',
-        'footer-col-1': 'Ecosystem',
-        'footer-col-2': 'Pro',
-        'footer-col-3': 'Legal',
-        'footer-link-web': 'Web Wallet',
-        'footer-link-jojo': 'JoJo Market',
-        'footer-link-about': 'About Us',
-        'footer-link-dev': 'Developers',
-        'footer-link-agent': 'Agent Space',
-        'footer-link-privacy': 'Privacy',
-        'footer-link-tos': 'Terms of Use',
-        'footer-copyright': 'All rights reserved.',
-    }
-};
-
-function setLanguage(lang) {
-    localStorage.setItem('cashpay-lang', lang);
-    
-    // Update button states
-    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-    const activeBtn = document.getElementById(`lang-btn-${lang}`);
-    if(activeBtn) activeBtn.classList.add('active');
-
-    // Update texts
-    const elements = document.querySelectorAll('[data-i18n]');
-    elements.forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (translations[lang][key]) {
-            el.innerHTML = translations[lang][key];
-        }
-    });
-
-    // Handle button text specifically if needed
-    const mainCta = document.getElementById('main-cta-btn');
-    if (mainCta) {
-        mainCta.innerText = window.innerWidth <= 768 ? 'Login' : translations[lang]['nav-web-access'];
-    }
-
-    // Update HTML lang attribute
-    document.documentElement.lang = lang;
-}
-
+/* Interactions communes : rendu des composants, langue, menu, animations, filtres, formulaire. */
 document.addEventListener('DOMContentLoaded', () => {
-    // Initial Language
-    const savedLang = localStorage.getItem('cashpay-lang') || 'fr';
-    setLanguage(savedLang);
+    // 1. Composants partagés + contenu dynamique
+    if (window.renderLayout) window.renderLayout();
+    if (window.renderServices) window.renderServices();
 
-    const navbar = document.getElementById('navbar');
-    const menuToggle = document.getElementById('menu-toggle');
-    const navLinks = document.getElementById('nav-links');
+    // 2. Langue
+    I18N.apply(I18N.initial());
+    document.addEventListener('click', e => {
+        const b = e.target.closest('.lang button');
+        if (b) I18N.apply(b.getAttribute('data-lang'));
+    });
 
-    // Hamburger Menu Logic
-    if (menuToggle && navLinks) {
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            const icon = menuToggle.querySelector('i');
-            if (navLinks.classList.contains('active')) {
-                icon.classList.replace('fa-bars', 'fa-xmark');
-            } else {
-                icon.classList.replace('fa-xmark', 'fa-bars');
-            }
-        });
+    // 3. En-tête : ombre au défilement
+    const header = document.getElementById('site-header');
+    const onScroll = () => header && header.classList.toggle('scrolled', window.scrollY > 10);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
 
-        // Close menu when clicking a link
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                menuToggle.querySelector('i').classList.replace('fa-xmark', 'fa-bars');
-            });
+    // 4. Menu mobile + sous-menu « À propos »
+    const toggle = document.getElementById('menu-toggle');
+    const links = document.getElementById('nav-links');
+    if (toggle && links) {
+        toggle.addEventListener('click', () => {
+            const open = links.classList.toggle('open');
+            toggle.setAttribute('aria-expanded', String(open));
+            toggle.querySelector('i').className = open ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
         });
     }
-
-    // Adjust button text on resize
-    window.addEventListener('resize', () => {
-        const currentLang = localStorage.getItem('cashpay-lang') || 'fr';
-        setLanguage(currentLang);
-    });
-
-    // Navbar Scroll Effect
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 20) {
-            navbar.style.boxShadow = '0 10px 30px rgba(0,0,0,0.05)';
-        } else {
-            navbar.style.boxShadow = 'none';
-        }
-    });
-
-    // Reveal animation
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
+    document.querySelectorAll('.has-dd > button').forEach(btn => {
+        btn.addEventListener('click', e => {
+            e.stopPropagation();
+            const li = btn.parentElement;
+            const open = li.classList.toggle('open');
+            btn.setAttribute('aria-expanded', String(open));
         });
-    }, { threshold: 0.1 });
+    });
+    document.addEventListener('click', () => document.querySelectorAll('.has-dd.open').forEach(li => li.classList.remove('open')));
 
-    document.querySelectorAll('.service-card, .dl-card, .feature-content, .leader-card').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'all 0.6s ease-out';
-        revealObserver.observe(el);
+    // 5. Apparition au défilement
+    const reveal = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+            if (en.isIntersecting) { en.target.classList.add('in'); reveal.unobserve(en.target); }
+        });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('[data-reveal]').forEach((el, i) => {
+        el.style.setProperty('--d', ((i % 6) * 0.07) + 's');
+        reveal.observe(el);
     });
 
-    document.head.insertAdjacentHTML('beforeend', `
-        <style>
-            .visible { opacity: 1 !important; transform: translateY(0) !important; }
-        </style>
-    `);
-});
+    // 6. Compteurs animés
+    const counter = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+            if (!en.isIntersecting) return;
+            counter.unobserve(en.target);
+            const el = en.target;
+            const target = parseInt(el.getAttribute('data-count'), 10);
+            const suffix = el.getAttribute('data-suffix') || '';
+            const start = performance.now();
+            const tick = now => {
+                const p = Math.min((now - start) / 1200, 1);
+                el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suffix;
+                if (p < 1) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+        });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('[data-count]').forEach(el => counter.observe(el));
 
-window.setLanguage = setLanguage;
+    // 7. Filtres des services
+    const filters = document.querySelectorAll('.filter-btn');
+    filters.forEach(btn => btn.addEventListener('click', () => {
+        const cat = btn.getAttribute('data-filter');
+        filters.forEach(b => b.classList.toggle('active', b === btn));
+        document.querySelectorAll('[data-services] .card').forEach(c => {
+            c.classList.toggle('hidden', cat !== 'all' && c.getAttribute('data-cat') !== cat);
+            c.classList.add('in');
+        });
+    }));
+
+    // 8. Message WhatsApp pré-rempli selon la langue
+    const wa = document.getElementById('wa-float');
+    const updateWa = () => {
+        if (wa) wa.href = 'https://wa.me/' + CASHPAY.WA_NUMBER + '?text=' + encodeURIComponent(I18N.t('wa.msg', 'Bonjour CashPay, '));
+    };
+    updateWa();
+    document.addEventListener('langchange', updateWa);
+
+    // 9. Formulaire de contact (ouvre le client mail ou WhatsApp)
+    const form = document.getElementById('contact-form');
+    if (form) {
+        const build = () => {
+            const d = new FormData(form);
+            const name = (d.get('name') || '').toString().trim();
+            const email = (d.get('email') || '').toString().trim();
+            const subject = (d.get('subject') || '').toString().trim();
+            const msg = (d.get('message') || '').toString().trim();
+            if (!name || !msg) { alert(I18N.t('ct.err', 'Merci de renseigner votre nom et votre message.')); return null; }
+            const body = msg + '\n\n— ' + name + (email ? ' (' + email + ')' : '');
+            return { subject, body };
+        };
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const m = build();
+            if (m) window.location.href = 'mailto:' + CASHPAY.EMAIL + '?subject=' + encodeURIComponent('[CashPay] ' + m.subject) + '&body=' + encodeURIComponent(m.body);
+        });
+        const waBtn = document.getElementById('contact-wa');
+        if (waBtn) waBtn.addEventListener('click', () => {
+            const m = build();
+            if (m) window.open('https://wa.me/' + CASHPAY.WA_NUMBER + '?text=' + encodeURIComponent(m.subject + '\n' + m.body), '_blank', 'noopener');
+        });
+    }
+});

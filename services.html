@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="t.services">Services — CashPay All</title>
+    <meta name="description" content="Les 20 services de CashPay All : transferts, Mobile Money, cartes, crypto, prêts, JoJo Shopping, OnChat, API développeurs.">
+    <link rel="icon" type="image/png" href="public/images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="services">
+    <header id="site-header"></header>
+    <main>
+        <section class="page-hero">
+            <div class="container">
+                <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">Accueil</a> / <span data-i18n="nav.services">Services</span></div>
+                <h1 data-i18n="svcp.title">Tous nos <span class="highlight">services</span></h1>
+                <p data-i18n="svcp.lead">Paiements, finance, commerce et outils développeurs : vingt services dans un seul écosystème.</p>
+                
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="filters" data-reveal>
+                    <button class="filter-btn active" data-filter="all" type="button" data-i18n="f.all">Tous</button>
+                    <button class="filter-btn" data-filter="pay" type="button" data-i18n="f.pay">Paiements & transferts</button>
+                    <button class="filter-btn" data-filter="fin" type="button" data-i18n="f.fin">Finance & épargne</button>
+                    <button class="filter-btn" data-filter="life" type="button" data-i18n="f.life">Commerce & quotidien</button>
+                    <button class="filter-btn" data-filter="biz" type="button" data-i18n="f.biz">Business & développeurs</button>
+                </div>
+                <div class="grid grid-3" data-services="all"></div>
+            </div>
+        </section>
+
+        <section class="cta-band">
+            <div class="container" data-reveal>
+                <h2 data-i18n="cta.title">Un projet en tête ? Parlons-en.</h2>
+                <p data-i18n="cta.desc">Paiements, cartes, applications ou intégrations : notre équipe vous répond rapidement.</p>
+                <div class="hero-btns" style="justify-content:center">
+                    <a class="btn btn-light" href="contact.html"><i class="fa-solid fa-envelope" aria-hidden="true"></i> <span data-i18n="cta.btn">Nous contacter</span></a>
+                    <a class="btn btn-ghost" href="https://wa.me/243853868021" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> <span data-i18n="cta.wa">Écrire sur WhatsApp</span></a>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer id="site-footer"></footer>
+    <script src="js/i18n.js"></script>
+    <script src="js/services-data.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
