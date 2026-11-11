@@ -85,27 +85,28 @@
                         <span class="badge"><i class="fa-solid fa-bolt" aria-hidden="true"></i> <span data-i18n="dv.b6">Financement JIT</span></span>
                     </div>
                 </div>
-                <div class="terminal" data-reveal>
+                <div class="code-computer" data-reveal><div class="terminal" data-code-demo>
                     <div class="terminal-bar"><i></i><i></i><i></i><span>POST /api/v1/b2b/cards/issue</span></div>
-<pre><span class="c"># Issue a virtual Visa card for one of your users</span>
+<pre><span class="c"># Example: issue a card after cardholder KYC approval</span>
 <span class="k">POST</span> /api/v1/b2b/cards/issue
 <span class="n">Authorization</span>: Bearer <span class="s">&lt;YOUR_API_KEY&gt;</span>
 <span class="n">Content-Type</span>: application/json
+<span class="n">Idempotency-Key</span>: <span class="s">&lt;UNIQUE_OPERATION_KEY&gt;</span>
 
 {
   <span class="n">"user"</span>: {
     <span class="n">"partnerUserId"</span>: <span class="s">"USER_12345"</span>,
-    <span class="n">"firstName"</span>: <span class="s">"John"</span>,
-    <span class="n">"lastName"</span>: <span class="s">"Doe"</span>,
-    <span class="n">"email"</span>: <span class="s">"john.doe@example.com"</span>
+    <span class="n">"cardholderId"</span>: <span class="s">"CARDHOLDER_ID"</span>
   },
   <span class="n">"card"</span>: {
     <span class="n">"type"</span>: <span class="s">"VIRTUAL"</span>,
     <span class="n">"brand"</span>: <span class="s">"VISA"</span>,
-    <span class="n">"currency"</span>: <span class="s">"USD"</span>
+    <span class="n">"currency"</span>: <span class="s">"USD"</span>,
+    <span class="n">"initialAmount"</span>: <span class="s">5</span>
   }
-}<span class="cursor"></span></pre>
-                </div>
+}</pre>
+                    <div class="code-controls"><span data-code-label>Exemple de code · animation</span><button type="button" data-code-toggle><i class="fa-solid fa-pause" aria-hidden="true"></i> <span>Pause</span></button></div>
+                </div><div class="computer-stand" aria-hidden="true"></div></div>
             </div>
         </section>
 
@@ -158,5 +159,6 @@
     <script src="js/services-data.js"></script>
     <script src="js/layout.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/code-demo.js"></script>
 </body>
 </html>
