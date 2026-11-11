@@ -211,7 +211,41 @@
         'ct.ph.name': 'Your name', 'ct.ph.email': 'you@example.com', 'ct.ph.msg': 'How can we help you?',
         'ct.send': 'Send by e-mail', 'ct.sendwa': 'Send on WhatsApp',
         'ct.note': 'Your e-mail application will open with the message ready to send.',
-        'ct.err': 'Please fill in your name and message.'
+        'ct.err': 'Please fill in your name and message.',
+
+        /* ---------- Atelier génie logiciel (animé) ---------- */
+        'sw.tag': `SOFTWARE ENGINEERING WORKSHOP`,
+        'sw.title': `We design your application <span class="highlight">around your vision</span>`,
+        'sw.desc': `Our software engineering workshop supports you from the idea to production: you describe your need, our engineers design, develop and deploy the application that fits you.`,
+        'sw.types': `Applications we build`,
+        'sw.t1': `Enterprise applications`, 'sw.t2': `Stock management`, 'sw.t3': `Financial management`, 'sw.t4': `Core e-banking`,
+        'sw.t5': `Android and iOS mobile applications`, 'sw.t6': `E-commerce and marketplaces`,
+        'sw.connect': `We connect your applications to all payment networks and platforms, with payments validated by partners at international level, for e-commerce as well as finance.`,
+        'sw.msg': `SMS and WhatsApp gateways for developers: notifications, validation codes and customer messages sent straight from your application.`,
+        'sw.vps': `We also support our partners in managing their VPS servers and in the most complex technical tasks.`,
+        'sw.help': `CashPay is here to help you.`, 'sw.cta': `Talk about my project`,
+        'cap.7.t': `Core e-banking`, 'cap.7.d': `Digital core banking: accounts, transactions, settlements and reports.`,
+        'cap.8.t': `Business & stock management`, 'cap.8.d': `Stock, sales, finance and dashboards tailored to your activity.`,
+        'cap.9.t': `VPS servers & infrastructure`, 'cap.9.d': `Support for partners in managing their servers and complex technical tasks.`,
+
+        /* ---------- Intégration du paiement ---------- */
+        'int.tag': `FOR BUSINESSES`,
+        'int.title': `Integrate <span class="highlight">CashPay</span> payments into your application`,
+        'int.desc': `Do you run an e-commerce or fintech application? Connect our payment method to collect from your customers (collection) and pay your users or partners (payout).`,
+        'int.c1.t': `Collection`, 'int.c1.d': `Collect from your customers on your site or app: hosted payment page, direct card payment, Mobile Money or CashPay wallet.`,
+        'int.c2.t': `Payment & payout`, 'int.c2.d': `Send money to your users, sellers, agents or employees through Mobile Money, bank or CashPay wallet.`,
+        'int.c3.t': `E-commerce applications`, 'int.c3.d': `Online shops and marketplaces: WordPress plugin, payment page and API to validate every order.`,
+        'int.c4.t': `Fintech applications`, 'int.c4.d': `Wallets, B2B prepaid cards, identity verification (KYC) and real-time exchange rates.`,
+        'int.doc': `Payment documentation`, 'int.l1': `Hosted payment page`, 'int.l2': `Payouts`, 'int.l3': `WordPress plugin`,
+
+        /* ---------- Messagerie ---------- */
+        'msg.tag': `SMS & WHATSAPP`, 'msg.title': `Messaging for <span class="highlight">developers</span>`,
+        'msg.desc': `Send SMS and WhatsApp messages from your applications with our gateways: validation codes, transaction alerts, notifications and customer reminders.`,
+        'msg.sms.t': `SMS gateway`, 'msg.sms.d': `Custom sender ID. $0.036 per SMS, i.e. $36 for 1,000 SMS.`,
+        'msg.wa.t': `WhatsApp gateway`, 'msg.wa.d': `$8 per month to message your customers on WhatsApp.`,
+        'msg.docs.sms': `SMS documentation`, 'msg.docs.wa': `WhatsApp documentation`,
+        'msg.head': `Messages sent by your applications`,
+        'msg.b1': `Your CashPay validation code: 482 913`, 'msg.b2': `Payment of USD 25.00 received. Thank you for your order!`, 'msg.b3': `Order no. 1042 confirmed. Delivery tomorrow.`
     };
 
     const state = { lang: 'fr', en: EN };

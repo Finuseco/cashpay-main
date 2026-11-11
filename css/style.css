@@ -439,3 +439,70 @@ a.info-card:hover { border-color: var(--orange); transform: translateX(6px); }
 .marquee img:hover { transform: scale(1.12); }
 .footer-logo { height: 56px; }
 .menu-toggle { min-width: 44px; min-height: 44px; border-radius: 10px; }
+
+/* ---------- Correction : téléphone de l'en-tête (hauteur proportionnelle) ---------- */
+.hero-visual .phone, .phone, .phone-float { height: auto; }
+
+/* ---------- Atelier génie logiciel : ordinateur qui code ---------- */
+.sw-section::before { content: ''; position: absolute; width: 520px; height: 520px; left: -160px; top: 10%; border-radius: 50%; background: radial-gradient(circle, rgba(255, 102, 0, .22), transparent 70%); pointer-events: none; }
+.sw-section .container { position: relative; }
+.workstation { position: relative; width: 100%; max-width: 580px; margin: 0 auto; padding: 34px 0 0; }
+.monitor { position: relative; z-index: 2; padding: 12px 12px 18px; border-radius: 18px; background: linear-gradient(180deg, #1a2347, #0b1230); box-shadow: 0 30px 60px rgba(0, 0, 0, .45), inset 0 0 0 2px rgba(255, 255, 255, .07); }
+.monitor::after { content: ''; position: absolute; bottom: 6px; left: 50%; width: 6px; height: 6px; margin-left: -3px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 8px var(--orange); }
+.screen { display: flex; flex-direction: column; aspect-ratio: 16 / 11; overflow: hidden; border-radius: 9px; background: #0a1128; }
+.ed-bar { display: flex; align-items: center; gap: 7px; padding: 9px 12px 0; background: #0f1838; border-bottom: 1px solid rgba(255, 255, 255, .06); }
+.ed-bar i { width: 9px; height: 9px; border-radius: 50%; margin-bottom: 9px; }
+.ed-bar i:nth-child(1) { background: #ff5f56; } .ed-bar i:nth-child(2) { background: #ffbd2e; } .ed-bar i:nth-child(3) { background: #27c93f; }
+.ed-tab { margin-left: 12px; padding: 5px 12px; border-radius: 7px 7px 0 0; background: #0a1128; color: #9fb0e6; font: 11px ui-monospace, Menlo, Consolas, monospace; }
+.ed-body { flex: 1; min-height: 0; display: flex; overflow: hidden; font: 12.5px/1.7 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace; }
+.ed-lines { min-width: 40px; padding: 12px 10px; margin: 0; text-align: right; color: #4a5a8f; border-right: 1px solid rgba(255, 255, 255, .05); user-select: none; font: inherit; }
+.ed-code { flex: 1; margin: 0; padding: 12px 14px; color: #d6defc; white-space: pre; overflow: hidden; font: inherit; }
+.ed-code code { font: inherit; }
+.ed-code .cursor { display: inline-block; width: 7px; height: 14px; margin-left: 1px; background: var(--orange); vertical-align: text-bottom; animation: blink 1s steps(2) infinite; }
+.ed-status { display: flex; justify-content: space-between; padding: 5px 12px; background: #0f1838; color: #6f80b8; font: 10.5px ui-monospace, Menlo, Consolas, monospace; }
+.tok-k { color: #ff8a3d; } .tok-s { color: #7ee787; } .tok-c { color: #6b7aa8; font-style: italic; } .tok-f { color: #79c0ff; } .tok-n { color: #f2cc60; }
+.neck { position: relative; z-index: 1; width: 96px; height: 38px; margin: -2px auto 0; background: linear-gradient(180deg, #141c3d, #0b1230); clip-path: polygon(14% 0, 86% 0, 100% 100%, 0 100%); }
+.foot { width: 220px; height: 12px; margin: 0 auto; border-radius: 12px 12px 4px 4px; background: linear-gradient(#1f2a58, #0b1230); }
+.keyboard { position: relative; overflow: hidden; width: 74%; height: 18px; margin: 14px auto 0; border-radius: 6px; background: repeating-linear-gradient(90deg, #26325f 0 12px, #0f1838 12px 14px); box-shadow: 0 10px 24px rgba(0, 0, 0, .35); }
+.keyboard::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255, 138, 61, .55), transparent); width: 30%; animation: kbscan 1.6s linear infinite; }
+@keyframes kbscan { from { transform: translateX(-100%); } to { transform: translateX(340%); } }
+.workstation .chip.k1 { top: 2%; left: 0; animation-delay: .2s; }
+.workstation .chip.k2 { top: 10%; right: 0; left: auto; animation-delay: 1s; }
+.workstation .chip.k3 { bottom: 26%; left: 0; top: auto; animation-delay: 1.8s; }
+.workstation .chip.k4 { bottom: 20%; right: 0; left: auto; top: auto; animation-delay: .6s; }
+.sw-sub { font-size: 16px; margin: 24px 0 12px; color: #fff; }
+.sw-types { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+.sw-points { margin: 8px 0 18px; }
+.sw-points li { display: flex; gap: 12px; margin-bottom: 14px; font-size: 15px; color: rgba(255, 255, 255, .8); }
+.sw-points i { color: var(--orange); margin-top: 5px; width: 18px; text-align: center; }
+.sw-help { margin: 0 0 22px !important; font-size: 19px; color: var(--orange-2) !important; }
+
+/* ---------- Messagerie SMS & WhatsApp ---------- */
+.chat-demo { width: 100%; max-width: 380px; min-height: 380px; margin: 0 auto; padding: 22px; display: grid; gap: 14px; align-content: start; background: #fff; border: 1px solid var(--border); border-radius: 28px; box-shadow: var(--shadow-lg); }
+.chat-head { display: flex; align-items: center; gap: 12px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+.chat-head img { width: 40px; height: 40px; border-radius: 12px; }
+.chat-head b { display: block; color: var(--navy); } .chat-head small { color: var(--muted); font-size: 12px; }
+.bubble { max-width: 88%; padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.5; opacity: 0; animation: bubble 9s infinite; }
+.bubble small { display: block; margin-bottom: 3px; font-size: 11px; font-weight: 800; letter-spacing: .5px; opacity: .7; }
+.b-sms { background: #eef2ff; color: var(--navy); border-bottom-left-radius: 4px; }
+.b-wa { margin-left: auto; background: #dcf8c6; color: #14532d; border-bottom-right-radius: 4px; }
+.bubble:nth-of-type(1) { animation-delay: 0s; } .bubble:nth-of-type(2) { animation-delay: 1.6s; } .bubble:nth-of-type(3) { animation-delay: 3.2s; }
+@keyframes bubble { 0% { opacity: 0; transform: translateY(14px) scale(.96); } 6%, 88% { opacity: 1; transform: none; } 96%, 100% { opacity: 0; } }
+
+/* ---------- Liens en pastilles sur fond clair ---------- */
+a.badge { transition: all .25s var(--ease); }
+.light a.badge { background: #fff; }
+.light a.badge:hover { border-color: var(--orange); color: var(--orange); transform: translateY(-2px); }
+
+@media (max-width: 640px) {
+    .sw-types { grid-template-columns: 1fr; }
+    .workstation { padding-top: 10px; }
+    .screen { aspect-ratio: 4 / 3.6; }
+    .ed-body { font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) { .bubble { opacity: 1; } }
+
+/* ---------- Correction mobile : le code ne doit pas élargir la colonne ---------- */
+.split > * { min-width: 0; }
+.workstation, .monitor, .screen, .ed-body { min-width: 0; max-width: 100%; }
+.ed-code { min-width: 0; }

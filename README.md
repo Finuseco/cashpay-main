@@ -9,11 +9,16 @@ Déployé sur `https://cashpay-all.com`.
 | `index.html` | Accueil : services de conception, services, application, espace développeur, cartes B2B, téléchargements |
 | `services.html` | Les 20 services avec filtres par catégorie |
 | `ateliers.html` | Atelier de conception & ingénierie des systèmes + atelier de génie logiciel, méthode, réalisations |
-| `developpeurs.html` | Synthèse du portail développeur (API, exemple de requête, tarifs) |
+| `developpeurs.html` | Synthèse du portail développeur (API, intégration du paiement, exemple de requête, tarifs) |
 | `cartes-b2b.html` | Cartes prépayées B2B Visa & Mastercard, modèle JIT, cas d'usage |
 | `apropos.html` | À propos de l'application CashPay All |
 | `entreprise.html` | À propos de FINUSECO SARL : profil, marques, direction |
 | `contact.html` | Formulaire (e-mail ou WhatsApp) et coordonnées |
+
+## Sections clés (accueil)
+- **Atelier de génie logiciel** (`#genie-logiciel`) : ordinateur qui code en animation (`js/main.js`, bloc « Ordinateur qui code »), types d'applications, VPS.
+- **Intégration du paiement** (`#integration`) : collecte et décaissement pour applications e-commerce et fintech, liens vers le portail développeur.
+- **SMS & WhatsApp** (`#messagerie`) : passerelles pour développeurs, liens vers la documentation.
 
 ## Fichiers partagés
 - `css/style.css` : design system (couleurs, composants, animations, responsive).

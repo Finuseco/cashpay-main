@@ -111,3 +111,64 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+// 10. Ordinateur qui code : frappe animée d'un exemple de code (décoratif)
+(function () {
+    const out = document.querySelector('[data-typing]');
+    if (!out) return;
+    const nums = document.querySelector('[data-lines]');
+    const pos = document.querySelector('[data-pos]');
+    const body = out.closest('.ed-body');
+    const CODE = [
+        '// Exemple illustratif — votre vision, notre code',
+        'const app = {',
+        '  nom: "Votre application",',
+        '  modules: ["core e-banking", "stock", "finances"],',
+        '  mobile: ["Android", "iOS"],',
+        '};',
+        '',
+        'async function payer(commande) {',
+        '  const res = await CashPay.collect(commande);',
+        '  if (res.status === "SUCCESS") {',
+        '    await notifier("SMS", "WhatsApp");',
+        '  }',
+        '  return res;',
+        '}',
+        '',
+        'deploy(app, { serveur: "VPS", ssl: true });'
+    ].join('\n');
+
+    const esc = t => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const hl = t => esc(t).replace(/(\/\/.*$)|("[^"\n]*"?)|\b(const|async|function|await|return|if|true)\b|\b(\d+)\b|\b([A-Za-z_]\w*)(?=\()/gm,
+        (m, c, str, kw, num, fn) => c ? '<span class="tok-c">' + c + '</span>' : str ? '<span class="tok-s">' + str + '</span>'
+            : kw ? '<span class="tok-k">' + kw + '</span>' : num ? '<span class="tok-n">' + num + '</span>' : '<span class="tok-f">' + fn + '</span>');
+
+    function draw(i) {
+        const shown = CODE.slice(0, i);
+        const lines = shown.split('\n');
+        out.innerHTML = hl(shown) + '<span class="cursor"></span>';
+        const count = Math.max(lines.length, 12);
+        let n = ''; for (let k = 1; k <= count; k++) n += k + (k < count ? '\n' : '');
+        nums.textContent = n;
+        if (pos) pos.textContent = 'Ln ' + lines.length + ', Col ' + (lines[lines.length - 1].length + 1);
+        body.scrollTop = body.scrollHeight;
+    }
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { draw(CODE.length); return; }
+
+    let i = 0, visible = false, timer = null;
+    function tick() {
+        if (!visible) { timer = null; return; }
+        if (i >= CODE.length) { timer = setTimeout(() => { i = 0; draw(0); timer = setTimeout(tick, 600); }, 3200); return; }
+        i = Math.min(CODE.length, i + 1 + (Math.random() < 0.35 ? 1 : 0));
+        draw(i);
+        timer = setTimeout(tick, CODE[i - 1] === '\n' ? 140 : 22 + Math.random() * 40);
+    }
+    new IntersectionObserver(es => {
+        visible = es[0].isIntersecting;
+        if (visible && !timer) tick();
+    }, { threshold: 0.2 }).observe(out.closest('.workstation'));
+    draw(0);
+})();
+});
