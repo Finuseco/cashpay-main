@@ -439,3 +439,16 @@ a.info-card:hover { border-color: var(--orange); transform: translateX(6px); }
 .marquee img:hover { transform: scale(1.12); }
 .footer-logo { height: 56px; }
 .menu-toggle { min-width: 44px; min-height: 44px; border-radius: 10px; }
+
+/* Source-code monitor: contained animation, readable on mobile. */
+.code-computer { min-width:0; width:100%; perspective:1000px; }
+.code-computer .terminal { border:7px solid #293347; border-bottom-width:18px; border-radius:18px; box-shadow:0 24px 60px #09152b33; overflow:hidden; }
+.code-computer pre { height:390px; overflow:auto; white-space:pre; font-size:12px; line-height:1.7; }
+.code-computer pre::after { content:''; display:inline-block; width:7px; height:1em; background:#7beac2; vertical-align:middle; }
+.computer-stand { width:38%; height:42px; margin:auto; border-bottom:8px solid #36445c; background:linear-gradient(90deg,transparent 34%,#293347 34%,#52627c 66%,transparent 66%); border-radius:0 0 10px 10px; }
+.code-controls { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; padding:10px 16px; color:#b6c9de; font-size:12px; background:#111b2e; }
+.code-controls button { color:#e8f2ff; background:#273b55; padding:8px 12px; border:1px solid #59718a; border-radius:6px; cursor:pointer; min-height:40px; }
+.code-controls button:focus-visible { outline:2px solid #7beac2; outline-offset:2px; }
+@media(max-width:600px) { .code-computer pre {height:335px;font-size:11px;} .code-computer .terminal {border-width:5px;border-bottom-width:12px;} }
+@media(prefers-reduced-motion:reduce) { .code-computer *, .code-computer {animation:none!important;transition:none!important;} }
+@media(max-width:600px) { .grid-2 {grid-template-columns:minmax(0,1fr);} .grid-2 > * {min-width:0;} }
