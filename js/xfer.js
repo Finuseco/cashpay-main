@@ -69,8 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <path class="arc-base" id="xf-base" d=""/><path class="arc-trail" id="xf-trail" d="" mask="url(#xf-mask)"/></svg>`;
 
     stage.innerHTML = `<div class="xfer-map"></div>${arcSvg}
-        <div class="xf-city l"><i class="fa-solid fa-location-dot" style="color:#ff6600"></i><span data-i18n="xf.kin">Kinshasa, RDC</span><em>CDF</em></div>
-        <div class="xf-city r"><i class="fa-solid fa-location-dot" style="color:#1d47c9"></i><span data-i18n="xf.par">Paris, France</span><em>EUR</em></div>
+        <div class="xf-city l"><i class="fa-solid fa-location-dot" style="color:#9f5dd7"></i><span data-i18n="xf.kin">Kinshasa, RDC</span><em>CDF</em></div>
+        <div class="xf-city r"><i class="fa-solid fa-location-dot" style="color:#6c15c1"></i><span data-i18n="xf.par">Paris, France</span><em>EUR</em></div>
         ${phone('kin')}${phone('par')}
         <div class="xf-coin usd"><b>$</b><small>USD</small></div><div class="xf-coin gbp"><b>£</b><small>GBP</small></div><div class="xf-coin cny"><b>¥</b><small>CNY</small></div>
         <div class="xf-rate"><span data-i18n="xf.rate">Taux en temps réel</span> : <b>1 € = ${fc(DEMO.rate)}</b></div>
