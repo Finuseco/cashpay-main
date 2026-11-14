@@ -20,11 +20,18 @@ Déployé sur `https://cashpay-all.com`.
 - **Intégration du paiement** (`#integration`) : collecte et décaissement pour applications e-commerce et fintech, liens vers le portail développeur.
 - **SMS & WhatsApp** (`#messagerie`) : passerelles pour développeurs, liens vers la documentation.
 
+- **Transfert international animé** (`#transfert`, `js/xfer.js`) : deux téléphones recomposés en HTML/CSS (Kinshasa → Paris). L'animation se lance au toucher de « Envoyer Transfert », du bouton « Lancer le transfert », ou à l'arrivée dans l'écran. Montants fictifs (constantes `DEMO` en haut du fichier).
+
+## Images de l'application et des cartes
+- `public/images/app-home-cdf.webp` / `app-home-usd.webp` : captures de l'application, affichées dans un cadre de téléphone en CSS (classe `.device`) sur l'accueil et « À propos ». Pour mettre à jour l'app, remplacer ces deux fichiers (720 × 1612 px).
+- `public/images/card-green|gold|red.webp` : cartes CashPay Visa en portrait (fond transparent), éventail `.cards-fan` sur l'accueil et la page Cartes B2B.
+
 ## Fichiers partagés
 - `css/style.css` : design system (couleurs, composants, animations, responsive).
 - `js/layout.js` : en-tête, pied de page et bouton WhatsApp flottant (+243 85 386 80 21) injectés dans toutes les pages.
 - `js/i18n.js` : moteur FR/EN. Le français est le texte du HTML ; l'anglais est dans le dictionnaire `EN`.
 - `js/services-data.js` : liste des services (une seule source, FR + EN) affichée sur l'accueil et sur `services.html`.
+- `js/xfer.js` : section de transfert animée (page d'accueil uniquement).
 - `js/main.js` : langue, menu, animations au défilement, compteurs, filtres, formulaire de contact.
 
 ## Modifier un texte

@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <div class="hero-visual">
-                    <img src="public/images/app_wallet.png" alt="CashPay All" class="phone" width="330" height="663" fetchpriority="high">
+                    <div class="device" role="img" aria-label="CashPay All"><span class="dev-key k1"></span><span class="dev-key k2"></span><span class="dev-key k3"></span><div class="dev-screen"><img class="scr s1" src="public/images/app-home-cdf.webp" alt="" width="720" height="1612" decoding="async" fetchpriority="high"><img class="scr s2" src="public/images/app-home-usd.webp" alt="" width="720" height="1612" loading="lazy" decoding="async"></div><span class="dev-cam"></span></div>
                     <div class="chip c1"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> <span data-i18n="chip.1">Envoi instantané</span></div>
                     <div class="chip c2"><i class="fa-solid fa-globe" aria-hidden="true"></i> <span data-i18n="chip.2">195+ devises</span></div>
                     <div class="chip c3"><i class="fa-solid fa-credit-card" aria-hidden="true"></i> <span data-i18n="chip.3">Cartes Visa & Mastercard</span></div>
@@ -143,7 +143,7 @@
 
         <section class="section soft" id="application">
             <div class="container split">
-                <div class="split-media plain" data-reveal><img src="public/images/app_wallet.png" alt="CashPay All" class="phone-float" width="330" height="663" loading="lazy"></div>
+                <div class="split-media plain" data-reveal><div class="device" role="img" aria-label="CashPay All"><span class="dev-key k1"></span><span class="dev-key k2"></span><span class="dev-key k3"></span><div class="dev-screen"><img class="scr s1" src="public/images/app-home-cdf.webp" alt="" width="720" height="1612" decoding="async" loading="lazy"><img class="scr s2" src="public/images/app-home-usd.webp" alt="" width="720" height="1612" loading="lazy" decoding="async"></div><span class="dev-cam"></span></div></div>
                 <div data-reveal>
                     <span class="tag" data-i18n="home.app.tag">NOTRE APPLICATION</span>
                     <h2 data-i18n="home.app.title">Tout dans <span class="highlight">un seul portefeuille</span></h2>
@@ -155,6 +155,30 @@
                         <li><i class="fa-solid fa-circle-check" aria-hidden="true"></i><span data-i18n="home.app.l4">Disponible en français et en anglais sur le web et Android</span></li>
                     </ul>
                     <a class="btn btn-primary" href="apropos.html"><span data-i18n="home.app.more">À propos de l'application</span> <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section xfer" id="transfert">
+            <div class="container">
+                <div class="section-title" data-reveal>
+                    <span class="tag" data-i18n="xf.tag">TRANSFERT INTERNATIONAL</span>
+                    <h2 data-i18n="xf.title">Envoyez de l'argent <span class="highlight">partout dans le monde</span></h2>
+                    <p data-i18n="xf.sub">Plus de 195 devises · Taux en temps réel · Envoi instantané</p>
+                </div>
+                <div class="xfer-stage" id="xfer-stage"></div>
+                <div class="xfer-ctl">
+                    <button class="btn btn-primary" id="xf-play" type="button"><i class="fa-solid fa-play" aria-hidden="true"></i> <span>Lancer le transfert</span></button>
+                    <p class="xf-note" data-i18n="xf.note">Touchez « Envoyer Transfert » sur le téléphone de gauche, ou lancez la démonstration. Exemple illustratif avec des montants fictifs.</p>
+                    <p class="sr-only" id="xf-live" aria-live="polite"></p>
+                </div>
+                <div class="grid xf-feats">
+                    <div class="xf-feat" data-reveal><i class="fa-solid fa-paper-plane" style="background:#1d5bff" aria-hidden="true"></i><div><b data-i18n="xf.f1.t">Envoyer</b><span data-i18n="xf.f1.d">Partout, en un instant</span></div></div>
+                    <div class="xf-feat" data-reveal><i class="fa-solid fa-arrow-down" style="background:#12b76a" aria-hidden="true"></i><div><b data-i18n="xf.f2.t">Recevoir</b><span data-i18n="xf.f2.d">Même de l'étranger</span></div></div>
+                    <div class="xf-feat" data-reveal><i class="fa-solid fa-file-invoice" style="background:#7a5af8" aria-hidden="true"></i><div><b data-i18n="xf.f3.t">Payer</b><span data-i18n="xf.f3.d">Factures et boutiques</span></div></div>
+                    <div class="xf-feat" data-reveal><i class="fa-solid fa-right-left" style="background:#f79009" aria-hidden="true"></i><div><b data-i18n="xf.f4.t">Vendre</b><span data-i18n="xf.f4.d">Et acheter en ligne</span></div></div>
+                    <div class="xf-feat" data-reveal><i class="fa-solid fa-money-bill-wave" style="background:#ff6600" aria-hidden="true"></i><div><b data-i18n="xf.f5.t">Retirer</b><span data-i18n="xf.f5.d">Espèces, Mobile Money</span></div></div>
+                    <div class="xf-feat" data-reveal><i class="fa-solid fa-credit-card" style="background:#ee46bc" aria-hidden="true"></i><div><b data-i18n="xf.f6.t">Cartes</b><span data-i18n="xf.f6.d">Visa et Mastercard</span></div></div>
                 </div>
             </div>
         </section>
@@ -268,10 +292,7 @@
         <section class="section" id="cartes-b2b">
             <div class="container split reverse">
                 <div class="split-media" data-reveal>
-                    <div class="cards-visual" aria-hidden="true">
-                        <div class="pcard pc1"><img class="pc-logo" src="public/images/logo.png" alt=""><span class="pc-chip"></span><span class="pc-mc"><i></i><i></i></span></div>
-                        <div class="pcard pc2"><img class="pc-logo" src="public/images/logo.png" alt=""><span class="pc-chip"></span><span class="pc-visa">VISA</span></div>
-                    </div>
+                    <div class="cards-fan" role="img" aria-label="CashPay Visa"><img class="cf cf-1" src="public/images/card-green.webp" alt="" width="541" height="1040" loading="lazy" decoding="async"><img class="cf cf-2" src="public/images/card-gold.webp" alt="" width="541" height="1040" loading="lazy" decoding="async"><img class="cf cf-3" src="public/images/card-red.webp" alt="" width="541" height="1040" loading="lazy" decoding="async"></div>
                 </div>
                 <div data-reveal>
                     <span class="tag" data-i18n="home.b2b.tag">CARTES B2B</span>
@@ -328,6 +349,7 @@
     <script src="js/i18n.js"></script>
     <script src="js/services-data.js"></script>
     <script src="js/layout.js"></script>
+    <script src="js/xfer.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

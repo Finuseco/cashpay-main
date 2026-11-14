@@ -213,6 +213,25 @@
         'ct.note': 'Your e-mail application will open with the message ready to send.',
         'ct.err': 'Please fill in your name and message.',
 
+        /* ---------- Section transfert animé ---------- */
+        'xf.tag': 'INTERNATIONAL TRANSFER', 'xf.title': 'Send money <span class="highlight">anywhere in the world</span>',
+        'xf.sub': '195+ currencies · Real-time rates · Instant sending',
+        'xf.play': 'Start the transfer', 'xf.running': 'Transfer in progress…', 'xf.replay': 'Replay the transfer',
+        'xf.note': 'Tap “Send Transfer” on the left phone, or start the demo. Illustrative example with fictional amounts.',
+        'xf.hint': 'Tap “Send”', 'xf.kin': 'Kinshasa, DR Congo', 'xf.par': 'Paris, France',
+        'xf.sent': 'Sent', 'xf.recv': 'Received', 'xf.rate': 'Real-time rate',
+        'xf.hello': 'Welcome', 'xf.acct': 'CP account no.', 'xf.lbl.cdf': 'Congolese Franc balance (CDF)', 'xf.lbl.eur': 'Euro balance (EUR)',
+        'xf.recent': 'Recent contacts', 'xf.all': 'See all', 'xf.add': 'Add', 'xf.contacts': 'Contacts',
+        'xf.t1': 'Send Transfer', 'xf.t2': 'Cash Withdrawal', 'xf.t3': 'Credit & Loans', 'xf.t4': 'PayScan Cart/POS',
+        'xf.t5': 'Deposit Top up', 'xf.t6': 'Bill Payment', 'xf.t7': 'My Cards', 'xf.t8': 'See More',
+        'xf.tx': 'Transactions', 'xf.tab1': 'All', 'xf.tab2': 'Incoming (+)', 'xf.tab3': 'Outgoing (-)',
+        'xf.tx.d1': 'Mobile Money deposit', 'xf.tx.d2': 'Bill payment', 'xf.tx.d3': 'Card deposit', 'xf.tx.d4': 'Online purchase',
+        'xf.tx.out': 'Transfer to Paris', 'xf.tx.in': 'Received from Kinshasa', 'xf.now': 'Just now', 'xf.yday': 'Yesterday',
+        'xf.n1': 'Wallet', 'xf.n2': 'History', 'xf.n3': 'Cards', 'xf.n4': 'Profile',
+        'xf.f1.t': 'Send', 'xf.f1.d': 'Anywhere, in an instant', 'xf.f2.t': 'Receive', 'xf.f2.d': 'Even from abroad',
+        'xf.f3.t': 'Pay', 'xf.f3.d': 'Bills and shops', 'xf.f4.t': 'Sell', 'xf.f4.d': 'And buy online',
+        'xf.f5.t': 'Withdraw', 'xf.f5.d': 'Cash, Mobile Money', 'xf.f6.t': 'Cards', 'xf.f6.d': 'Visa and Mastercard',
+
         /* ---------- Atelier génie logiciel (animé) ---------- */
         'sw.tag': `SOFTWARE ENGINEERING WORKSHOP`,
         'sw.title': `We design your application <span class="highlight">around your vision</span>`,
