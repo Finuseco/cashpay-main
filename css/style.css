@@ -715,21 +715,30 @@ main { overflow-x: clip; }
 
 
 /* ---------- Réseaux sociaux de la direction + messages ---------- */
-.leader-social { display: flex; justify-content: center; gap: 10px; margin-top: 18px; }
-.leader-social a { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--bg-soft); color: var(--navy); border: 1px solid var(--border); font-size: 15px; transition: all .25s; }
-.leader-social a:hover { background: var(--orange); color: #fff; border-color: var(--orange); transform: translateY(-3px); }
 #cp-toast { position: fixed; left: 50%; bottom: 96px; transform: translate(-50%, 20px); z-index: 1000; max-width: min(92vw, 460px); background: var(--navy); color: #fff; padding: 14px 20px; border-radius: 14px; font-size: 14.5px; line-height: 1.5; box-shadow: 0 16px 40px rgba(25, 10, 40, .35); opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s var(--ease); text-align: center; }
 #cp-toast.show { opacity: 1; transform: translate(-50%, 0); }
 
 
-/* ---------- Pied de page : réseaux ---------- */
-.footer-follow { position: relative; margin-top: 44px; padding-top: 28px; border-top: 1px solid rgba(255, 255, 255, .12); display: flex; flex-wrap: wrap; align-items: center; gap: 18px 28px; }
+/* ---------- Réseaux sociaux : boutons ronds aux couleurs de chaque réseau ---------- */
+.footer-follow { position: relative; margin-top: 44px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .footer-follow h5 { color: #fff; font-size: 15px; margin: 0; }
-.follow-btns { display: flex; flex-wrap: wrap; gap: 10px; }
-.follow-btns a { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; font-size: 14px; font-weight: 600; color: #fff; background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .18); transition: all .25s; }
-.follow-btns a:hover { background: #fff; color: var(--navy); transform: translateY(-2px); }
-.follow-btns a.fb-wa { background: var(--green); border-color: var(--green); }
-.follow-btns a.fb-wa:hover { background: #fff; color: #0b7a43; }
+.soc-box { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px 26px; padding: 22px 30px; border-radius: 24px; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .14); max-width: 100%; }
+.soc { display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgba(255, 255, 255, .85); font-size: 12px; font-weight: 600; min-width: 64px; }
+.soc-ico { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 23px; background: #888; box-shadow: 0 8px 18px rgba(0, 0, 0, .3); transition: transform .25s var(--ease), box-shadow .25s; }
+.soc:hover .soc-ico { transform: translateY(-4px) scale(1.06); box-shadow: 0 14px 26px rgba(0, 0, 0, .4); }
+[data-net="wa"] .soc-ico, .leader-social [data-net="wa"] { background: #25D366; }
+[data-net="facebook"] .soc-ico, .leader-social [data-net="facebook"] { background: #1877F2; }
+[data-net="instagram"] .soc-ico, .leader-social [data-net="instagram"] { background: linear-gradient(45deg, #FEDA75 0%, #FA7E1E 25%, #D62976 50%, #962FBF 75%, #4F5BD5 100%); }
+[data-net="x"] .soc-ico, .leader-social [data-net="x"] { background: #000; box-shadow: 0 0 0 1px rgba(255, 255, 255, .35), 0 8px 18px rgba(0, 0, 0, .3); }
+[data-net="linkedin"] .soc-ico, .leader-social [data-net="linkedin"] { background: #0A66C2; }
+@media (max-width: 560px) {
+    .soc-box { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 10px; padding: 22px 16px; width: 100%; }
+}
+
+/* Réseaux sociaux des cartes de direction : mêmes couleurs, icônes blanches */
+.leader-social { display: flex; justify-content: center; gap: 12px; margin-top: 18px; }
+.leader-social a { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; color: #fff; border: 0; font-size: 16px; transition: transform .25s var(--ease), box-shadow .25s; box-shadow: 0 6px 14px rgba(25, 10, 40, .25); }
+.leader-social a:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(25, 10, 40, .35); }
 
 /* ---------- Pop-up de bienvenue ---------- */
 .welcome-pop { position: fixed; inset: 0; z-index: 1200; display: grid; place-items: center; padding: 20px; background: rgba(25, 10, 40, .62); backdrop-filter: blur(4px); opacity: 0; transition: opacity .3s; }

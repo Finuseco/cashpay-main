@@ -92,13 +92,13 @@
             </div>
             <div class="footer-follow">
                 <h5 data-i18n="foot.follow">Suivez CashPay All</h5>
-                <div class="follow-btns">
-                    <a class="fb-wa" href="${CHANNEL_URL}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> <span data-i18n="foot.channel">Chaîne WhatsApp</span></a>
-                    <a class="fb-wa" href="https://wa.me/${WA_NUMBER}" target="_blank" rel="noopener"><i class="fa-solid fa-headset" aria-hidden="true"></i> <span data-i18n="foot.wapage">WhatsApp : nous écrire</span></a>
-                    <a href="#" data-href="*" data-net="facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i> Facebook</a>
-                    <a href="#" data-href="*" data-net="instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i> Instagram</a>
-                    <a href="#" data-href="*" data-net="x"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i> X</a>
-                    <a href="#" data-href="*" data-net="linkedin"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i> LinkedIn</a>
+                <div class="soc-box">
+                    <a class="soc" data-net="wa" href="${CHANNEL_URL}" target="_blank" rel="noopener" aria-label="Chaîne WhatsApp CashPay All"><span class="soc-ico"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></span><span class="soc-name" data-i18n="foot.channel">Chaîne</span></a>
+                    <a class="soc" data-net="wa" href="https://wa.me/${WA_NUMBER}" target="_blank" rel="noopener" aria-label="WhatsApp ${WA_DISPLAY}"><span class="soc-ico"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></span><span class="soc-name">WhatsApp</span></a>
+                    <a class="soc" data-net="facebook" href="#" data-href="*" aria-label="Facebook"><span class="soc-ico"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></span><span class="soc-name">Facebook</span></a>
+                    <a class="soc" data-net="instagram" href="#" data-href="*" aria-label="Instagram"><span class="soc-ico"><i class="fa-brands fa-instagram" aria-hidden="true"></i></span><span class="soc-name">Instagram</span></a>
+                    <a class="soc" data-net="x" href="#" data-href="*" aria-label="X"><span class="soc-ico"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></span><span class="soc-name">X</span></a>
+                    <a class="soc" data-net="linkedin" href="#" data-href="*" aria-label="LinkedIn"><span class="soc-ico"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i></span><span class="soc-name">LinkedIn</span></a>
                 </div>
             </div>
             <div class="footer-bottom">
