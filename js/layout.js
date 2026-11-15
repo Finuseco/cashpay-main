@@ -34,6 +34,10 @@
                             <i class="fa-solid fa-building" aria-hidden="true"></i>
                             <div><strong data-i18n="nav.about.co">L'entreprise FINUSECO</strong><small data-i18n="nav.about.co.d">Profil, marques, direction</small></div>
                         </a>
+                        <a href="recrutement.html" data-page-link="recruitment">
+                            <i class="fa-solid fa-briefcase" aria-hidden="true"></i>
+                            <div><strong data-i18n="nav.recruitment">Recrutement</strong><small data-i18n="nav.recruitment.d">Nos postes et votre candidature</small></div>
+                        </a>
                     </div>
                 </li>
                 <li><a href="faq.html" data-page-link="faq" data-i18n="nav.faq">FAQ</a></li>
@@ -69,6 +73,7 @@
                         <li><a href="cartes-b2b.html" data-i18n="nav.cards">Cartes B2B</a></li>
                         <li><a href="apropos.html" data-i18n="nav.about.app">L'application</a></li>
                         <li><a href="entreprise.html" data-i18n="nav.about.co">L'entreprise FINUSECO</a></li>
+                        <li><a href="recrutement.html" data-i18n="nav.recruitment">Recrutement</a></li>
                         <li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
                     </ul>
                 </div>
@@ -166,7 +171,7 @@
         document.querySelectorAll('[data-page-link]').forEach(a => {
             if (a.getAttribute('data-page-link') === page) a.classList.add('active');
         });
-        if (page === 'about-app' || page === 'company') {
+        if (page === 'about-app' || page === 'company' || page === 'recruitment') {
             const dd = document.querySelector('.has-dd > button');
             if (dd) dd.classList.add('active');
         }

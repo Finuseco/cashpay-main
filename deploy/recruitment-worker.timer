@@ -1,0 +1,11 @@
+[Unit]
+Description=CashPay All — vérification périodique de la file de recrutement
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+Persistent=true
+Unit=recruitment-worker.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,10 @@
+[Unit]
+Description=CashPay All — purge quotidienne des candidatures arrivées à échéance
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+Unit=recruitment-cleanup.service
+
+[Install]
+WantedBy=timers.target

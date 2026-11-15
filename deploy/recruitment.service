@@ -1,0 +1,26 @@
+[Unit]
+Description=CashPay All — API de recrutement
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=cashpay-recruitment
+Group=cashpay-recruitment
+WorkingDirectory=/var/www/cashpay-all/main
+EnvironmentFile=/etc/cashpay-recruitment.env
+ExecStart=/usr/bin/node recruitment-server/index.mjs
+Restart=on-failure
+RestartSec=5
+StateDirectory=cashpay-recruitment
+StateDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/cashpay-recruitment
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

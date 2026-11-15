@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="jobs.title">Recrutement — CashPay All</title>
+    <meta name="description" content="Rejoignez CashPay All en République démocratique du Congo. Choisissez votre province et votre métier, puis déposez votre candidature et votre CV.">
+    <link rel="canonical" href="https://cashpay-all.com/recrutement.html">
+    <meta property="og:title" content="Recrutement — CashPay All">
+    <meta property="og:description" content="Des talents pour chaque province : découvrez les profils recherchés et déposez votre candidature.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cashpay-all.com/recrutement.html">
+    <meta name="theme-color" content="#7a22d4">
+    <link rel="icon" type="image/png" href="public/images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/recruitment.css">
+</head>
+<body data-page="recruitment" class="recruitment-page">
+    <a class="rec-skip" href="#recruitment-main" data-i18n="jobs.skip">Aller aux candidatures</a>
+    <header id="site-header"></header>
+    <main id="recruitment-main">
+        <section class="page-hero rec-hero">
+            <div class="container rec-hero-grid">
+                <div>
+                    <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">Accueil</a> / <span data-i18n="jobs.nav">Carrières</span></div>
+                    <span class="rec-eyebrow" data-i18n="jobs.eyebrow">CONSTRUISONS LA SUITE, ENSEMBLE</span>
+                    <h1 data-i18n="jobs.hero">Des talents pour<br><span class="highlight">chaque province.</span></h1>
+                    <p data-i18n="jobs.lead">Rejoignez les équipes CashPay All en République démocratique du Congo. Trouvez le profil qui vous correspond et présentez-nous votre parcours.</p>
+                    <a class="btn btn-primary" href="#application"><span data-i18n="jobs.hero.cta">Déposer ma candidature</span> <i class="fa-solid fa-arrow-down" aria-hidden="true"></i></a>
+                </div>
+                <aside class="rec-hero-note" aria-label="Notre recrutement" data-i18n-aria="jobs.scope.aria">
+                    <div class="rec-map-mark" aria-hidden="true"><i class="fa-solid fa-location-dot"></i><span class="rec-mark-ring"></span></div>
+                    <span class="rec-note-tag" data-i18n="jobs.scope.tag">NOTRE PREMIER TERRAIN D’ACTION</span>
+                    <h2 data-i18n="jobs.scope.title">La RDC,<br>province par province.</h2>
+                    <p data-i18n="jobs.scope.text">Management, finance, ressources humaines et développement commercial : plusieurs façons de contribuer au même projet.</p>
+                    <div class="rec-scope-bottom"><span class="rec-live-mark" aria-hidden="true"></span><span data-i18n="jobs.scope.bottom">Candidatures en République démocratique du Congo</span></div>
+                </aside>
+            </div>
+        </section>
+
+        <section class="rec-content" id="application" aria-labelledby="application-title">
+            <div class="container">
+                <div class="rec-section-heading"><div><span class="rec-eyebrow" data-i18n="jobs.form.tag">VOTRE PROCHAINE ÉTAPE</span><h2 id="application-title" data-i18n="jobs.form.title">Faisons connaissance.</h2></div><p data-i18n="jobs.form.lead">Choisissez d’abord votre lieu de candidature. Les profils recherchés s’afficheront ensuite.</p></div>
+                <div id="catalog-error" class="rec-notice rec-notice-error" role="alert" hidden><p id="catalog-error-text"></p><button id="catalog-retry" class="rec-text-button" type="button" data-i18n="jobs.retry">Réessayer</button></div>
+                <p id="catalog-status" class="rec-loading" role="status" data-i18n="jobs.loading">Chargement des pays et des postes…</p>
+
+                <section id="application-result" class="rec-result" tabindex="-1" aria-labelledby="result-title" hidden>
+                    <span class="rec-result-icon" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
+                    <span class="rec-eyebrow" data-i18n="jobs.result.tag">VOTRE DOSSIER</span>
+                    <h2 id="result-title" data-i18n="jobs.result.title">Candidature enregistrée.</h2>
+                    <p id="result-message"></p>
+                    <p class="rec-reference"><span data-i18n="jobs.result.reference">Votre référence</span><strong id="result-reference"></strong></p>
+                    <p class="rec-result-followup" data-i18n="jobs.result.followup">Conservez cette référence pour vos échanges avec notre équipe. Il n’est pas nécessaire de renvoyer votre dossier.</p>
+                    <button class="btn btn-outline" id="new-application" type="button" data-i18n="jobs.result.new">Préparer une autre candidature</button>
+                </section>
+
+                <form id="application-form" class="rec-form" novalidate enctype="multipart/form-data" aria-busy="false">
+                    <ol class="rec-steps" aria-label="Étapes de sélection" data-i18n-aria="jobs.steps.aria"><li id="step-country" aria-current="step"><span class="rec-step-number">01</span><span data-i18n="jobs.step.country">Le pays</span></li><li id="step-province"><span class="rec-step-number">02</span><span data-i18n="jobs.step.province">La province</span></li><li id="step-position"><span class="rec-step-number">03</span><span data-i18n="jobs.step.position">Le poste</span></li></ol>
+                    <div class="rec-selection-grid">
+                        <div class="rec-field"><label for="job-country"><span data-i18n="jobs.country">Pays</span> <span aria-hidden="true">*</span></label><select id="job-country" name="countryCode" required disabled aria-describedby="country-note country-error"><option value="" data-i18n="jobs.country.placeholder">Sélectionnez un pays</option></select><small id="country-note" data-i18n="jobs.country.note">Le recrutement est actuellement ouvert en RDC.</small><p id="country-error" class="rec-field-error" hidden></p></div>
+                        <div class="rec-field"><label for="job-province"><span data-i18n="jobs.province">Province</span> <span aria-hidden="true">*</span></label><select id="job-province" name="provinceId" required disabled aria-describedby="province-note province-error"><option value="" data-i18n="jobs.province.placeholder">Sélectionnez d’abord le pays</option></select><small id="province-note" data-i18n="jobs.province.note">Le lieu dans lequel vous souhaitez rejoindre nos équipes.</small><p id="province-error" class="rec-field-error" hidden></p></div>
+                        <div class="rec-field"><label for="job-position"><span data-i18n="jobs.position">Poste recherché</span> <span aria-hidden="true">*</span></label><select id="job-position" name="positionId" required disabled aria-describedby="position-note position-error"><option value="" data-i18n="jobs.position.placeholder">Sélectionnez d’abord la province</option></select><small id="position-note" data-i18n="jobs.position.note">Consultez la description avant de présenter votre candidature.</small><p id="position-error" class="rec-field-error" hidden></p></div>
+                    </div>
+                    <p id="location-status" class="rec-location-status" role="status"></p>
+
+                    <div class="rec-application-grid">
+                        <aside id="position-card" class="rec-position-card" aria-labelledby="position-card-title" aria-live="polite">
+                            <span class="rec-card-icon" aria-hidden="true"><i class="fa-solid fa-briefcase"></i></span>
+                            <span id="position-department" class="rec-eyebrow" data-i18n="jobs.profile.tag">LE PROFIL RECHERCHÉ</span>
+                            <h3 id="position-card-title" data-i18n="jobs.profile.empty.title">À vous de choisir.</h3>
+                            <p id="position-description" data-i18n="jobs.profile.empty.text">Sélectionnez un pays, une province et un poste pour découvrir les missions correspondantes.</p>
+                            <ul id="position-missions" hidden></ul>
+                            <div class="rec-position-location" id="position-location" hidden><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span></span></div>
+                            <div class="rec-profile-tip"><i class="fa-regular fa-lightbulb" aria-hidden="true"></i><p data-i18n="jobs.profile.tip">Dans votre message, expliquez ce que votre expérience peut apporter à ce poste.</p></div>
+                        </aside>
+
+                        <div class="rec-dossier">
+                            <div class="rec-dossier-heading"><span class="rec-eyebrow" data-i18n="jobs.dossier.tag">PRÉSENTEZ-VOUS</span><h3 data-i18n="jobs.dossier.title">Votre candidature</h3><p data-i18n="jobs.required">Les champs marqués d’un * sont obligatoires.</p></div>
+                            <div id="form-error-summary" class="rec-notice rec-notice-error" role="alert" tabindex="-1" hidden><strong data-i18n="jobs.error.heading">Votre candidature n’a pas été envoyée.</strong><p id="form-error-message"></p><ul id="form-errors"></ul></div>
+                            <div class="rec-field-row">
+                                <div class="rec-field"><label for="app-last-name"><span data-i18n="jobs.lastName">Nom</span> <span aria-hidden="true">*</span></label><input id="app-last-name" name="lastName" type="text" autocomplete="family-name" maxlength="100" required aria-describedby="lastName-error"><p id="lastName-error" class="rec-field-error" hidden></p></div>
+                                <div class="rec-field"><label for="app-post-name" data-i18n="jobs.postName">Postnom</label><input id="app-post-name" name="postName" type="text" autocomplete="additional-name" maxlength="100" aria-describedby="postName-error"><p id="postName-error" class="rec-field-error" hidden></p></div>
+                            </div>
+                            <div class="rec-field-row">
+                                <div class="rec-field"><label for="app-first-name"><span data-i18n="jobs.firstName">Prénom</span> <span aria-hidden="true">*</span></label><input id="app-first-name" name="firstName" type="text" autocomplete="given-name" maxlength="100" required aria-describedby="firstName-error"><p id="firstName-error" class="rec-field-error" hidden></p></div>
+                                <div class="rec-field"><label for="app-age" data-i18n="jobs.age">Âge <span class="rec-optional">(facultatif)</span></label><input id="app-age" name="age" type="number" inputmode="numeric" min="1" max="120" step="1" aria-describedby="age-error"><p id="age-error" class="rec-field-error" hidden></p></div>
+                            </div>
+                            <div class="rec-field-row">
+                                <div class="rec-field"><label for="app-email"><span data-i18n="jobs.email">Adresse e-mail</span> <span aria-hidden="true">*</span></label><input id="app-email" name="email" type="email" autocomplete="email" maxlength="254" required aria-describedby="email-error"><p id="email-error" class="rec-field-error" hidden></p></div>
+                                <div class="rec-field"><label for="app-phone"><span data-i18n="jobs.phone">Téléphone</span> <span aria-hidden="true">*</span></label><input id="app-phone" name="phone" type="tel" autocomplete="tel" maxlength="40" placeholder="+243…" required aria-describedby="phone-note phone-error"><small id="phone-note" data-i18n="jobs.phone.note">Indiquez l’indicatif du pays.</small><p id="phone-error" class="rec-field-error" hidden></p></div>
+                            </div>
+
+                            <div class="rec-form-divider"><span data-i18n="jobs.documents.heading">Vos documents</span><span aria-hidden="true">02</span></div>
+                            <div class="rec-field rec-file-field"><label for="app-cv"><span data-i18n="jobs.cv">CV</span> <span aria-hidden="true">*</span></label><div class="rec-file-box"><span class="rec-file-icon" aria-hidden="true"><i class="fa-regular fa-file-pdf"></i></span><div><strong data-i18n="jobs.cv.select">Ajoutez votre CV au format PDF</strong><p data-i18n="jobs.cv.note">Un fichier, 5 Mio maximum.</p><input id="app-cv" name="cv" type="file" accept="application/pdf,.pdf" required aria-describedby="cv-selection cv-error"></div></div><p id="cv-selection" class="rec-file-selection" role="status"></p><p id="cv-error" class="rec-field-error" hidden></p></div>
+                            <div class="rec-field rec-file-field"><label for="app-documents" data-i18n="jobs.documents.label">Documents complémentaires <span class="rec-optional">(facultatif)</span></label><input id="app-documents" name="documents" type="file" accept="application/pdf,.pdf" multiple aria-describedby="documents-note documents-selection documents-error"><small id="documents-note" data-i18n="jobs.documents.note">Lettre de motivation, diplôme ou justificatif pertinent. Jusqu’à 3 PDF de 5 Mio chacun ; 15 Mio maximum pour l’ensemble du dossier.</small><p id="documents-selection" class="rec-file-selection" role="status"></p><p id="documents-error" class="rec-field-error" hidden></p></div>
+                            <div class="rec-field"><label for="app-message"><span data-i18n="jobs.message">Votre message</span> <span aria-hidden="true">*</span></label><textarea id="app-message" name="message" rows="5" minlength="10" maxlength="5000" required data-i18n-ph="jobs.message.placeholder" placeholder="Présentez votre expérience, vos motivations et ce qui vous attire dans ce poste." aria-describedby="message-note message-error"></textarea><small id="message-note" data-i18n="jobs.message.note">De 10 à 5 000 caractères.</small><p id="message-error" class="rec-field-error" hidden></p></div>
+                            <div class="rec-honeypot" aria-hidden="true"><label for="app-website">Votre site web</label><input id="app-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
+                            <div class="rec-consent"><input id="app-consent" name="consent" type="checkbox" value="true" required aria-describedby="consent-error"><label for="app-consent" data-i18n="jobs.consent">J’accepte que CashPay All utilise mes coordonnées et mes documents pour examiner ma candidature et me contacter au sujet du recrutement.</label></div><p id="consent-error" class="rec-field-error" hidden></p>
+                            <div class="rec-submit-row"><button id="application-submit" class="btn btn-primary" type="submit" disabled><span data-i18n="jobs.submit">Envoyer ma candidature</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button><span class="rec-submit-note" data-i18n="jobs.submit.note">Un dossier transmis à notre équipe, sans ouvrir votre application e-mail.</span></div>
+                            <p id="submission-status" class="rec-submission-status" role="status" aria-live="polite"></p>
+                        </div>
+                    </div>
+                </form>
+                <noscript><div class="rec-notice" data-i18n="jobs.noscript">Activez JavaScript pour choisir votre province et transmettre votre dossier. Vous pouvez aussi écrire à info@cashpayall.com.</div></noscript>
+            </div>
+        </section>
+        <section class="rec-how-section"><div class="container rec-how-grid"><div><span class="rec-eyebrow" data-i18n="jobs.after.tag">APRÈS L’ENVOI</span><h2 data-i18n="jobs.after.title">Chaque parcours<br>mérite notre attention.</h2></div><ol><li><span>01</span><div><h3 data-i18n="jobs.after.one.title">Votre dossier est enregistré</h3><p data-i18n="jobs.after.one.text">Une référence s’affiche dès que la réception de votre candidature est confirmée.</p></div></li><li><span>02</span><div><h3 data-i18n="jobs.after.two.title">Notre équipe l’examine</h3><p data-i18n="jobs.after.two.text">Vos informations sont transmises à l’équipe chargée du recrutement.</p></div></li><li><span>03</span><div><h3 data-i18n="jobs.after.three.title">Nous pouvons vous recontacter</h3><p data-i18n="jobs.after.three.text">Si votre profil correspond au besoin, notre équipe utilise les coordonnées que vous avez renseignées.</p></div></li></ol></div></section>
+    </main>
+    <footer id="site-footer"></footer>
+    <script src="js/i18n.js"></script>
+    <script src="js/recruitment-i18n.js"></script>
+    <script src="js/services-data.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/recruitment.js"></script>
+</body>
+</html>

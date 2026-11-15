@@ -1,0 +1,18 @@
+[Unit]
+Description=CashPay All — purge des anciennes candidatures
+
+[Service]
+Type=oneshot
+User=cashpay-recruitment
+Group=cashpay-recruitment
+WorkingDirectory=/var/www/cashpay-all/main
+EnvironmentFile=/etc/cashpay-recruitment.env
+ExecStart=/usr/bin/node recruitment-server/cleanup.mjs
+StateDirectory=cashpay-recruitment
+StateDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/cashpay-recruitment

@@ -14,6 +14,7 @@ Déployé sur `https://cashpay-all.com`.
 | `apropos.html` | À propos de l'application CashPay All |
 | `entreprise.html` | À propos de FINUSECO SARL : profil, marques, direction |
 | `contact.html` | Formulaire (e-mail ou WhatsApp) et coordonnées |
+| `recrutement.html` | Offres par pays, province et poste ; candidature avec CV |
 
 ## Sections clés (accueil)
 - **Atelier de génie logiciel** (`#genie-logiciel`) : ordinateur qui code en animation (`js/main.js`, bloc « Ordinateur qui code »), types d'applications, VPS.
@@ -51,3 +52,11 @@ Chaque texte porte `data-i18n="clé"`. Changer le français dans le HTML, l'angl
 - `faq.html` : questions fréquemment posées (contenu et traductions dans `js/faq-data.js`, captures dans `public/images/faq/`).
 - `entreprise.html` : direction avec photos (`public/images/team/` : patrick-lubanda, gary-zita, assistante).
 - Témoignages : tableau `TESTIMONIALS` de `js/faq-data.js` (vide = invitation à envoyer un témoignage ; n'y mettre que de vrais témoignages).
+
+## Recrutement
+
+La page `recrutement.html` reprend le design du site et ajoute un parcours pays → province → poste, puis un dossier de candidature avec CV PDF et documents complémentaires. Les candidatures sont ouvertes pour les 26 provinces de RDC et les huit profils du catalogue ; les autres pays africains sont indiqués comme non ouverts.
+
+L’envoi utilise un petit service Node.js séparé, raccordé uniquement à `/api/recruitment/`. Le dossier est conservé hors du site public et notifié par SMTP à **info@cashpayall.com**, l’adresse de recrutement demandée sans tiret. Le formulaire de contact et ses coordonnées existantes restent inchangés.
+
+Voir [l’installation et le fonctionnement du recrutement](docs/recrutement.md) pour le compte SMTP, le stockage privé, le raccordement Nginx et les services systemd. Le service doit être configuré sur le serveur après mise à jour du dépôt ; un `git pull` seul ne configure pas la messagerie. Aucun envoi SMTP réel n’a été exécuté pendant les tests.
