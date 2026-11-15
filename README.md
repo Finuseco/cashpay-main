@@ -46,3 +46,8 @@ Chaque texte porte `data-i18n="clé"`. Changer le français dans le HTML, l'angl
 - Application web : `https://app.cashpay-all.com`
 - Portail développeurs : `https://developer.cashpay-all.com`
 - E-mail : `info@cashpay-all.com`
+
+## FAQ, direction et témoignages
+- `faq.html` : questions fréquemment posées (contenu et traductions dans `js/faq-data.js`, captures dans `public/images/faq/`).
+- `entreprise.html` : direction avec photos (`public/images/team/` : patrick-lubanda, gary-zita, assistante).
+- Témoignages : tableau `TESTIMONIALS` de `js/faq-data.js` (vide = invitation à envoyer un témoignage ; n'y mettre que de vrais témoignages).

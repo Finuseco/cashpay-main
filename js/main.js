@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Composants partagés + contenu dynamique
     if (window.renderLayout) window.renderLayout();
     if (window.renderServices) window.renderServices();
+    if (window.renderFaq) window.renderFaq();
+    if (window.renderTestimonials) window.renderTestimonials();
 
     // 2. Langue
     I18N.apply(I18N.initial());

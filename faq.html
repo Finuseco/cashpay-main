@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="t.faq">FAQ — CashPay All</title>
+    <meta name="description" content="Questions fréquemment posées sur CashPay All : comment se connecter, utiliser le code PIN, voir ses soldes USD et CDF, services et contact, avec captures de l'application.">
+    <link rel="icon" type="image/png" href="public/images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="faq">
+    <header id="site-header"></header>
+    <main>
+        <section class="page-hero">
+            <div class="container">
+                <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">Accueil</a> / <span>FAQ</span></div>
+                <h1 data-i18n="faq.title">Questions fréquemment <span class="highlight">posées</span></h1>
+                <p data-i18n="faq.lead">Comment se connecter, utiliser l'application et obtenir de l'aide : des réponses simples, avec des captures d'écran.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="section-title" data-reveal>
+                    <h2 data-i18n="faq.steps.t">Se connecter en <span class="highlight">3 étapes</span></h2>
+                </div>
+                <div class="faq-steps">
+                    <article class="faq-step" data-reveal>
+                        <div class="shot"><img src="public/images/faq/faq-login.webp" alt="Écran de connexion de CashPay All" loading="lazy"></div>
+                        <h3 data-i18n="faq.s1.t">1. Identifiez-vous</h3>
+                        <p data-i18n="faq.s1.d">Choisissez Téléphone ou Wallet ID, puis touchez Sign in / Continuer.</p>
+                    </article>
+                    <article class="faq-step" data-reveal>
+                        <div class="shot"><img src="public/images/faq/faq-pin.webp" alt="Saisie du code PIN CashPay" loading="lazy"></div>
+                        <h3 data-i18n="faq.s2.t">2. Saisissez votre PIN</h3>
+                        <p data-i18n="faq.s2.d">Tapez votre code PIN CashPay, ou utilisez votre empreinte digitale si elle est disponible.</p>
+                    </article>
+                    <article class="faq-step" data-reveal>
+                        <div class="shot"><img class="flat" src="public/images/faq/faq-usd.webp" alt="Portefeuille avec solde en dollars et carte VISA" loading="lazy"></div>
+                        <h3 data-i18n="faq.s3.t">3. Votre portefeuille s'ouvre</h3>
+                        <p data-i18n="faq.s3.d">Votre solde en dollars et votre carte VISA s'affichent dès l'ouverture.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section soft" id="questions">
+            <div class="container">
+                <div class="section-title" data-reveal>
+                    <h2 data-i18n="faq.list.t">Toutes les <span class="highlight">réponses</span></h2>
+                    <p data-i18n="faq.list.sub">Choisissez un thème ou parcourez les questions ci-dessous.</p>
+                </div>
+                <div class="faq-cats" data-faq-cats></div>
+                <div class="faq-list" data-faq></div>
+            </div>
+        </section>
+
+        <section class="cta-band">
+            <div class="container" data-reveal>
+                <h2 data-i18n="faq.more.t">Une autre question ?</h2>
+                <p data-i18n="faq.more.d">Notre équipe vous répond rapidement sur WhatsApp ou par e-mail.</p>
+                <div class="hero-btns" style="justify-content:center">
+                    <a class="btn btn-light" href="contact.html"><i class="fa-solid fa-envelope" aria-hidden="true"></i> <span data-i18n="cta.btn">Nous contacter</span></a>
+                    <a class="btn btn-ghost" href="https://wa.me/243853868021" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> <span data-i18n="cta.wa">Écrire sur WhatsApp</span></a>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer id="site-footer"></footer>
+    <script src="js/i18n.js"></script>
+    <script src="js/services-data.js"></script>
+    <script src="js/faq-data.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
