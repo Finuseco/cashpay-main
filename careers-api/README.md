@@ -24,6 +24,14 @@ pm2 start server.js --name cashpay-careers && pm2 save
 Variables : `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` (obligatoires pour l'e-mail), `MAIL_TO`, `MAIL_FROM` (défaut : SMTP_USER),
 `DATA_DIR` (défaut `/var/lib/cashpay-careers`), `PORT` (défaut 8010), `TRUST_PROXY=1` derrière nginx.
 
+## Accusé de réception automatique
+Après chaque candidature valide, le candidat reçoit un e-mail professionnel (français ou anglais selon la langue du site) avec sa référence,
+un récapitulatif et les prochaines étapes. Expéditeur : `noreply@cashpay-all.com` (variable `MAIL_NOREPLY`) ; les réponses vont à `info@cashpay-all.com`.
+- Par défaut l'envoi passe par le compte SMTP principal : le serveur de messagerie doit autoriser d'écrire « de la part de » noreply@ (alias ou boîte existante).
+- S'il refuse, créer la boîte `noreply@cashpay-all.com` et ajouter dans `/etc/cashpay-careers.env` : `NOREPLY_SMTP_USER=noreply@cashpay-all.com` et `NOREPLY_SMTP_PASSWORD=…`
+  (`NOREPLY_SMTP_HOST` / `NOREPLY_SMTP_PORT` si différents), puis `pm2 restart cashpay-careers`.
+- Si l'accusé échoue, la candidature n'est pas perdue : elle arrive quand même à info@ ; l'erreur est dans `pm2 logs cashpay-careers` (`accusé de réception non envoyé`).
+
 ## nginx (dans le bloc `server` de cashpay-all.com)
 ```nginx
 location /api/careers {
@@ -43,4 +51,4 @@ Logs : `pm2 logs cashpay-careers`. Les candidatures sont aussi dans `DATA_DIR/AA
 
 ## Sécurité
 Limites : 6 envois/heure par adresse IP, 3 candidatures/jour par e-mail ; champ piège anti-robots ; délai minimal de remplissage ;
-types de fichiers vérifiés sur le contenu ; aucune réponse automatique envoyée aux candidats (évite l'usage du serveur pour spammer des tiers).
+types de fichiers vérifiés sur le contenu ; l'accusé de réception n'est envoyé qu'après une candidature complète et valide (CV vérifié), avec les limites ci-dessus, pour éviter qu'on s'en serve pour spammer des tiers.

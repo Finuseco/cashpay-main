@@ -24,6 +24,8 @@ const CFG = {
     host: process.env.HOST || '127.0.0.1',
     mailTo: process.env.MAIL_TO || 'info@cashpay-all.com',
     mailFrom: process.env.MAIL_FROM || process.env.SMTP_USER || 'info@cashpay-all.com',
+    noreplyFrom: process.env.MAIL_NOREPLY || 'noreply@cashpay-all.com',      // expéditeur de l'accusé de réception
+    noreply: { host: process.env.NOREPLY_SMTP_HOST || process.env.SMTP_HOST, port: Number(process.env.NOREPLY_SMTP_PORT || process.env.SMTP_PORT || 587), user: process.env.NOREPLY_SMTP_USER, pass: process.env.NOREPLY_SMTP_PASSWORD },
     smtp: { host: process.env.SMTP_HOST, port: Number(process.env.SMTP_PORT || 587), user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD },
     dataDir: process.env.DATA_DIR || '/var/lib/cashpay-careers',      // hors du dossier web !
     trustProxy: process.env.TRUST_PROXY === '1',
@@ -32,6 +34,7 @@ const CFG = {
     maxBodyBytes: 22 * 1024 * 1024
 };
 
+const TPL = require('./templates');
 const JOBS = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'js', 'jobs-data.json'), 'utf8'));
 const POSITIONS = new Map(JOBS.positions.map(p => [p.key, p]));
 const COUNTRIES = new Map(JOBS.countries.map(c => [c.code, c]));
@@ -92,6 +95,15 @@ function mailer() {
     const nodemailer = require('nodemailer');
     transporter = nodemailer.createTransport({ host: CFG.smtp.host, port: CFG.smtp.port, secure: CFG.smtp.port === 465, auth: { user: CFG.smtp.user, pass: CFG.smtp.pass } });
     return transporter;
+}
+
+let noreplyTr = null;
+/** Compte SMTP dédié à noreply@ (facultatif). Sans identifiants dédiés, on utilise le compte principal. */
+function noreplyMailer() {
+    if (noreplyTr) return noreplyTr;
+    if (!CFG.noreply.user || !CFG.noreply.pass || !CFG.noreply.host) return null;
+    noreplyTr = require('nodemailer').createTransport({ host: CFG.noreply.host, port: CFG.noreply.port, secure: CFG.noreply.port === 465, auth: { user: CFG.noreply.user, pass: CFG.noreply.pass } });
+    return noreplyTr;
 }
 
 // --- Traitement d'une candidature --------------------------------------------
@@ -158,31 +170,34 @@ async function handleApply(req, res) {
         saved = true;
     } catch (e) { console.error('[careers] sauvegarde disque impossible :', e.message); }
 
-    // 2) E-mail vers info@cashpay-all.com
-    let mailed = false;
+    // 2) E-mail interne vers info@cashpay-all.com + accusé de réception automatique au candidat
+    let mailed = false, acked = false;
     const tr = mailer();
     if (tr) {
-        const where = [d.province, country.name].join(', ');
-        const rows = [
-            ['Référence', ref], ['Poste', position.fr], ['Pays', country.name], ['Province / région', d.province],
-            ['Nom', d.lastName], ['Prénom', d.firstName], ['Âge', d.age + ' ans'], ['Téléphone', d.phone], ['E-mail', d.email], ['Ville / commune', d.city || '—']
-        ];
-        const text = rows.map(r => r[0] + ' : ' + r[1]).join('\n') + '\n\nMessage :\n' + (d.message || '—') + '\n\nPièces jointes : ' + files.map(f => f.name).join(', ');
-        const html = '<h2>Nouvelle candidature — ' + esc(position.fr) + '</h2><table cellpadding="6" style="border-collapse:collapse">' +
-            rows.map(r => '<tr><td style="background:#f3edf9"><b>' + esc(r[0]) + '</b></td><td>' + esc(r[1]) + '</td></tr>').join('') + '</table>' +
-            '<h3>Message</h3><p style="white-space:pre-wrap">' + esc(d.message || '—') + '</p><p>Pièces jointes : ' + esc(files.map(f => f.name).join(', ')) + '</p>';
+        const ctx = { ref, position: position.fr, positionEn: position.en, country: country.name, files: files.map(f => f.name) };
+        const m = TPL.internal(d, ctx);
         try {
             await tr.sendMail({
-                from: '"CashPay All Carrières" <' + CFG.mailFrom + '>', to: CFG.mailTo, replyTo: '"' + d.firstName.replace(/"/g, '') + ' ' + d.lastName.replace(/"/g, '') + '" <' + d.email + '>',
-                subject: '[Candidature] ' + position.fr + ' — ' + d.lastName + ' ' + d.firstName + ' (' + where + ') — ' + ref,
-                text, html, attachments: files.map(f => ({ filename: f.name, content: f.buf }))
+                from: '"CashPay All Carrières" <' + CFG.mailFrom + '>', to: CFG.mailTo,
+                replyTo: '"' + d.firstName.replace(/"/g, '') + ' ' + d.lastName.replace(/"/g, '') + '" <' + d.email + '>',
+                subject: m.subject, text: m.text, html: m.html, attachments: files.map(f => ({ filename: f.name, content: f.buf }))
             });
             mailed = true;
-        } catch (e) { console.error('[careers] e-mail non envoyé :', e.message); }
+        } catch (e) { console.error('[careers] e-mail interne non envoyé :', e.message); }
+        // Accusé de réception : envoyé uniquement après une candidature valide (limites par IP et par e-mail déjà appliquées)
+        try {
+            const a = TPL.acknowledgement(d, ctx), t2 = noreplyMailer() || tr;
+            await t2.sendMail({
+                from: '"CashPay All" <' + CFG.noreplyFrom + '>', to: d.email, replyTo: CFG.mailTo,
+                subject: a.subject, text: a.text, html: a.html,
+                headers: { 'Auto-Submitted': 'auto-replied', 'X-Auto-Response-Suppress': 'All' }
+            });
+            acked = true;
+        } catch (e) { console.error('[careers] accusé de réception non envoyé à ' + d.email + ' :', e.message); }
     } else console.error('[careers] SMTP non configuré : candidature ' + ref + ' enregistrée sur disque seulement.');
 
     if (!saved && !mailed) return fail(res, 500, 'server', 'Un problème est survenu. Écrivez-nous à ' + CFG.mailTo + '.');
-    console.log('[careers] ' + ref + ' ' + position.key + ' ' + d.country + '/' + d.province + ' saved=' + saved + ' mailed=' + mailed);
+    console.log('[careers] ' + ref + ' ' + position.key + ' ' + d.country + '/' + d.province + ' saved=' + saved + ' mailed=' + mailed + ' ack=' + acked);
     return send(res, 200, { ok: true, ref });
 }
 
