@@ -51,3 +51,8 @@ Chaque texte porte `data-i18n="clé"`. Changer le français dans le HTML, l'angl
 - `faq.html` : questions fréquemment posées (contenu et traductions dans `js/faq-data.js`, captures dans `public/images/faq/`).
 - `entreprise.html` : direction avec photos (`public/images/team/` : patrick-lubanda, gary-zita, assistante).
 - Témoignages : tableau `TESTIMONIALS` de `js/faq-data.js` (vide = invitation à envoyer un témoignage ; n'y mettre que de vrais témoignages).
+
+## Emplois
+- `emplois.html` + `js/jobs.js` : candidature en ligne (pays → province → poste → informations → CV et message).
+- `js/jobs-data.json` : pays africains, provinces et liste des postes (à modifier ici).
+- `careers-api/` : service qui reçoit les candidatures et les envoie à info@cashpay-all.com (installation dans `careers-api/README.md`).

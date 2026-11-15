@@ -1,8 +1,5 @@
-.env*
 node_modules/
-.next/
-backups/
+.env
+.env.*
 *.log
-*.key
-*.pem
-*.cpk
+careers-api/data/

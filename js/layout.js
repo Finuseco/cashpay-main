@@ -34,6 +34,10 @@
                             <i class="fa-solid fa-building" aria-hidden="true"></i>
                             <div><strong data-i18n="nav.about.co">L'entreprise FINUSECO</strong><small data-i18n="nav.about.co.d">Profil, marques, direction</small></div>
                         </a>
+                        <a href="emplois.html" data-page-link="jobs">
+                            <i class="fa-solid fa-briefcase" aria-hidden="true"></i>
+                            <div><strong data-i18n="nav.jobs">Emplois & carrières</strong><small data-i18n="nav.jobs.d">Postes ouverts et candidature en ligne</small></div>
+                        </a>
                     </div>
                 </li>
                 <li><a href="faq.html" data-page-link="faq" data-i18n="nav.faq">FAQ</a></li>
@@ -70,6 +74,7 @@
                         <li><a href="apropos.html" data-i18n="nav.about.app">L'application</a></li>
                         <li><a href="entreprise.html" data-i18n="nav.about.co">L'entreprise FINUSECO</a></li>
                         <li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
+                        <li><a href="emplois.html" data-i18n="nav.jobs.short">Emplois</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">

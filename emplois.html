@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="t.jobs">Emplois & carrières — CashPay All</title>
+    <meta name="description" content="Rejoignez CashPay All : postes ouverts dans chaque province de la RDC (manager, expert-comptable, trésorier, directeurs, délégué et agent commercial). Postulez en ligne avec votre CV.">
+    <link rel="icon" type="image/png" href="public/images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="jobs">
+    <header id="site-header"></header>
+    <main>
+        <section class="page-hero">
+            <div class="container">
+                <div class="breadcrumb"><a href="index.html" data-i18n="nav.home">Accueil</a> / <span data-i18n="jb.crumb">Emplois</span></div>
+                <h1 data-i18n="jb.title">Rejoignez <span class="highlight">CashPay All</span></h1>
+                <p data-i18n="jb.lead">Nous recrutons pour chaque province de la République démocratique du Congo. Choisissez votre pays, votre province et le poste qui vous correspond, puis envoyez votre candidature en quelques minutes.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="section-title" data-reveal>
+                    <h2 data-i18n="jb.roles.t">Les profils que nous <span class="highlight">recherchons</span></h2>
+                    <p data-i18n="jb.roles.sub">Ces postes sont ouverts dans chacune de nos provinces.</p>
+                </div>
+                <div class="job-roles" id="job-roles"></div>
+            </div>
+        </section>
+
+        <section class="section soft" id="postuler">
+            <div class="container job-wrap">
+                <div class="section-title" data-reveal>
+                    <h2 data-i18n="jb.apply.t">Postuler <span class="highlight">en ligne</span></h2>
+                    <p data-i18n="jb.apply.sub">Cinq étapes simples. Votre dossier est transmis directement à notre équipe.</p>
+                </div>
+
+                <form id="job-form" class="job-form" novalidate autocomplete="on">
+                    <div class="job-progress" id="job-progress" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+
+                    <fieldset class="job-step" data-step="1">
+                        <legend><b>1</b> <span data-i18n="jb.s1">Votre pays</span></legend>
+                        <label class="job-label" for="f-country" data-i18n="jb.country">Dans quel pays souhaitez-vous travailler ?</label>
+                        <select id="f-country" name="country" required></select>
+                    </fieldset>
+
+                    <fieldset class="job-step locked" data-step="2">
+                        <legend><b>2</b> <span data-i18n="jb.s2">Votre province</span></legend>
+                        <label class="job-label" for="f-province" data-i18n="jb.province">Province ou région</label>
+                        <div id="province-box"></div>
+                    </fieldset>
+
+                    <fieldset class="job-step locked" data-step="3">
+                        <legend><b>3</b> <span data-i18n="jb.s3">Le poste visé</span></legend>
+                        <div class="job-pos" id="job-pos" role="radiogroup" aria-label="Poste"></div>
+                        <p class="job-desc" id="pos-desc" aria-live="polite"></p>
+                    </fieldset>
+
+                    <fieldset class="job-step locked" data-step="4">
+                        <legend><b>4</b> <span data-i18n="jb.s4">Vos informations</span></legend>
+                        <div class="job-grid">
+                            <div><label for="f-last" data-i18n="jb.last">Nom</label><input id="f-last" name="lastName" type="text" maxlength="80" autocomplete="family-name" required></div>
+                            <div><label for="f-first" data-i18n="jb.first">Prénom</label><input id="f-first" name="firstName" type="text" maxlength="80" autocomplete="given-name" required></div>
+                            <div><label for="f-age" data-i18n="jb.age">Âge</label><input id="f-age" name="age" type="number" inputmode="numeric" min="16" max="80" required></div>
+                            <div><label for="f-phone" data-i18n="jb.phone">Téléphone (avec indicatif)</label><input id="f-phone" name="phone" type="tel" maxlength="30" placeholder="+243 …" autocomplete="tel" required></div>
+                            <div><label for="f-email" data-i18n="jb.email">Adresse e-mail</label><input id="f-email" name="email" type="email" maxlength="120" autocomplete="email" required></div>
+                            <div><label for="f-city" data-i18n="jb.city">Ville ou commune (facultatif)</label><input id="f-city" name="city" type="text" maxlength="80" autocomplete="address-level2"></div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="job-step locked" data-step="5">
+                        <legend><b>5</b> <span data-i18n="jb.s5">Documents et message</span></legend>
+                        <div class="job-grid">
+                            <div class="full"><label for="f-cv" data-i18n="jb.cv">Votre CV (PDF, DOC ou DOCX, 5 Mo maximum) *</label><input id="f-cv" name="cv" type="file" accept=".pdf,.doc,.docx" required></div>
+                            <div class="full"><label for="f-docs" data-i18n="jb.docs">Autres documents : lettre de motivation, diplômes… (facultatif, 3 fichiers maximum)</label><input id="f-docs" name="docs" type="file" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"></div>
+                            <div class="full"><label for="f-msg" data-i18n="jb.msg">Message ou description de votre profil (facultatif)</label><textarea id="f-msg" name="message" rows="5" maxlength="4000" data-i18n-ph="jb.msg.ph" placeholder="Présentez votre expérience, vos compétences, vos disponibilités…"></textarea></div>
+                        </div>
+                        <div class="job-hp" aria-hidden="true"><label>Site web <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+                        <label class="job-check"><input type="checkbox" id="f-consent" name="consent" value="1" required> <span data-i18n="jb.consent">J'accepte que mes données et mes documents soient transmis à FINUSECO SARL pour le traitement de ma candidature.</span></label>
+                        <p class="job-error" id="job-error" role="alert" hidden></p>
+                        <button type="submit" class="btn btn-primary job-submit" id="job-submit"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> <span data-i18n="jb.send">Envoyer ma candidature</span></button>
+                    </fieldset>
+                </form>
+
+                <div class="job-done" id="job-done" hidden>
+                    <div class="job-done-ico"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></div>
+                    <h3 data-i18n="jb.done.t">Candidature envoyée</h3>
+                    <p data-i18n="jb.done.d">Merci ! Votre dossier a bien été transmis à notre équipe. Nous vous contacterons si votre profil correspond à nos besoins.</p>
+                    <p class="job-ref"><span data-i18n="jb.done.ref">Votre référence :</span> <b id="job-ref"></b></p>
+                    <a class="btn btn-outline" href="index.html"><i class="fa-solid fa-house" aria-hidden="true"></i> <span data-i18n="jb.done.home">Retour à l'accueil</span></a>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-band">
+            <div class="container" data-reveal>
+                <h2 data-i18n="jb.help.t">Une question sur un poste ?</h2>
+                <p data-i18n="jb.help.d">Écrivez-nous, notre équipe vous répond.</p>
+                <div class="hero-btns" style="justify-content:center">
+                    <a class="btn btn-light" href="mailto:info@cashpay-all.com"><i class="fa-solid fa-envelope" aria-hidden="true"></i> info@cashpay-all.com</a>
+                    <a class="btn btn-ghost" href="https://wa.me/243853868021" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> <span data-i18n="cta.wa">Écrire sur WhatsApp</span></a>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer id="site-footer"></footer>
+    <script src="js/i18n.js"></script>
+    <script src="js/jobs.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
