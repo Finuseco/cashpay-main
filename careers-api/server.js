@@ -24,7 +24,7 @@ const CFG = {
     host: process.env.HOST || '127.0.0.1',
     mailTo: process.env.MAIL_TO || 'info@cashpay-all.com',
     mailFrom: process.env.MAIL_FROM || process.env.SMTP_USER || 'info@cashpay-all.com',
-    noreplyFrom: process.env.MAIL_NOREPLY || 'noreply@cashpay-all.com',      // expéditeur de l'accusé de réception
+    noreplyFrom: process.env.MAIL_NOREPLY || process.env.SMTP_USER || 'noreply@cashpay-all.com',      // expéditeur de l'accusé de réception
     noreply: { host: process.env.NOREPLY_SMTP_HOST || process.env.SMTP_HOST, port: Number(process.env.NOREPLY_SMTP_PORT || process.env.SMTP_PORT || 587), user: process.env.NOREPLY_SMTP_USER, pass: process.env.NOREPLY_SMTP_PASSWORD },
     smtp: { host: process.env.SMTP_HOST, port: Number(process.env.SMTP_PORT || 587), user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD },
     dataDir: process.env.DATA_DIR || '/var/lib/cashpay-careers',      // hors du dossier web !

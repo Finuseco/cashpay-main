@@ -6,7 +6,14 @@ puis envoie un e-mail avec les pièces jointes à **info@cashpay-all.com**.
 
 Données du formulaire (pays, provinces, postes) : `../js/jobs-data.json` — pour ajouter un poste ou une province, modifier ce fichier seulement.
 
-## Installation sur le serveur (une fois)
+## Installation en UNE commande (recommandé)
+```bash
+cd /var/www/cashpay-all/cashpay-main && git pull origin main && bash careers-api/install.sh
+```
+Le script copie les réglages SMTP du portail développeur, installe, démarre le service avec pm2 et ajoute la route dans nginx
+(avec test `nginx -t` et retour arrière automatique en cas d'erreur). Il peut être relancé sans risque.
+
+## Installation manuelle (équivalent, une fois)
 ```bash
 cd /var/www/cashpay-all/cashpay-main/careers-api && npm install --omit=dev
 
