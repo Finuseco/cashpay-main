@@ -720,3 +720,28 @@ main { overflow-x: clip; }
 .leader-social a:hover { background: var(--orange); color: #fff; border-color: var(--orange); transform: translateY(-3px); }
 #cp-toast { position: fixed; left: 50%; bottom: 96px; transform: translate(-50%, 20px); z-index: 1000; max-width: min(92vw, 460px); background: var(--navy); color: #fff; padding: 14px 20px; border-radius: 14px; font-size: 14.5px; line-height: 1.5; box-shadow: 0 16px 40px rgba(25, 10, 40, .35); opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s var(--ease); text-align: center; }
 #cp-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+
+/* ---------- Pied de page : réseaux ---------- */
+.footer-follow { position: relative; margin-top: 44px; padding-top: 28px; border-top: 1px solid rgba(255, 255, 255, .12); display: flex; flex-wrap: wrap; align-items: center; gap: 18px 28px; }
+.footer-follow h5 { color: #fff; font-size: 15px; margin: 0; }
+.follow-btns { display: flex; flex-wrap: wrap; gap: 10px; }
+.follow-btns a { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; font-size: 14px; font-weight: 600; color: #fff; background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .18); transition: all .25s; }
+.follow-btns a:hover { background: #fff; color: var(--navy); transform: translateY(-2px); }
+.follow-btns a.fb-wa { background: var(--green); border-color: var(--green); }
+.follow-btns a.fb-wa:hover { background: #fff; color: #0b7a43; }
+
+/* ---------- Pop-up de bienvenue ---------- */
+.welcome-pop { position: fixed; inset: 0; z-index: 1200; display: grid; place-items: center; padding: 20px; background: rgba(25, 10, 40, .62); backdrop-filter: blur(4px); opacity: 0; transition: opacity .3s; }
+.welcome-pop[hidden] { display: none; }
+.welcome-pop.show { opacity: 1; }
+.welcome-card { position: relative; width: min(100%, 460px); background: #fff; border-radius: 26px; padding: 40px 30px 26px; text-align: center; box-shadow: 0 30px 80px rgba(25, 10, 40, .5); transform: translateY(24px) scale(.97); transition: transform .35s var(--ease); }
+.welcome-pop.show .welcome-card { transform: none; }
+.welcome-ico { width: 72px; height: 72px; margin: 0 auto 16px; border-radius: 50%; display: grid; place-items: center; background: var(--green); color: #fff; font-size: 38px; box-shadow: 0 10px 26px rgba(37, 211, 102, .4); }
+.welcome-card h3 { font-size: 23px; color: var(--navy); margin-bottom: 10px; }
+.welcome-card p { color: #3b2d52; font-size: 15.5px; line-height: 1.6; margin-bottom: 22px; }
+.welcome-btns { display: grid; gap: 10px; }
+.welcome-btns .btn { justify-content: center; width: 100%; }
+.welcome-close { position: absolute; top: 14px; right: 14px; width: 38px; height: 38px; border-radius: 50%; border: 0; background: var(--bg-soft); color: var(--navy); font-size: 16px; cursor: pointer; }
+.welcome-close:hover { background: var(--navy); color: #fff; }
+.welcome-later { margin-top: 14px; background: none; border: 0; color: #6b5a82; font: 600 13.5px 'Inter', sans-serif; cursor: pointer; text-decoration: underline; }

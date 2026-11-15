@@ -5,8 +5,9 @@
     const WA_DISPLAY = '+243 85 386 80 21';
     const EMAIL = 'info@cashpay-all.com';
     const APP_URL = 'https://app.cashpay-all.com';
+    const CHANNEL_URL = 'https://whatsapp.com/channel/0029VbC4htiHAdNTdwakAX1Y'; // chaîne WhatsApp CashPay All
 
-    window.CASHPAY = { WA_NUMBER, WA_DISPLAY, EMAIL, APP_URL };
+    window.CASHPAY = { WA_NUMBER, WA_DISPLAY, EMAIL, APP_URL, CHANNEL_URL };
 
     function headerHTML() {
         return `
@@ -89,6 +90,17 @@
                     </ul>
                 </div>
             </div>
+            <div class="footer-follow">
+                <h5 data-i18n="foot.follow">Suivez CashPay All</h5>
+                <div class="follow-btns">
+                    <a class="fb-wa" href="${CHANNEL_URL}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> <span data-i18n="foot.channel">Chaîne WhatsApp</span></a>
+                    <a class="fb-wa" href="https://wa.me/${WA_NUMBER}" target="_blank" rel="noopener"><i class="fa-solid fa-headset" aria-hidden="true"></i> <span data-i18n="foot.wapage">WhatsApp : nous écrire</span></a>
+                    <a href="#" data-href="*" data-net="facebook"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i> Facebook</a>
+                    <a href="#" data-href="*" data-net="instagram"><i class="fa-brands fa-instagram" aria-hidden="true"></i> Instagram</a>
+                    <a href="#" data-href="*" data-net="x"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i> X</a>
+                    <a href="#" data-href="*" data-net="linkedin"><i class="fa-brands fa-linkedin-in" aria-hidden="true"></i> LinkedIn</a>
+                </div>
+            </div>
             <div class="footer-bottom">
                 <span>&copy; <span id="year"></span> FINUSECO SARL — CashPay All. <span data-i18n="foot.rights">Tous droits réservés.</span></span>
                 <span data-i18n="foot.tagline">Service Financier Numérique Congolais</span>
@@ -101,6 +113,46 @@
             <span class="wa-ico"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></span>
             <span class="wa-label" data-i18n="wa.label">Discuter sur WhatsApp</span>
         </a>`;
+    }
+
+    function popupHTML() {
+        return `<div class="welcome-pop" id="welcome-pop" role="dialog" aria-modal="true" aria-labelledby="welcome-title" hidden>
+            <div class="welcome-card">
+                <button type="button" class="welcome-close" id="welcome-close" aria-label="Fermer"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                <div class="welcome-ico"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
+                <h3 id="welcome-title" data-i18n="pop.title">Rejoignez la communauté CashPay All</h3>
+                <p data-i18n="pop.desc">Abonnez-vous d'abord à notre chaîne WhatsApp pour suivre nos nouveautés, nos offres et nos services, et écrivez-nous sur notre page WhatsApp pour toute question.</p>
+                <div class="welcome-btns">
+                    <a class="btn btn-wa" href="${CHANNEL_URL}" target="_blank" rel="noopener" data-welcome-go><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> <span data-i18n="pop.channel">Suivre la chaîne WhatsApp</span></a>
+                    <a class="btn btn-outline" href="https://wa.me/${WA_NUMBER}" target="_blank" rel="noopener" data-welcome-go><i class="fa-solid fa-comment-dots" aria-hidden="true"></i> <span data-i18n="pop.page">Écrire sur WhatsApp</span></a>
+                </div>
+                <button type="button" class="welcome-later" id="welcome-later" data-i18n="pop.later">Plus tard</button>
+            </div>
+        </div>`;
+    }
+
+    function initWelcome() {
+        const KEY = 'cashpay-welcome', DAYS = 7;
+        try { const t = parseInt(localStorage.getItem(KEY) || '0', 10); if (t && Date.now() - t < DAYS * 864e5) return; } catch (e) {}
+        if (!document.getElementById('welcome-pop')) document.body.insertAdjacentHTML('beforeend', popupHTML());
+        const pop = document.getElementById('welcome-pop');
+        let last = null;
+        function close() {
+            pop.classList.remove('show'); setTimeout(() => { pop.hidden = true; }, 300);
+            try { localStorage.setItem(KEY, String(Date.now())); } catch (e) {}
+            document.removeEventListener('keydown', onKey);
+            if (last && last.focus) last.focus();
+        }
+        function onKey(e) { if (e.key === 'Escape') close(); }
+        pop.addEventListener('click', e => { if (e.target === pop || e.target.closest('#welcome-close, #welcome-later, [data-welcome-go]')) close(); });
+        setTimeout(() => {
+            if (document.getElementById('welcome-pop') !== pop) return;
+            last = document.activeElement; pop.hidden = false;
+            if (window.I18N) I18N.apply(I18N.lang);
+            requestAnimationFrame(() => pop.classList.add('show'));
+            document.addEventListener('keydown', onKey);
+            const b = pop.querySelector('.btn'); if (b) b.focus();
+        }, 3500);
     }
 
     window.renderLayout = function () {
@@ -118,6 +170,7 @@
             const dd = document.querySelector('.has-dd > button');
             if (dd) dd.classList.add('active');
         }
+        initWelcome();
         const y = document.getElementById('year');
         if (y) y.textContent = new Date().getFullYear();
     };
