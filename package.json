@@ -1,0 +1,14 @@
+{
+  "name": "cashpay-main-recruitment",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Service de candidatures isolé du site statique CashPay All",
+  "engines": { "node": ">=22.9" },
+  "scripts": {
+    "recruitment:start": "node recruitment-server/index.mjs",
+    "recruitment:work": "node recruitment-server/worker.mjs",
+    "recruitment:cleanup": "node recruitment-server/cleanup.mjs",
+    "test:recruitment": "node --test --experimental-test-isolation=none test/recruitment*.test.mjs"
+  },
+  "dependencies": { "nodemailer": "^7.0.10" }
+}

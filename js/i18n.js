@@ -13,6 +13,8 @@
         't.about': 'About the app — CashPay All',
         't.company': 'FINUSECO — CashPay All',
         't.contact': 'Contact — CashPay All',
+        'nav.recruitment': 'Careers',
+        'nav.recruitment.d': 'Our roles and your application',
 
         /* ---------- Navigation & pied de page ---------- */
         'nav.home': 'Home', 'nav.services': 'Services', 'nav.workshops': 'Workshops', 'nav.developers': 'Developers',
