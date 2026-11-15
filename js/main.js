@@ -174,3 +174,38 @@ document.addEventListener('DOMContentLoaded', () => {
     draw(0);
 })();
 });
+
+// --- Messages d'information (liens non encore disponibles) ---
+(function () {
+    function toast(msg) {
+        let t = document.getElementById('cp-toast');
+        if (!t) { t = document.createElement('div'); t.id = 'cp-toast'; t.setAttribute('role', 'status'); t.setAttribute('aria-live', 'polite'); document.body.appendChild(t); }
+        t.textContent = msg; t.classList.add('show');
+        clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 4200);
+    }
+    window.cpToast = toast;
+    if (window.I18N) I18N.extend({
+        'toast.social': 'Ce profil sera bientôt disponible.',
+        'toast.dl': "Ce fichier n'est pas encore disponible au téléchargement. Écrivez-nous sur WhatsApp ou par e-mail pour l'obtenir."
+    });
+    document.addEventListener('click', e => {
+        // Réseaux sociaux : « * » = lien pas encore renseigné, aucune navigation
+        const soc = e.target.closest('a[data-href]');
+        if (soc && soc.getAttribute('data-href') === '*') {
+            e.preventDefault();
+            toast(I18N.t('toast.social', 'Ce profil sera bientôt disponible.'));
+            return;
+        }
+        // Téléchargements : on vérifie que le fichier existe avant de lancer le téléchargement
+        const dl = e.target.closest('a[href*="public/downloads/"]');
+        if (dl) {
+            e.preventDefault();
+            const url = dl.getAttribute('href');
+            fetch(url, { method: 'HEAD', cache: 'no-store' }).then(r => {
+                const type = (r.headers.get('content-type') || '').toLowerCase();
+                if (r.ok && type.indexOf('text/html') === -1) { window.location.href = url; }
+                else toast(I18N.t('toast.dl', "Ce fichier n'est pas encore disponible au téléchargement. Écrivez-nous sur WhatsApp ou par e-mail pour l'obtenir."));
+            }).catch(() => toast(I18N.t('toast.dl', "Ce fichier n'est pas encore disponible au téléchargement.")));
+        }
+    });
+})();

@@ -712,3 +712,11 @@ main { overflow-x: clip; }
     .faq-item summary { font-size: 16px; padding: 18px; }
     .faq-body { padding: 0 18px 20px; }
 }
+
+
+/* ---------- Réseaux sociaux de la direction + messages ---------- */
+.leader-social { display: flex; justify-content: center; gap: 10px; margin-top: 18px; }
+.leader-social a { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--bg-soft); color: var(--navy); border: 1px solid var(--border); font-size: 15px; transition: all .25s; }
+.leader-social a:hover { background: var(--orange); color: #fff; border-color: var(--orange); transform: translateY(-3px); }
+#cp-toast { position: fixed; left: 50%; bottom: 96px; transform: translate(-50%, 20px); z-index: 1000; max-width: min(92vw, 460px); background: var(--navy); color: #fff; padding: 14px 20px; border-radius: 14px; font-size: 14.5px; line-height: 1.5; box-shadow: 0 16px 40px rgba(25, 10, 40, .35); opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s var(--ease); text-align: center; }
+#cp-toast.show { opacity: 1; transform: translate(-50%, 0); }
