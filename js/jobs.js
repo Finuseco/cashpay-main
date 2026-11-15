@@ -23,7 +23,7 @@
         'jb.pick': 'Select a position', 'jb.otherCountry': 'Applications outside the DR Congo are welcome: tell us your region.',
         'jb.err.country': 'Please choose a country.', 'jb.err.province': 'Please choose or enter a province.', 'jb.err.position': 'Please choose a position.',
         'jb.err.fields': 'Please fill in all the required fields correctly.', 'jb.err.cv': 'Please attach your CV (PDF, DOC or DOCX).', 'jb.err.consent': 'Please accept the consent box.',
-        'jb.err.size': 'A file is larger than 5 MB.', 'jb.err.type': 'A file has an unsupported format.', 'jb.err.docs': 'You can attach 3 other documents at most.',
+        'jb.err.size': 'A file is larger than 5 MB.', 'jb.err.total_too_big': 'The files exceed 15 MB in total. Please reduce their size.', 'jb.err.type': 'A file has an unsupported format.', 'jb.err.docs': 'You can attach 3 other documents at most.',
         'jb.err.net': 'We could not send your application. Check your connection or write to info@cashpay-all.com.',
         'jb.err.cv_missing': 'The CV is required.', 'jb.err.cv_bad_type': 'CV refused: use a PDF, DOC or DOCX file of 5 MB maximum.', 'jb.err.cv_too_big': 'The CV is larger than 5 MB.',
         'jb.err.rate_limit': 'Too many applications from this connection. Please try again later.', 'jb.err.too_fast': 'Please wait a few seconds and try again.'
@@ -109,6 +109,7 @@
         if (docs.length > 3) return showError(L('jb.err.docs', 'Vous pouvez joindre 3 autres documents au maximum.'));
         if (!okExt(cv, ['pdf', 'doc', 'docx']) || docs.some(f => !okExt(f, ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png']))) return showError(L('jb.err.type', 'Un fichier a un format non accepté.'));
         if (cv.size > MAX || docs.some(f => f.size > MAX)) return showError(L('jb.err.size', 'Un fichier dépasse 5 Mo.'));
+        if (cv.size + docs.reduce((n, f) => n + f.size, 0) > 15 * 1024 * 1024) return showError(L('jb.err.total_too_big', 'Les fichiers dépassent 15 Mo au total. Réduisez leur taille.'));
         if (!$('f-consent').checked) return showError(L('jb.err.consent', 'Veuillez cocher la case de consentement.'));
 
         const fd = new FormData(form);

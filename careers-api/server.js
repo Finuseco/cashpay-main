@@ -28,6 +28,7 @@ const CFG = {
     dataDir: process.env.DATA_DIR || '/var/lib/cashpay-careers',      // hors du dossier web !
     trustProxy: process.env.TRUST_PROXY === '1',
     maxFileBytes: 5 * 1024 * 1024,
+    maxTotalBytes: 15 * 1024 * 1024,
     maxBodyBytes: 22 * 1024 * 1024
 };
 
@@ -140,6 +141,9 @@ async function handleApply(req, res) {
         if (r.error) return fail(res, 422, 'doc_' + r.error, 'Document « ' + oneLine(f.name, 60) + ' » refusé (PDF, DOC, DOCX, JPG ou PNG, 5 Mo maximum).');
         docs.push(r);
     }
+
+    // Total limité : une boîte mail refuse souvent plus de ~25 Mo (les pièces jointes grossissent d'un tiers à l'envoi)
+    if (cv.buf.length + docs.reduce((n, x) => n + x.buf.length, 0) > CFG.maxTotalBytes) return fail(res, 422, 'total_too_big', 'Les fichiers dépassent 15 Mo au total. Réduisez leur taille.');
 
     const ref = 'CP-' + new Date().toISOString().slice(2, 10).replace(/-/g, '') + '-' + crypto.randomBytes(3).toString('hex').toUpperCase();
     const files = [{ ...cv, name: 'CV_' + cv.name }, ...docs.map((x, i) => ({ ...x, name: 'Doc' + (i + 1) + '_' + x.name }))];
