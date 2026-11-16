@@ -74,13 +74,15 @@ const SIGNATURES = {
     doc: b => b[0] === 0xd0 && b[1] === 0xcf && b[2] === 0x11 && b[3] === 0xe0,
     jpg: b => b[0] === 0xff && b[1] === 0xd8,
     jpeg: b => b[0] === 0xff && b[1] === 0xd8,
-    png: b => b[0] === 0x89 && b.slice(1, 4).toString('latin1') === 'PNG'
+    png: b => b[0] === 0x89 && b.slice(1, 4).toString('latin1') === 'PNG',
+    webp: b => b.slice(0, 4).toString('latin1') === 'RIFF' && b.slice(8, 12).toString('latin1') === 'WEBP'
 };
+const PHOTO_EXT = ['jpg', 'jpeg', 'png', 'webp'];
 const CV_EXT = ['pdf', 'doc', 'docx'];
 const DOC_EXT = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
-async function readFile(file, allowedExt) {
+async function readFile(file, allowedExt, maxBytes) {
     if (!file || typeof file === 'string' || !file.size) return { error: 'missing' };
-    if (file.size > CFG.maxFileBytes) return { error: 'too_big', name: file.name };
+    if (file.size > (maxBytes || CFG.maxFileBytes)) return { error: 'too_big', name: file.name };
     const ext = (String(file.name).split('.').pop() || '').toLowerCase();
     if (!allowedExt.includes(ext)) return { error: 'bad_type', name: file.name };
     const buf = Buffer.from(await file.arrayBuffer());
@@ -129,7 +131,7 @@ async function handleApply(req, res) {
     const d = {
         country: get('country'), province: oneLine(get('province'), 80), position: get('position'),
         lastName: oneLine(get('lastName'), 80), firstName: oneLine(get('firstName'), 80),
-        age: parseInt(get('age'), 10), phone: oneLine(get('phone'), 30), email: oneLine(get('email'), 120).toLowerCase(),
+        gender: get('gender'), profession: oneLine(get('profession'), 100), age: parseInt(get('age'), 10), phone: oneLine(get('phone'), 30), email: oneLine(get('email'), 120).toLowerCase(),
         city: oneLine(get('city'), 80), message: multiLine(get('message'), 4000), lang: get('lang') === 'en' ? 'en' : 'fr'
     };
     const country = COUNTRIES.get(d.country), position = POSITIONS.get(d.position);
@@ -137,12 +139,17 @@ async function handleApply(req, res) {
     if (!position) return fail(res, 422, 'position', 'Poste invalide.');
     if (!d.province || (country.provinces && !country.provinces.includes(d.province))) return fail(res, 422, 'province', 'Province invalide.');
     if (d.lastName.length < 2 || d.firstName.length < 2) return fail(res, 422, 'name', 'Nom et prénom requis.');
+    if (d.gender !== 'M' && d.gender !== 'F') return fail(res, 422, 'gender', 'Sexe requis.');
+    if (d.profession.length < 2) return fail(res, 422, 'profession', 'Profession requise.');
     if (!(d.age >= 16 && d.age <= 80)) return fail(res, 422, 'age', 'Âge invalide.');
     if (!/^[+\d][\d\s().-]{6,24}$/.test(d.phone)) return fail(res, 422, 'phone', 'Numéro de téléphone invalide.');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email)) return fail(res, 422, 'email', 'Adresse e-mail invalide.');
     if (get('consent') !== '1') return fail(res, 422, 'consent', 'Consentement requis.');
     if (!allow('mail:' + d.email, 3, 24 * 60 * 60 * 1000)) return fail(res, 429, 'rate_limit', 'Vous avez déjà envoyé plusieurs candidatures aujourd\'hui.');
 
+    const photo = await readFile(form.get('photo'), PHOTO_EXT, 3 * 1024 * 1024);
+    if (photo.error === 'missing') return fail(res, 422, 'photo_missing', 'La photo de profil est obligatoire.');
+    if (photo.error) return fail(res, 422, 'photo_' + photo.error, 'Photo refusée (JPG, PNG ou WEBP, 3 Mo maximum).');
     const cv = await readFile(form.get('cv'), CV_EXT);
     if (cv.error === 'missing') return fail(res, 422, 'cv_missing', 'Le CV est obligatoire.');
     if (cv.error) return fail(res, 422, 'cv_' + cv.error, 'CV : fichier refusé (PDF, DOC ou DOCX, 5 Mo maximum).');
@@ -155,10 +162,11 @@ async function handleApply(req, res) {
     }
 
     // Total limité : une boîte mail refuse souvent plus de ~25 Mo (les pièces jointes grossissent d'un tiers à l'envoi)
-    if (cv.buf.length + docs.reduce((n, x) => n + x.buf.length, 0) > CFG.maxTotalBytes) return fail(res, 422, 'total_too_big', 'Les fichiers dépassent 15 Mo au total. Réduisez leur taille.');
+    if (photo.buf.length + cv.buf.length + docs.reduce((n, x) => n + x.buf.length, 0) > CFG.maxTotalBytes) return fail(res, 422, 'total_too_big', 'Les fichiers dépassent 15 Mo au total. Réduisez leur taille.');
 
     const ref = 'CP-' + new Date().toISOString().slice(2, 10).replace(/-/g, '') + '-' + crypto.randomBytes(3).toString('hex').toUpperCase();
-    const files = [{ ...cv, name: 'CV_' + cv.name }, ...docs.map((x, i) => ({ ...x, name: 'Doc' + (i + 1) + '_' + x.name }))];
+    const photoFile = { ...photo, name: 'Photo_' + photo.name };
+    const files = [photoFile, { ...cv, name: 'CV_' + cv.name }, ...docs.map((x, i) => ({ ...x, name: 'Doc' + (i + 1) + '_' + x.name }))];
 
     // 1) Copie sur le disque (jamais perdue même si l'e-mail échoue)
     let saved = false;
@@ -180,7 +188,7 @@ async function handleApply(req, res) {
             await tr.sendMail({
                 from: '"CashPay All Carrières" <' + CFG.mailFrom + '>', to: CFG.mailTo,
                 replyTo: '"' + d.firstName.replace(/"/g, '') + ' ' + d.lastName.replace(/"/g, '') + '" <' + d.email + '>',
-                subject: m.subject, text: m.text, html: m.html, attachments: files.map(f => ({ filename: f.name, content: f.buf }))
+                subject: m.subject, text: m.text, html: m.html, attachments: files.map(f => f === photoFile ? { filename: f.name, content: f.buf, cid: 'photo@cashpay' } : { filename: f.name, content: f.buf })
             });
             mailed = true;
         } catch (e) { console.error('[careers] e-mail interne non envoyé :', e.message); }

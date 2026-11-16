@@ -20,10 +20,10 @@ const table = rows => '<table role="presentation" width="100%" cellpadding="0" c
 
 /** E-mail interne reçu par l'équipe (info@cashpay-all.com). */
 function internal(d, ctx) {
-    const rows = [['Référence', ctx.ref], ['Poste', ctx.position], ['Pays', ctx.country], ['Province / région', d.province], ['Nom', d.lastName], ['Prénom', d.firstName], ['Âge', d.age + ' ans'], ['Téléphone', d.phone], ['E-mail', d.email], ['Ville / commune', d.city || '—'], ['Langue du candidat', d.lang === 'en' ? 'English' : 'Français']];
+    const rows = [['Référence', ctx.ref], ['Poste', ctx.position], ['Pays', ctx.country], ['Province / région', d.province], ['Nom', d.lastName], ['Prénom', d.firstName], ['Sexe', d.gender === 'F' ? 'Femme' : 'Homme'], ['Âge', d.age + ' ans'], ['Profession', d.profession], ['Téléphone', d.phone], ['E-mail', d.email], ['Ville / commune', d.city || '—'], ['Langue du candidat', d.lang === 'en' ? 'English' : 'Français']];
     const text = 'NOUVELLE CANDIDATURE — ' + ctx.position + '\n\n' + rows.map(r => r[0] + ' : ' + r[1]).join('\n') + '\n\nMessage du candidat :\n' + (d.message || '—') + '\n\nPièces jointes : ' + ctx.files.join(', ') + '\n\n(Répondre à ce message écrit directement au candidat.)';
     const html = shell('Nouvelle candidature — ' + ctx.position,
-        '<p style="margin:0 0 16px;font-size:14px;line-height:1.6">Une candidature vient d\'être déposée sur le site. Pour répondre au candidat, utilisez simplement « Répondre ».</p>' + table(rows) +
+        '<p style="margin:0 0 16px;text-align:center"><img src="cid:photo@cashpay" alt="Photo" width="110" height="110" style="width:110px;height:110px;border-radius:55px;object-fit:cover;border:3px solid #7a22d4"></p><p style="margin:0 0 16px;font-size:14px;line-height:1.6">Une candidature vient d\'être déposée sur le site. Pour répondre au candidat, utilisez simplement « Répondre ».</p>' + table(rows) +
         '<h3 style="margin:22px 0 8px;font-size:15px;color:#190a28">Message du candidat</h3><div style="background:#faf7fd;border-left:4px solid #7a22d4;padding:12px 14px;font-size:14px;line-height:1.6">' + (d.message ? nl2br(d.message) : '—') + '</div>' +
         '<p style="margin:18px 0 0;font-size:13px;color:#6b5a82">Pièces jointes : ' + esc(ctx.files.join(', ')) + '</p>', 'fr');
     return { subject: '[Candidature] ' + ctx.position + ' — ' + d.lastName + ' ' + d.firstName + ' (' + d.province + ', ' + ctx.country + ') — ' + ctx.ref, text, html };

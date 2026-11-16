@@ -26,6 +26,12 @@
         'jb.err.size': 'A file is larger than 5 MB.', 'jb.err.total_too_big': 'The files exceed 15 MB in total. Please reduce their size.', 'jb.err.type': 'A file has an unsupported format.', 'jb.err.docs': 'You can attach 3 other documents at most.',
         'jb.err.net': 'We could not send your application. Check your connection or write to info@cashpay-all.com.',
         'jb.err.cv_missing': 'The CV is required.', 'jb.err.cv_bad_type': 'CV refused: use a PDF, DOC or DOCX file of 5 MB maximum.', 'jb.err.cv_too_big': 'The CV is larger than 5 MB.',
+        'jb.photo': 'Profile photo *', 'jb.photo.btn': 'Choose a photo', 'jb.photo.hint': 'A clear photo of your face, JPG, PNG or WEBP, 3 MB maximum.',
+        'jb.gender': 'Gender', 'jb.male': 'Male', 'jb.female': 'Female', 'jb.job': 'Current profession', 'jb.job.ph': 'E.g. accountant, teacher, sales…',
+        'jb.cv.btn': 'Choose my CV', 'jb.docs.btn': 'Add documents', 'jb.nofile': 'No file chosen', 'jb.files': ' files selected',
+        'jb.levelhint': 'Write your level of education and diplomas directly in your CV.',
+        'jb.err.gender': 'Please select your gender.', 'jb.err.profession': 'Please enter your profession.', 'jb.err.photo': 'Please add a profile photo (JPG, PNG or WEBP, 3 MB maximum).',
+        'jb.err.photo_missing': 'The profile photo is required.', 'jb.err.photo_bad_type': 'Photo refused: use a JPG, PNG or WEBP image of 3 MB maximum.', 'jb.err.photo_too_big': 'The photo is larger than 3 MB.',
         'jb.err.rate_limit': 'Too many applications from this connection. Please try again later.', 'jb.err.too_fast': 'Please wait a few seconds and try again.'
     });
 
@@ -43,7 +49,7 @@
     // ---- Rendu -------------------------------------------------------------
     function renderRoles() {
         $('job-roles').innerHTML = DATA.positions.filter(p => p.key !== 'open').map(p =>
-            '<article class="job-role" data-reveal><div class="job-role-ico"><i class="fa-solid fa-briefcase" aria-hidden="true"></i></div><h3>' + posLabel(p) + '</h3><p>' + posDesc(p) + '</p><a href="#postuler" class="job-role-cta" data-pos="' + p.key + '">' + L('jb.role.cta', 'Postuler') + ' <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></article>').join('');
+            '<article class="job-role"><div class="job-role-ico"><i class="fa-solid fa-briefcase" aria-hidden="true"></i></div><h3>' + posLabel(p) + '</h3><p>' + posDesc(p) + '</p><a href="#postuler" class="job-role-cta" data-pos="' + p.key + '">' + L('jb.role.cta', 'Postuler') + ' <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></article>').join('');
     }
     function renderCountries() {
         const sel = $('f-country'), cur = sel.value;
@@ -82,10 +88,8 @@
     }
     function refresh() {
         const d = stepDone(), steps = form.querySelectorAll('.job-step');
-        steps[1].classList.toggle('locked', !d[0]);
-        steps[2].classList.toggle('locked', !(d[0] && d[1]));
-        steps[3].classList.toggle('locked', !(d[0] && d[1] && d[2]));
-        steps[4].classList.toggle('locked', !(d[0] && d[1] && d[2]));
+        const lock = (i, v) => { steps[i].classList.toggle('locked', v); if (v) steps[i].setAttribute('inert', ''); else steps[i].removeAttribute('inert'); };
+        lock(1, !d[0]); lock(2, !(d[0] && d[1])); lock(3, !(d[0] && d[1] && d[2])); lock(4, !(d[0] && d[1] && d[2]));
         const n = 1 + (d[0] ? 1 : 0) + (d[0] && d[1] ? 1 : 0) + (d[0] && d[1] && d[2] ? 2 : 0);
         $('job-progress').querySelectorAll('span').forEach((s, i) => s.classList.toggle('on', i < n));
     }
@@ -101,7 +105,11 @@
         if (!$('f-country').value) return showError(L('jb.err.country', 'Choisissez un pays.'));
         if (!prov || !prov.value.trim()) return showError(L('jb.err.province', 'Choisissez ou saisissez une province.'));
         if (!form.querySelector('[name=position]:checked')) return showError(L('jb.err.position', 'Choisissez un poste.'));
-        const req = ['lastName', 'firstName', 'age', 'phone', 'email'];
+        const ph = $('f-photo').files[0];
+        if (!ph) return showError(L('jb.err.photo', 'Ajoutez une photo de profil (JPG, PNG ou WEBP, 3 Mo maximum).'));
+        if (!okExt(ph, ['jpg', 'jpeg', 'png', 'webp']) || ph.size > 3 * 1024 * 1024) return showError(L('jb.err.photo_bad_type', 'Photo refusée : image JPG, PNG ou WEBP de 3 Mo maximum.'));
+        if (!form.querySelector('[name=gender]:checked')) return showError(L('jb.err.gender', 'Veuillez indiquer votre sexe.'));
+        const req = ['lastName', 'firstName', 'age', 'profession', 'phone', 'email'];
         for (const n of req) { const el = form.elements[n]; if (!el.value.trim() || !el.checkValidity()) { el.focus(); return showError(L('jb.err.fields', 'Veuillez remplir correctement tous les champs obligatoires.')); } }
         const cv = $('f-cv').files[0];
         if (!cv) return showError(L('jb.err.cv', 'Joignez votre CV (PDF, DOC ou DOCX).'));
@@ -109,7 +117,7 @@
         if (docs.length > 3) return showError(L('jb.err.docs', 'Vous pouvez joindre 3 autres documents au maximum.'));
         if (!okExt(cv, ['pdf', 'doc', 'docx']) || docs.some(f => !okExt(f, ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png']))) return showError(L('jb.err.type', 'Un fichier a un format non accepté.'));
         if (cv.size > MAX || docs.some(f => f.size > MAX)) return showError(L('jb.err.size', 'Un fichier dépasse 5 Mo.'));
-        if (cv.size + docs.reduce((n, f) => n + f.size, 0) > 15 * 1024 * 1024) return showError(L('jb.err.total_too_big', 'Les fichiers dépassent 15 Mo au total. Réduisez leur taille.'));
+        if (ph.size + cv.size + docs.reduce((n, f) => n + f.size, 0) > 15 * 1024 * 1024) return showError(L('jb.err.total_too_big', 'Les fichiers dépassent 15 Mo au total. Réduisez leur taille.'));
         if (!$('f-consent').checked) return showError(L('jb.err.consent', 'Veuillez cocher la case de consentement.'));
 
         const fd = new FormData(form);
@@ -129,6 +137,20 @@
         btn.disabled = false; btn.innerHTML = old;
     });
 
+    // ---- Photo et noms de fichiers ----------------------------------------------
+    let photoUrl = null;
+    function fileNames() {
+        const set = (id, files) => { const el = $(id); if (!files.length) { el.className = 'fname'; el.textContent = L('jb.nofile', 'Aucun fichier choisi'); } else { el.className = 'fname ok'; el.textContent = files.length === 1 ? files[0].name : files.length + L('jb.files', ' fichiers sélectionnés'); } };
+        set('cv-name', Array.from($('f-cv').files)); set('docs-name', Array.from($('f-docs').files));
+    }
+    $('f-cv').addEventListener('change', fileNames); $('f-docs').addEventListener('change', fileNames);
+    $('f-photo').addEventListener('change', () => {
+        const f = $('f-photo').files[0], c = $('photo-circle');
+        if (photoUrl) { URL.revokeObjectURL(photoUrl); photoUrl = null; }
+        if (f && /^image\//.test(f.type)) { photoUrl = URL.createObjectURL(f); c.style.backgroundImage = 'url(' + photoUrl + ')'; c.classList.add('has'); }
+        else { c.style.backgroundImage = ''; c.classList.remove('has'); }
+    });
+
     let startedAt = Date.now();
     fetch('js/jobs-data.json', { cache: 'no-cache' }).then(r => r.json()).then(d => {
         DATA = d; renderRoles(); renderCountries(); renderPositions(); refresh();
@@ -143,6 +165,6 @@
         startedAt = Date.now();
     }).catch(() => showError(L('jb.err.net', 'Impossible de charger la page. Réessayez.')));
 
-    document.addEventListener('langchange', () => { if (!DATA) return; renderRoles(); renderCountries(); renderProvince(); renderPositions(); });
+    document.addEventListener('langchange', () => { if (!DATA) return; renderRoles(); renderCountries(); renderProvince(); renderPositions(); fileNames(); });
     if (window.I18N) I18N.extend({ 'jb.role.cta': 'Apply' });
 })();

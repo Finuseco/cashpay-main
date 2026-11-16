@@ -59,3 +59,7 @@ Logs : `pm2 logs cashpay-careers`. Les candidatures sont aussi dans `DATA_DIR/AA
 ## Sécurité
 Limites : 6 envois/heure par adresse IP, 3 candidatures/jour par e-mail ; champ piège anti-robots ; délai minimal de remplissage ;
 types de fichiers vérifiés sur le contenu ; l'accusé de réception n'est envoyé qu'après une candidature complète et valide (CV vérifié), avec les limites ci-dessus, pour éviter qu'on s'en serve pour spammer des tiers.
+
+
+## Champs du formulaire (mise à jour)
+Nom, prénom, sexe (M/F), âge, profession, téléphone, e-mail, ville, **photo de profil obligatoire** (JPG/PNG/WEBP, 3 Mo), CV (PDF/DOC/DOCX, 5 Mo), documents (3 max), message. Pas de liste de niveau d'études : il figure dans le CV. La photo est affichée dans l'e-mail interne.
