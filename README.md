@@ -55,7 +55,7 @@ Chaque texte porte `data-i18n="clé"`. Changer le français dans le HTML, l'angl
 ## Emplois
 - `emplois.html` + `js/jobs.js` : candidature en ligne (pays → province → poste → informations → CV et message).
 - `js/jobs-data.json` : pays africains, provinces et liste des postes (à modifier ici).
-- `careers-api/` : service qui reçoit les candidatures et les envoie à info@cashpay-all.com (installation dans `careers-api/README.md`).
+- Candidatures : le formulaire utilise `https://app.cashpay-all.com/api/careers` dans CashPay Web pour transmettre directement les documents par e-mail, sans dossier conservé sur le serveur. L’ancien service local est retiré (voir `careers-api/README.md`).
 
 ## Cache
 Avant chaque push : `sh bump-version.sh` (ajoute ?v= aux css/js pour forcer le rechargement).
