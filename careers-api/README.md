@@ -63,3 +63,13 @@ types de fichiers vérifiés sur le contenu ; l'accusé de réception n'est envo
 
 ## Champs du formulaire (mise à jour)
 Nom, prénom, sexe (M/F), âge, profession, téléphone, e-mail, ville, **photo de profil obligatoire** (JPG/PNG/WEBP, 3 Mo), CV (PDF/DOC/DOCX, 5 Mo), documents (3 max), message. Pas de liste de niveau d'études : il figure dans le CV. La photo est affichée dans l'e-mail interne.
+
+## Messagerie : ce qui doit être vrai pour recevoir les e-mails
+- `SMTP_USER` doit être une **vraie boîte mail** qui peut s'authentifier (ex. `noreply@cashpay-all.com`). Une simple **redirection** (comme `info@` → Gmail chez LWS) ne peut pas envoyer : le serveur refuse la connexion.
+- `MAIL_TO` = destinataire interne (par défaut `info@cashpay-all.com`, redirigé vers Gmail). Pour tester sans passer par la redirection, mettez directement l'adresse Gmail ; plusieurs adresses possibles séparées par des virgules.
+- DNS : SPF, DKIM (clé du panel LWS, enregistrement TXT `dkim._domainkey`) et DMARC. Sans eux, Gmail classe souvent en indésirable ou rejette.
+- Diagnostic en une commande : `bash careers-api/diagnose.sh [adresse_test]` (réglages, connexion SMTP, message d'essai, DNS, journaux).
+- `GET /api/careers/health` indique `smtp`, `database` et le dernier résultat d'envoi (`lastMail`).
+
+## Base de données (facultative mais conseillée)
+Appliquer `migrations/20261117_career_applications.sql` de cashpay_web (tables `career_applications` et `career_email_log`), puis mettre `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` dans `/etc/cashpay-careers.env` (install.sh les reprend du `.env` de CashPay Web s'il le trouve) et relancer `install.sh`. Chaque candidature et chaque e-mail (réussi ou non) y est enregistré. Suivi et envoi du résultat au candidat : route `GET/PATCH /api/internal/careers` de CashPay Web (en-tête `x-internal-job-secret`).

@@ -29,6 +29,16 @@ else
     echo "$ENV_FILE existe déjà : conservé tel quel."
 fi
 chmod 600 "$ENV_FILE"
+# Base de données de CashPay Web (facultative) : conserve toutes les candidatures et le journal des e-mails.
+if ! grep -qE '^(DB_HOST|DATABASE_URL)=' "$ENV_FILE"; then
+    for w in "${WEB_ENV:-}" /var/www/cashpay-all/web/.env /var/www/cashpay-all/cashpay_web/.env /var/www/cashpay-all/app/.env; do
+        if [ -n "$w" ] && [ -f "$w" ] && grep -qE '^DB_HOST=' "$w"; then
+            grep -E '^DB_(HOST|PORT|USER|PASSWORD|NAME|SSL_CA)=' "$w" >> "$ENV_FILE"
+            echo "Base de données reprise de $w"; break
+        fi
+    done
+fi
+grep -qE '^(DB_HOST|DATABASE_URL)=' "$ENV_FILE" || echo "Base de données non configurée : les candidatures restent sur disque et par e-mail (ajoutez DB_HOST, DB_USER, DB_PASSWORD, DB_NAME dans $ENV_FILE pour activer la table)."
 for k in SMTP_HOST SMTP_USER SMTP_PASSWORD; do
     grep -qE "^${k}=.+" "$ENV_FILE" || die "$k manque dans $ENV_FILE : le portail développeur n'a pas de réglages SMTP dans $DEV_ENV. Ajoutez la ligne ${k}=… dans $ENV_FILE puis relancez ce script."
 done

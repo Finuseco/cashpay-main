@@ -35,6 +35,8 @@ const CFG = {
 };
 
 const TPL = require('./templates');
+const DB = require('./db');
+const mailState = { internal: null, acknowledgement: null };   // dernier résultat d'envoi (visible dans /api/careers/health)
 const JOBS = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'js', 'jobs-data.json'), 'utf8'));
 const POSITIONS = new Map(JOBS.positions.map(p => [p.key, p]));
 const COUNTRIES = new Map(JOBS.countries.map(c => [c.code, c]));
@@ -169,14 +171,16 @@ async function handleApply(req, res) {
     const files = [photoFile, { ...cv, name: 'CV_' + cv.name }, ...docs.map((x, i) => ({ ...x, name: 'Doc' + (i + 1) + '_' + x.name }))];
 
     // 1) Copie sur le disque (jamais perdue même si l'e-mail échoue)
-    let saved = false;
+    let saved = false, dir = null;
     try {
-        const dir = path.join(CFG.dataDir, new Date().toISOString().slice(0, 7), ref);
+        dir = path.join(CFG.dataDir, new Date().toISOString().slice(0, 7), ref);
         fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
         fs.writeFileSync(path.join(dir, 'candidature.json'), JSON.stringify({ ref, date: new Date().toISOString(), ip, ...d, files: files.map(f => f.name) }, null, 2), { mode: 0o600 });
         files.forEach(f => fs.writeFileSync(path.join(dir, f.name), f.buf, { mode: 0o600 }));
         saved = true;
     } catch (e) { console.error('[careers] sauvegarde disque impossible :', e.message); }
+
+    const appId = await DB.saveApplication({ ref, ...d, positionLabel: position.fr, files: files.map(f => f.name), dir, ip });
 
     // 2) E-mail interne vers info@cashpay-all.com + accusé de réception automatique au candidat
     let mailed = false, acked = false;
@@ -190,8 +194,9 @@ async function handleApply(req, res) {
                 replyTo: '"' + d.firstName.replace(/"/g, '') + ' ' + d.lastName.replace(/"/g, '') + '" <' + d.email + '>',
                 subject: m.subject, text: m.text, html: m.html, attachments: files.map(f => f === photoFile ? { filename: f.name, content: f.buf, cid: 'photo@cashpay' } : { filename: f.name, content: f.buf })
             });
-            mailed = true;
-        } catch (e) { console.error('[careers] e-mail interne non envoyé :', e.message); }
+            mailed = true; mailState.internal = { ok: true, at: new Date().toISOString() };
+            await DB.logMail(appId, 'internal', CFG.mailTo, true);
+        } catch (e) { console.error('[careers] e-mail interne non envoyé :', e.message); mailState.internal = { ok: false, at: new Date().toISOString(), error: e.message }; await DB.logMail(appId, 'internal', CFG.mailTo, false, e.message); }
         // Accusé de réception : envoyé uniquement après une candidature valide (limites par IP et par e-mail déjà appliquées)
         try {
             const a = TPL.acknowledgement(d, ctx), t2 = noreplyMailer() || tr;
@@ -200,8 +205,9 @@ async function handleApply(req, res) {
                 subject: a.subject, text: a.text, html: a.html,
                 headers: { 'Auto-Submitted': 'auto-replied', 'X-Auto-Response-Suppress': 'All' }
             });
-            acked = true;
-        } catch (e) { console.error('[careers] accusé de réception non envoyé à ' + d.email + ' :', e.message); }
+            acked = true; mailState.acknowledgement = { ok: true, at: new Date().toISOString() };
+            await DB.logMail(appId, 'acknowledgement', d.email, true);
+        } catch (e) { console.error('[careers] accusé de réception non envoyé à ' + d.email + ' :', e.message); mailState.acknowledgement = { ok: false, at: new Date().toISOString(), error: e.message }; await DB.logMail(appId, 'acknowledgement', d.email, false, e.message); }
     } else console.error('[careers] SMTP non configuré : candidature ' + ref + ' enregistrée sur disque seulement.');
 
     if (!saved && !mailed) return fail(res, 500, 'server', 'Un problème est survenu. Écrivez-nous à ' + CFG.mailTo + '.');
@@ -212,7 +218,7 @@ async function handleApply(req, res) {
 // --- Serveur -----------------------------------------------------------------
 const server = http.createServer((req, res) => {
     const url = (req.url || '').split('?')[0];
-    if (req.method === 'GET' && (url === '/api/careers/health' || url === '/api/careers/health/')) return send(res, 200, { ok: true, smtp: !!mailer(), dataDir: fs.existsSync(CFG.dataDir) });
+    if (req.method === 'GET' && (url === '/api/careers/health' || url === '/api/careers/health/')) return send(res, 200, { ok: true, smtp: !!mailer(), database: DB.enabled(), dataDir: fs.existsSync(CFG.dataDir), lastMail: { internal: mailState.internal && { ok: mailState.internal.ok, at: mailState.internal.at }, acknowledgement: mailState.acknowledgement && { ok: mailState.acknowledgement.ok, at: mailState.acknowledgement.at } } });
     if (req.method === 'POST' && (url === '/api/careers' || url === '/api/careers/')) {
         handleApply(req, res).catch(e => { console.error('[careers] erreur :', e); if (!res.headersSent) fail(res, 500, 'server', 'Erreur du serveur.'); });
         return;
