@@ -35,13 +35,13 @@ function acknowledgement(d, ctx) {
     const T = en ? {
         subject: 'We received your application — ' + ctx.positionEn + ' (' + ctx.ref + ')', title: 'Your application has been received',
         hello: 'Hello ' + d.firstName + ',', p1: 'Thank you for your interest in CashPay All. We have received your application and our team will review it carefully.',
-        recap: 'Summary of your application', next: 'What happens next', n1: 'Our team reviews your file.', n2: 'If your profile matches our needs, we will contact you by phone or e-mail.', n3: 'Please keep your reference number for any follow-up.',
+        recap: 'Summary of your application', next: 'What happens next', n1: 'Our team reviews your file.', n2: 'If your profile matches our needs, we will contact you by phone or e-mail.', n3: 'Please come back from ' + ctx.resultsDate + ' to check the outcome, quoting your reference number. We will also write to you by e-mail.',
         note: 'This is an automatic message, please do not reply to it. For any question, write to info@cashpay-all.com, quoting your reference.', sign: 'The CashPay All team',
         rows: [['Reference', ctx.ref], ['Position', ctx.positionEn], ['Location', d.province + ', ' + ctx.country], ['Name', d.firstName + ' ' + d.lastName]]
     } : {
         subject: 'Nous avons bien reçu votre candidature — ' + ctx.position + ' (' + ctx.ref + ')', title: 'Votre candidature a bien été reçue',
         hello: 'Bonjour ' + d.firstName + ',', p1: 'Merci de l\'intérêt que vous portez à CashPay All. Nous avons bien reçu votre candidature et notre équipe va l\'étudier avec attention.',
-        recap: 'Récapitulatif de votre candidature', next: 'Et maintenant ?', n1: 'Notre équipe examine votre dossier.', n2: 'Si votre profil correspond à nos besoins, nous vous contacterons par téléphone ou par e-mail.', n3: 'Conservez votre numéro de référence pour tout suivi.',
+        recap: 'Récapitulatif de votre candidature', next: 'Et maintenant ?', n1: 'Notre équipe examine votre dossier.', n2: 'Si votre profil correspond à nos besoins, nous vous contacterons par téléphone ou par e-mail.', n3: 'Revenez à partir du ' + ctx.resultsDate + ' pour connaître les résultats, en indiquant votre numéro de référence. Nous vous écrirons aussi par e-mail.',
         note: 'Ceci est un message automatique, merci de ne pas y répondre. Pour toute question, écrivez à info@cashpay-all.com en indiquant votre référence.', sign: 'L\'équipe CashPay All',
         rows: [['Référence', ctx.ref], ['Poste', ctx.position], ['Lieu', d.province + ', ' + ctx.country], ['Nom', d.firstName + ' ' + d.lastName]]
     };

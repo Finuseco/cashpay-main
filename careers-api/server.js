@@ -186,7 +186,8 @@ async function handleApply(req, res) {
     let mailed = false, acked = false;
     const tr = mailer();
     if (tr) {
-        const ctx = { ref, position: position.fr, positionEn: position.en, country: country.name, files: files.map(f => f.name) };
+        const rd = new Date(Date.now() + Number(process.env.RESULTS_DAYS || 14) * 86400000);
+        const ctx = { resultsDate: rd.toLocaleDateString(d.lang === 'en' ? 'en-GB' : 'fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Africa/Kinshasa' }), ref, position: position.fr, positionEn: position.en, country: country.name, files: files.map(f => f.name) };
         const m = TPL.internal(d, ctx);
         try {
             await tr.sendMail({
