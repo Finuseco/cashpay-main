@@ -79,6 +79,25 @@ SPF, DKIM et DMARC se contrôlent dans la configuration du domaine et du fournis
 `GET /api/careers/health` expose la disponibilité du service, la présence de configuration et le dernier résultat d'envoi.
 La présence d'une configuration SMTP n'est pas un test d'authentification ni une preuve de livraison.
 
+## Comparer avec une application qui envoie déjà des e-mails
+
+Lorsque `verify()` retourne `EAUTH` / `535`, le serveur SMTP refuse l'authentification du compte indiqué.
+Ce résultat ne distingue pas un mot de passe mal chargé, un compte différent, un mauvais serveur ou un refus imposé par le fournisseur.
+Pour comparer Carrières à une application Next.js gérée par PM2 :
+
+```bash
+cd /var/www/cashpay-all/main
+bash careers-api/compare-smtp.sh cashpay-wallet
+```
+
+Remplacer `cashpay-wallet` par le nom PM2 de l'application dont les envois fonctionnent.
+La commande lit sa configuration en mémoire, avec son propre module `@next/env` et les variables de démarrage conservées par PM2.
+Il s'agit d'une reconstruction à partir des fichiers actuels et des variables de démarrage, pas d'une lecture de la mémoire du processus en cours.
+Le résultat compare le serveur, le port, le compte et uniquement l'égalité du mot de passe : aucune valeur, longueur ou empreinte du secret n'est affichée.
+La connexion SMTP du compte de référence est vérifiée sans envoi d'e-mail. Aucun fichier ni service n'est modifié ou redémarré.
+Si l'application ou son chargeur Next.js est introuvable, la commande s'arrête avec un diagnostic limité ; elle ne remplace pas son parseur par celui de Carrières.
+La sortie permet de vérifier si les paramètres de référence s'authentifient et quelles valeurs diffèrent avant toute copie.
+
 ## Résultat d'une soumission et reprises
 
 | Réponse HTTP | Résultat |
