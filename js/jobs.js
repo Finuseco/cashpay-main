@@ -18,6 +18,18 @@
         'jb.send': 'Send my application', 'jb.sending': 'Sending…',
         'jb.done.t': 'Application sent', 'jb.done.d': 'Thank you! Your file has been sent to our team. We will contact you if your profile matches our needs.',
         'jb.done.ref': 'Your reference:', 'jb.done.home': 'Back to home',
+        'jb.delivery.accepted.t': 'Application transmitted',
+        'jb.delivery.accepted.d': 'The mail service has accepted the message to our team and your acknowledgement. Keep your reference for any follow-up.',
+        'jb.delivery.partial.t': 'Application transmitted — acknowledgement unconfirmed',
+        'jb.delivery.partial.d': 'The message to our team was accepted by the mail service, but your acknowledgement has not been confirmed. Keep your reference; you do not need to submit the application again.',
+        'jb.delivery.pending.t': 'Application recorded — notification pending',
+        'jb.delivery.pending.d': 'Your application is stored, but the e-mail notification to our team has not yet been confirmed. Keep your reference; you do not need to submit the application again.',
+        'jb.delivery.manual.t': 'Application recorded — notification to verify',
+        'jb.delivery.manual.d': 'Your application is stored, but the notification to our team has not been confirmed. Keep your reference and contact info@cashpay-all.com. Do not submit the application again.',
+        'jb.delivery.unknown.t': 'Response received — e-mail unconfirmed',
+        'jb.delivery.unknown.d': 'The server returned a reference without confirming the recruitment e-mail or your acknowledgement. Keep this reference and contact info@cashpay-all.com before submitting again.',
+        'jb.err.mail_unavailable': 'The application could not be confirmed. The mail service is unavailable; your form has been kept on this page. Please try again later.',
+        'jb.err.receipt': 'The server did not confirm receipt of your application. Keep this page and try again later.',
         'jb.help.t': 'A question about a position?', 'jb.help.d': 'Write to us, our team will answer.',
         'jb.choose': '— Choose —', 'jb.chooseCountry': '— Choose your country —', 'jb.chooseProvince': '— Choose your province —', 'jb.region.ph': 'Your province or region',
         'jb.pick': 'Select a position', 'jb.otherCountry': 'Applications outside the DR Congo are welcome: tell us your region.',
@@ -98,9 +110,37 @@
     function showError(msg) { const e = $('job-error'); e.textContent = msg; e.hidden = !msg; if (msg) e.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
     const MAX = 5 * 1024 * 1024;
     const okExt = (f, list) => list.indexOf((f.name.split('.').pop() || '').toLowerCase()) !== -1;
+    let receipt = null, submitting = false;
+    function showReceipt(response) {
+        receipt = response;
+        const delivery = response.delivery || {};
+        const internalAccepted = delivery.internal === 'accepted';
+        const state = internalAccepted ? (delivery.acknowledgement === 'accepted' ? 'accepted' : 'partial')
+            : response.saved === true ? (response.retryScheduled === false ? 'manual' : 'pending') : 'unknown';
+        const copies = {
+            accepted: ['Candidature transmise', 'Le service de messagerie a accepté le message à notre équipe et votre accusé de réception. Conservez votre référence pour tout suivi.'],
+            partial: ['Dossier transmis — accusé non confirmé', 'Le service de messagerie a accepté le message à notre équipe, mais votre accusé de réception n’a pas été confirmé. Conservez votre référence ; il n’est pas nécessaire de renvoyer votre candidature.'],
+            pending: ['Dossier enregistré — notification en attente', 'Votre candidature est enregistrée, mais la notification par e-mail à notre équipe n’a pas encore été confirmée. Conservez votre référence ; il n’est pas nécessaire de renvoyer votre dossier.'],
+            manual: ['Dossier enregistré — notification à vérifier', 'Votre candidature est enregistrée, mais la notification à notre équipe n’a pas été confirmée. Conservez votre référence et contactez info@cashpay-all.com. Ne soumettez pas à nouveau votre candidature.'],
+            unknown: ['Réponse reçue — envoi non confirmé', 'Le serveur a renvoyé une référence sans confirmer le mail de recrutement ni votre accusé de réception. Conservez cette référence et contactez info@cashpay-all.com avant de soumettre à nouveau.']
+        };
+        const box = $('job-done'), title = box.querySelector('h3'), description = box.querySelector('p[data-i18n="jb.done.d"]') || box.querySelector('[data-delivery-description]');
+        // This copy depends on the API receipt. The static i18n success text must
+        // never replace a pending/failure message when the language changes.
+        title.removeAttribute('data-i18n');
+        description.removeAttribute('data-i18n'); description.setAttribute('data-delivery-description', '');
+        title.textContent = L('jb.delivery.' + state + '.t', copies[state][0]);
+        description.textContent = L('jb.delivery.' + state + '.d', copies[state][1]);
+        const iconBox = box.querySelector('.job-done-ico');
+        iconBox.style.color = state === 'accepted' ? '#25D366' : '#b54708';
+        iconBox.querySelector('i').className = state === 'accepted' ? 'fa-solid fa-circle-check' : state === 'pending' ? 'fa-solid fa-clock' : 'fa-solid fa-circle-exclamation';
+        box.setAttribute('data-delivery-state', state); box.setAttribute('role', 'status'); box.setAttribute('aria-live', 'polite'); box.setAttribute('tabindex', '-1');
+        $('job-ref').textContent = response.ref;
+        form.hidden = true; box.hidden = false;
+    }
 
     form.addEventListener('submit', async e => {
-        e.preventDefault(); showError('');
+        e.preventDefault(); if (submitting) return; showError('');
         const prov = form.querySelector('[name=province]');
         if (!$('f-country').value) return showError(L('jb.err.country', 'Choisissez un pays.'));
         if (!prov || !prov.value.trim()) return showError(L('jb.err.province', 'Choisissez ou saisissez une province.'));
@@ -122,19 +162,21 @@
 
         const fd = new FormData(form);
         fd.set('lang', lang()); fd.set('t', String(startedAt));
-        const btn = $('job-submit'); btn.disabled = true; const old = btn.innerHTML;
+        const btn = $('job-submit'); submitting = true; btn.disabled = true; const old = btn.innerHTML;
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> ' + L('jb.sending', 'Envoi en cours…');
         try {
             const r = await fetch(API, { method: 'POST', body: fd });
             let j = {}; try { j = await r.json(); } catch (x) {}
-            if (r.ok && j.ok) {
-                $('job-ref').textContent = j.ref || ''; form.hidden = true; $('job-done').hidden = false;
+            if ((r.ok && j.ok) || (j.saved === true && j.ref)) {
+                if (typeof j.ref !== 'string' || !j.ref.trim() || j.ref === 'CP-OK') throw new Error('Invalid application receipt');
+                showReceipt(j);
                 $('job-done').scrollIntoView({ block: 'center', behavior: 'smooth' });
+                $('job-done').focus();
             } else {
                 showError(L('jb.err.' + j.error, j.message || L('jb.err.net', "L'envoi a échoué. Écrivez-nous à info@cashpay-all.com.")));
             }
         } catch (x) { showError(L('jb.err.net', "L'envoi a échoué. Vérifiez votre connexion ou écrivez-nous à info@cashpay-all.com.")); }
-        btn.disabled = false; btn.innerHTML = old;
+        submitting = false; btn.disabled = false; btn.innerHTML = old;
     });
 
     // ---- Photo et noms de fichiers ----------------------------------------------
@@ -165,6 +207,6 @@
         startedAt = Date.now();
     }).catch(() => showError(L('jb.err.net', 'Impossible de charger la page. Réessayez.')));
 
-    document.addEventListener('langchange', () => { if (!DATA) return; renderRoles(); renderCountries(); renderProvince(); renderPositions(); fileNames(); });
+    document.addEventListener('langchange', () => { if (!DATA) return; renderRoles(); renderCountries(); renderProvince(); renderPositions(); fileNames(); if (receipt) showReceipt(receipt); });
     if (window.I18N) I18N.extend({ 'jb.role.cta': 'Apply' });
 })();

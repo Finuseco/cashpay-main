@@ -5,7 +5,8 @@
   "description": "Petit service qui reçoit les candidatures du site CashPay All et les envoie par e-mail à info@cashpay-all.com",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node --test test/*.test.js ../test/frontend-delivery.test.js"
   },
   "engines": {
     "node": ">=18"

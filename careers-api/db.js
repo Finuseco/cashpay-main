@@ -8,7 +8,7 @@ function getPool() {
     if (!DATABASE_URL && !(DB_HOST && DB_USER && DB_NAME)) return null;
     try {
         const { Pool } = require('pg');
-        pool = new Pool(DATABASE_URL ? { connectionString: DATABASE_URL, max: 3 } : { host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME, port: Number(DB_PORT || 5432), max: 3, ssl: DB_SSL_CA ? { ca: DB_SSL_CA, rejectUnauthorized: true } : undefined, connectionTimeoutMillis: 8000 });
+        pool = new Pool(DATABASE_URL ? { connectionString: DATABASE_URL, max: 3, connectionTimeoutMillis: 8000, query_timeout: 8000 } : { host: DB_HOST, user: DB_USER, password: DB_PASSWORD, database: DB_NAME, port: Number(DB_PORT || 5432), max: 3, ssl: DB_SSL_CA ? { ca: DB_SSL_CA, rejectUnauthorized: true } : undefined, connectionTimeoutMillis: 8000, query_timeout: 8000 });
         pool.on('error', e => console.error('[careers] base :', e.message));
     } catch (e) { console.error('[careers] module pg indisponible :', e.message); pool = null; }
     return pool;

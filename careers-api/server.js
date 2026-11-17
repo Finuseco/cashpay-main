@@ -8,34 +8,21 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-// --- Configuration -----------------------------------------------------------
-function loadEnvFile(file) {
-    try {
-        const vars = require('./envfile').parse(fs.readFileSync(file, 'utf8'), process.env);
-        Object.keys(vars).forEach(k => { if (process.env[k] === undefined) process.env[k] = vars[k]; });
-    } catch (e) { /* fichier absent : on utilise l'environnement */ }
+// Configuration scoped to this service; SMTP values in its file override stale PM2 values.
+const { loadConfiguration } = require('./config');
+const { createDelivery, mailbox } = require('./mail-delivery');
+function createService(options = {}) {
+const logger = options.logger || console;
+const resolved = loadConfiguration({ env: options.env || process.env, logger });
+const CFG = options.config || resolved.config;
+// Preserve optional database settings formerly loaded by loadEnvFile, without
+// replacing credentials inherited from another process or modifying its files.
+if (!options.db) for (const [key, value] of Object.entries(resolved.effectiveEnv)) {
+    if ((key === 'DATABASE_URL' || key.startsWith('DB_')) && process.env[key] === undefined) process.env[key] = value;
 }
-loadEnvFile(process.env.CAREERS_ENV_FILE || '/etc/cashpay-careers.env');
-
-const CFG = {
-    port: Number(process.env.PORT || 8010),
-    host: process.env.HOST || '127.0.0.1',
-    mailTo: process.env.MAIL_TO || 'info@cashpay-all.com',
-    mailFrom: process.env.MAIL_FROM || process.env.SMTP_USER || 'info@cashpay-all.com',
-    noreplyFrom: process.env.MAIL_NOREPLY || process.env.SMTP_USER || 'noreply@cashpay-all.com',      // expéditeur de l'accusé de réception
-    noreply: { host: process.env.NOREPLY_SMTP_HOST || process.env.SMTP_HOST, port: Number(process.env.NOREPLY_SMTP_PORT || process.env.SMTP_PORT || 587), user: process.env.NOREPLY_SMTP_USER, pass: process.env.NOREPLY_SMTP_PASSWORD },
-    smtp: { host: process.env.SMTP_HOST, port: Number(process.env.SMTP_PORT || 587), user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD },
-    dataDir: process.env.DATA_DIR || '/var/lib/cashpay-careers',      // hors du dossier web !
-    trustProxy: process.env.TRUST_PROXY === '1',
-    maxFileBytes: 5 * 1024 * 1024,
-    maxTotalBytes: 15 * 1024 * 1024,
-    maxBodyBytes: 22 * 1024 * 1024
-};
-
-const TPL = require('./templates');
-const DB = require('./db');
-const mailState = { internal: null, acknowledgement: null };   // dernier résultat d'envoi (visible dans /api/careers/health)
-const JOBS = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'js', 'jobs-data.json'), 'utf8'));
+const DB = options.db || require('./db');
+const delivery = createDelivery(CFG, { transportFactory: options.transportFactory, db: DB, logger, clock: options.clock });
+const JOBS = options.jobs || JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'js', 'jobs-data.json'), 'utf8'));
 const POSITIONS = new Map(JOBS.positions.map(p => [p.key, p]));
 const COUNTRIES = new Map(JOBS.countries.map(c => [c.code, c]));
 
@@ -90,24 +77,6 @@ async function readFile(file, allowedExt, maxBytes) {
     return { name: safeName(file.name), buf, ext };
 }
 
-let transporter = null;
-function mailer() {
-    if (transporter) return transporter;
-    if (!CFG.smtp.host || !CFG.smtp.user || !CFG.smtp.pass) return null;
-    const nodemailer = require('nodemailer');
-    transporter = nodemailer.createTransport({ host: CFG.smtp.host, port: CFG.smtp.port, secure: CFG.smtp.port === 465, auth: { user: CFG.smtp.user, pass: CFG.smtp.pass } });
-    return transporter;
-}
-
-let noreplyTr = null;
-/** Compte SMTP dédié à noreply@ (facultatif). Sans identifiants dédiés, on utilise le compte principal. */
-function noreplyMailer() {
-    if (noreplyTr) return noreplyTr;
-    if (!CFG.noreply.user || !CFG.noreply.pass || !CFG.noreply.host) return null;
-    noreplyTr = require('nodemailer').createTransport({ host: CFG.noreply.host, port: CFG.noreply.port, secure: CFG.noreply.port === 465, auth: { user: CFG.noreply.user, pass: CFG.noreply.pass } });
-    return noreplyTr;
-}
-
 // --- Traitement d'une candidature --------------------------------------------
 async function handleApply(req, res) {
     const ip = clientIp(req);
@@ -124,7 +93,7 @@ async function handleApply(req, res) {
 
     const get = k => { const v = form.get(k); return typeof v === 'string' ? v : ''; };
     // Anti-robots : champ piège rempli, ou formulaire envoyé trop vite
-    if (get('website')) return send(res, 200, { ok: true, ref: 'CP-OK' });
+    if (get('website')) return fail(res, 400, 'bad_request', 'Requête invalide.');
     const started = Number(get('t'));
     if (!started || Date.now() - started < 4000) return fail(res, 400, 'too_fast', 'Veuillez réessayer.');
 
@@ -143,7 +112,7 @@ async function handleApply(req, res) {
     if (d.profession.length < 2) return fail(res, 422, 'profession', 'Profession requise.');
     if (!(d.age >= 16 && d.age <= 80)) return fail(res, 422, 'age', 'Âge invalide.');
     if (!/^[+\d][\d\s().-]{6,24}$/.test(d.phone)) return fail(res, 422, 'phone', 'Numéro de téléphone invalide.');
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email)) return fail(res, 422, 'email', 'Adresse e-mail invalide.');
+    if (mailbox(d.email) !== d.email) return fail(res, 422, 'email', 'Adresse e-mail invalide.');
     if (get('consent') !== '1') return fail(res, 422, 'consent', 'Consentement requis.');
     if (!allow('mail:' + d.email, 3, 24 * 60 * 60 * 1000)) return fail(res, 429, 'rate_limit', 'Vous avez déjà envoyé plusieurs candidatures aujourd\'hui.');
 
@@ -164,7 +133,7 @@ async function handleApply(req, res) {
     // Total limité : une boîte mail refuse souvent plus de ~25 Mo (les pièces jointes grossissent d'un tiers à l'envoi)
     if (photo.buf.length + cv.buf.length + docs.reduce((n, x) => n + x.buf.length, 0) > CFG.maxTotalBytes) return fail(res, 422, 'total_too_big', 'Les fichiers dépassent 15 Mo au total. Réduisez leur taille.');
 
-    const ref = 'CP-' + new Date().toISOString().slice(2, 10).replace(/-/g, '') + '-' + crypto.randomBytes(3).toString('hex').toUpperCase();
+    const ref = 'CP-' + new Date().toISOString().slice(2, 10).replace(/-/g, '') + '-' + crypto.randomBytes(6).toString('hex').toUpperCase();
     const photoFile = { ...photo, name: 'Photo_' + photo.name };
     const files = [photoFile, { ...cv, name: 'CV_' + cv.name }, ...docs.map((x, i) => ({ ...x, name: 'Doc' + (i + 1) + '_' + x.name }))];
 
@@ -173,57 +142,68 @@ async function handleApply(req, res) {
     try {
         dir = path.join(CFG.dataDir, new Date().toISOString().slice(0, 7), ref);
         fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
-        fs.writeFileSync(path.join(dir, 'candidature.json'), JSON.stringify({ ref, date: new Date().toISOString(), ip, ...d, files: files.map(f => f.name) }, null, 2), { mode: 0o600 });
         files.forEach(f => fs.writeFileSync(path.join(dir, f.name), f.buf, { mode: 0o600 }));
+        fs.writeFileSync(path.join(dir, 'candidature.json'), JSON.stringify({ ref, date: new Date().toISOString(), ip, ...d, files: files.map(f => f.name) }, null, 2), { mode: 0o600 });
         saved = true;
-    } catch (e) { console.error('[careers] sauvegarde disque impossible :', e.message); }
+    } catch (e) { logger.error('[careers] sauvegarde disque impossible ref=' + ref + ' code=' + (e.code || 'STORAGE_FAILED')); dir = null; }
 
-    const appId = await DB.saveApplication({ ref, ...d, positionLabel: position.fr, files: files.map(f => f.name), dir, ip });
+    let appId = null;
+    try { appId = await DB.saveApplication({ ref, ...d, positionLabel: position.fr, files: files.map(f => f.name), dir, ip }); }
+    catch (_) { logger.error('[careers] base indisponible ref=' + ref); }
 
-    // 2) E-mail interne vers info@cashpay-all.com + accusé de réception automatique au candidat
-    let mailed = false, acked = false;
-    const tr = mailer();
-    if (tr) {
-        const rd = new Date(Date.now() + Number(process.env.RESULTS_DAYS || 14) * 86400000);
-        const ctx = { resultsDate: rd.toLocaleDateString(d.lang === 'en' ? 'en-GB' : 'fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Africa/Kinshasa' }), ref, position: position.fr, positionEn: position.en, country: country.name, files: files.map(f => f.name) };
-        const m = TPL.internal(d, ctx);
-        try {
-            await tr.sendMail({
-                from: '"CashPay All Carrières" <' + CFG.mailFrom + '>', to: CFG.mailTo,
-                replyTo: '"' + d.firstName.replace(/"/g, '') + ' ' + d.lastName.replace(/"/g, '') + '" <' + d.email + '>',
-                subject: m.subject, text: m.text, html: m.html, attachments: files.map(f => f === photoFile ? { filename: f.name, content: f.buf, cid: 'photo@cashpay' } : { filename: f.name, content: f.buf })
-            });
-            mailed = true; mailState.internal = { ok: true, at: new Date().toISOString() };
-            await DB.logMail(appId, 'internal', CFG.mailTo, true);
-        } catch (e) { console.error('[careers] e-mail interne non envoyé :', e.message); mailState.internal = { ok: false, at: new Date().toISOString(), error: e.message }; await DB.logMail(appId, 'internal', CFG.mailTo, false, e.message); }
-        // Accusé de réception : envoyé uniquement après une candidature valide (limites par IP et par e-mail déjà appliquées)
-        try {
-            const a = TPL.acknowledgement(d, ctx), t2 = noreplyMailer() || tr;
-            await t2.sendMail({
-                from: '"CashPay All" <' + CFG.noreplyFrom + '>', to: d.email, replyTo: CFG.mailTo,
-                subject: a.subject, text: a.text, html: a.html,
-                headers: { 'Auto-Submitted': 'auto-replied', 'X-Auto-Response-Suppress': 'All' }
-            });
-            acked = true; mailState.acknowledgement = { ok: true, at: new Date().toISOString() };
-            await DB.logMail(appId, 'acknowledgement', d.email, true);
-        } catch (e) { console.error('[careers] accusé de réception non envoyé à ' + d.email + ' :', e.message); mailState.acknowledgement = { ok: false, at: new Date().toISOString(), error: e.message }; await DB.logMail(appId, 'acknowledgement', d.email, false, e.message); }
-    } else console.error('[careers] SMTP non configuré : candidature ' + ref + ' enregistrée sur disque seulement.');
-
-    if (!saved && !mailed) return fail(res, 500, 'server', 'Un problème est survenu. Écrivez-nous à ' + CFG.mailTo + '.');
-    console.log('[careers] ' + ref + ' ' + position.key + ' ' + d.country + '/' + d.province + ' saved=' + saved + ' mailed=' + mailed + ' ack=' + acked);
-    return send(res, 200, { ok: true, ref });
+    // 2) Track SMTP acceptance separately from durable storage. A resolved
+    // sendMail without accepted recipients is not a successful delivery.
+    const rd = new Date(Date.now() + Number(resolved.effectiveEnv.RESULTS_DAYS || 14) * 86400000);
+    const context = { resultsDate: rd.toLocaleDateString(d.lang === 'en' ? 'en-GB' : 'fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Africa/Kinshasa' }), ref, position: position.fr, positionEn: position.en, country: country.name, files: files.map(f => f.name) };
+    const outcome = await delivery.sendApplication({ d, context, files, dir: saved ? dir : null, appId });
+    const status = kind => outcome && outcome[kind].status === 'accepted' ? 'accepted' : saved ? 'pending' : 'failed';
+    const mailDelivery = { internal: status('internal'), acknowledgement: status('acknowledgement') };
+    logger.log('[careers] ' + ref + ' saved=' + saved + ' internal=' + mailDelivery.internal + ' acknowledgement=' + mailDelivery.acknowledgement);
+    const retryScheduled = Boolean(outcome && outcome.retryScheduled);
+    if (mailDelivery.internal === 'accepted') return send(res, 200, { ok: true, ref, saved, delivery: mailDelivery, retryScheduled });
+    if (saved) return send(res, 202, { ok: true, ref, saved: true, delivery: mailDelivery, retryScheduled,
+        message: retryScheduled ? 'Candidature enregistrée. La notification par e-mail est en attente ; ne soumettez pas à nouveau votre dossier.' : 'Candidature enregistrée. La notification nécessite une vérification manuelle ; contactez le recrutement avec votre référence.' });
+    return send(res, 503, { ok: false, error: 'mail_unavailable', saved: false, ref, delivery: mailDelivery, message: 'Votre candidature n’a pas pu être enregistrée ni transmise au service de recrutement. Veuillez réessayer plus tard.' });
 }
 
 // --- Serveur -----------------------------------------------------------------
 const server = http.createServer((req, res) => {
     const url = (req.url || '').split('?')[0];
-    if (req.method === 'GET' && (url === '/api/careers/health' || url === '/api/careers/health/')) return send(res, 200, { ok: true, smtp: !!mailer(), database: DB.enabled(), dataDir: fs.existsSync(CFG.dataDir), lastMail: { internal: mailState.internal && { ok: mailState.internal.ok, at: mailState.internal.at }, acknowledgement: mailState.acknowledgement && { ok: mailState.acknowledgement.ok, at: mailState.acknowledgement.at } } });
+    if (req.method === 'GET' && (url === '/api/careers/health' || url === '/api/careers/health/')) {
+        const configured = Boolean(CFG.smtp.host && CFG.smtp.user && CFG.smtp.pass);
+        return send(res, 200, { ok: true, smtp: configured, smtpConfigured: configured,
+            smtpVerified: false, smtpStatus: 'configuration_only', database: DB.enabled(),
+            dataDir: fs.existsSync(CFG.dataDir), lastMail: delivery.lastMail });
+    }
     if (req.method === 'POST' && (url === '/api/careers' || url === '/api/careers/')) {
-        handleApply(req, res).catch(e => { console.error('[careers] erreur :', e); if (!res.headersSent) fail(res, 500, 'server', 'Erreur du serveur.'); });
+        handleApply(req, res).catch(e => { logger.error('[careers] traitement impossible'); if (!res.headersSent) fail(res, 500, 'server', 'Erreur du serveur.'); });
         return;
     }
     fail(res, 404, 'not_found', 'Introuvable.');
 });
 server.requestTimeout = 120000; server.headersTimeout = 20000;
-if (require.main === module) server.listen(CFG.port, CFG.host, () => console.log('[careers] à l\'écoute sur ' + CFG.host + ':' + CFG.port));
+let retryTimer = null, retryRunning = false;
+server.startMailRetries = () => {
+    if (retryTimer) return;
+    const run = async () => {
+        if (retryRunning) return;
+        retryRunning = true;
+        try { await delivery.retryPending(); } catch (_) { logger.error('[careers] reprise des e-mails indisponible'); }
+        finally { retryRunning = false; }
+    };
+    retryTimer = setInterval(run, 60000); retryTimer.unref();
+    run();
+};
+server.on('close', () => { clearInterval(retryTimer); retryTimer = null; delivery.close(); });
+server.handleRequest = server.listeners('request')[0];
+server.retryPendingMail = delivery.retryPending;
+server.config = CFG;
+return server;
+}
+const server = createService();
+if (require.main === module) server.listen(server.config.port, server.config.host, () => {
+    console.log('[careers] à l’écoute sur ' + server.config.host + ':' + server.config.port);
+    server.startMailRetries();
+});
 module.exports = server;
+module.exports.createService = createService;
