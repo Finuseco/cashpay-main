@@ -12,7 +12,7 @@ echo
 echo "=== 2. Connexion SMTP et envoi d'essai ==="
 ENV_FILE="$ENV_FILE" TEST_TO="$TEST_TO" node -e '
 const fs=require("fs");
-fs.readFileSync(process.env.ENV_FILE,"utf8").split(/\r?\n/).forEach(l=>{const m=l.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/);if(m&&process.env[m[1]]===undefined)process.env[m[1]]=m[2].replace(/^["\x27]|["\x27]$/g,"")});
+const v=require("./envfile").parse(fs.readFileSync(process.env.ENV_FILE,"utf8"),process.env);Object.keys(v).forEach(k=>{if(process.env[k]===undefined)process.env[k]=v[k]});
 const e=process.env,nm=require("nodemailer"),port=Number(e.SMTP_PORT||587);
 const tr=nm.createTransport({host:e.SMTP_HOST,port,secure:port===465,auth:{user:e.SMTP_USER,pass:e.SMTP_PASSWORD},connectionTimeout:15000});
 const to=process.env.TEST_TO||e.MAIL_TO||"info@cashpay-all.com";

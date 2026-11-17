@@ -22,7 +22,8 @@ if [ ! -f "$ENV_FILE" ]; then
     port=8010
     while ss -ltn 2>/dev/null | grep -qE "[:.]${port}[[:space:]]"; do port=$((port + 1)); done
     ( umask 077
-      grep -E '^SMTP_(HOST|PORT|USER|PASSWORD)=' "$DEV_ENV" > "$ENV_FILE" || true
+      : > "$ENV_FILE"
+      node sync-smtp.js "$DEV_ENV" "$ENV_FILE" || true
       printf 'MAIL_TO=info@%s\nTRUST_PROXY=1\nPORT=%s\n' "$DOMAIN" "$port" >> "$ENV_FILE" )
     echo "Réglages copiés depuis le portail développeur → $ENV_FILE (port $port)"
 else

@@ -11,10 +11,8 @@ const crypto = require('crypto');
 // --- Configuration -----------------------------------------------------------
 function loadEnvFile(file) {
     try {
-        fs.readFileSync(file, 'utf8').split(/\r?\n/).forEach(line => {
-            const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/);
-            if (m && process.env[m[1]] === undefined) process.env[m[1]] = m[2].replace(/^["']|["']$/g, '');
-        });
+        const vars = require('./envfile').parse(fs.readFileSync(file, 'utf8'), process.env);
+        Object.keys(vars).forEach(k => { if (process.env[k] === undefined) process.env[k] = vars[k]; });
     } catch (e) { /* fichier absent : on utilise l'environnement */ }
 }
 loadEnvFile(process.env.CAREERS_ENV_FILE || '/etc/cashpay-careers.env');
