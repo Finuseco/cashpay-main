@@ -205,5 +205,13 @@
     }).catch(() => showError(L('jb.err.net', 'Impossible de charger la page. Réessayez.')));
 
     document.addEventListener('langchange', () => { if (!DATA) return; renderRoles(); renderCountries(); renderProvince(); renderPositions(); fileNames(); if (receipt) showReceipt(receipt); else if (submissionError) showError(L(submissionError.key, submissionError.fallback)); });
+    if (window.I18N) I18N.extend({
+        'jb.in.t': 'Remote work, <span class="highlight">open to the whole world</span>', 'jb.in.sub': 'Before applying, here is how we work.',
+        'jb.in.1t': 'From any country', 'jb.in.1p': 'Your application is accepted wherever in the world you live.',
+        'jb.in.2t': '100% online', 'jb.in.2p': 'We recruit for remote work: not a traditional contract, nor exactly freelance. It requires a solid command of IT, the internet and finance.',
+        'jb.in.3t': 'Finance profiles wanted', 'jb.in.3p': 'We are looking above all for finance profiles. Selected people get an account opened and start working remotely as local representatives.',
+        'jb.in.4t': 'Paid within our network', 'jb.in.4p': 'All remuneration is paid within the CashPay network.',
+        'jb.in.note': 'Later on, we may set up a foundation or a local office. For now, we work online only.'
+    });
     if (window.I18N) I18N.extend({ 'jb.role.cta': 'Apply' });
 })();

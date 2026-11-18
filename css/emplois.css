@@ -101,3 +101,14 @@
     .jobs-page .photo-pick { flex-direction: column; text-align: center; }
     .jobs-page .job-step-h { font-size: 17px; }
 }
+
+/* Introduction : comment nous travaillons */
+.jobs-page .j-intro { padding-bottom: 10px; }
+.jobs-page .intro-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.jobs-page .intro-card { background: #fff; border: 1px solid var(--jp-line); border-radius: 22px; padding: 24px 20px; box-shadow: 0 8px 24px rgba(89, 21, 141, .06); }
+.jobs-page .intro-ico { width: 48px; height: 48px; border-radius: 16px; display: grid; place-items: center; color: #fff; font-size: 19px; margin-bottom: 14px; background: linear-gradient(135deg, var(--jp-mid), var(--jp)); }
+.jobs-page .intro-card h3 { font-size: 17px; color: var(--jp-dark); margin-bottom: 8px; line-height: 1.3; }
+.jobs-page .intro-card p { font-size: 14px; line-height: 1.6; color: var(--jp-text); }
+.jobs-page .intro-note { margin-top: 22px; text-align: center; font-weight: 600; color: var(--jp-mid); font-size: 15px; }
+@media (max-width: 960px) { .jobs-page .intro-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .jobs-page .intro-grid { grid-template-columns: 1fr; } }
