@@ -40,6 +40,7 @@
                         </a>
                     </div>
                 </li>
+                <li><a href="salaire.html" data-page-link="salary" data-i18n="nav.salary">Salaire</a></li>
                 <li><a href="faq.html" data-page-link="faq" data-i18n="nav.faq">FAQ</a></li>
                 <li><a href="contact.html" data-page-link="contact" data-i18n="nav.contact">Contact</a></li>
             </ul>
@@ -73,6 +74,7 @@
                         <li><a href="cartes-b2b.html" data-i18n="nav.cards">Cartes B2B</a></li>
                         <li><a href="apropos.html" data-i18n="nav.about.app">L'application</a></li>
                         <li><a href="entreprise.html" data-i18n="nav.about.co">L'entreprise FINUSECO</a></li>
+                        <li><a href="salaire.html" data-i18n="nav.salary">Salaire</a></li>
                         <li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
                         <li><a href="emplois.html" data-i18n="nav.jobs.short">Emplois</a></li>
                     </ul>
