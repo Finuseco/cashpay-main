@@ -76,6 +76,9 @@
                         <li><a href="entreprise.html" data-i18n="nav.about.co">L'entreprise FINUSECO</a></li>
                         <li><a href="salaire.html" data-i18n="nav.salary">Salaire</a></li>
                         <li><a href="partenaires.html" data-i18n="nav.partners">Partenariat</a></li>
+                        <li><a href="financement-pme.html" data-i18n="nav.fin.sme">Financement des PME</a></li>
+                        <li><a href="livraison-paiement.html" data-i18n="nav.fin.deliv">Livraisons et paiements</a></li>
+                        <li><a href="financement-startups.html" data-i18n="nav.fin.startup">Financement des startups</a></li>
                         <li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
                         <li><a href="emplois.html" data-i18n="nav.jobs.short">Emplois</a></li>
                     </ul>
