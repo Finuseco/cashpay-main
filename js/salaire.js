@@ -1,8 +1,8 @@
 (function () {
     'use strict';
     // Paramètres indicatifs de la simulation (à ajuster avec la politique de crédit).
-    var RATE = 0.20;       // frais du crédit : 20 % du montant demandé
-    var GUARANTEE = 0.30;  // garantie à constituer pour un client sans entreprise partenaire
+    var RATE = 0.20;       // intérêts totaux : 20 % du montant, répartis sur les échéances (taux affiché par échéance)
+    var GUARANTEE = 0.20;  // garantie (caution) à constituer pour un client sans entreprise partenaire
     var STEP = 10;         // les échéances sont arrondies à la dizaine supérieure
 
     if (window.I18N) I18N.extend({
@@ -24,7 +24,7 @@
         'sal.sim.t': 'Simulate your <span class="highlight">repayment</span>', 'sal.sim.sub': 'Type the amount you want: instalments and guarantee are calculated instantly.',
         'sal.sim.partner': 'Partner company employee', 'sal.sim.other': 'Other customer', 'sal.sim.amount': 'Amount requested (USD)',
         'sal.sim.duration': 'Credit duration (months)', 'sal.sim.freq': 'Due date', 'sal.sim.monthly': 'Monthly', 'sal.sim.quarterly': 'Quarterly', 'sal.sim.semester': 'Every 6 months',
-        'sal.sim.inst': 'Each instalment', 'sal.sim.n': 'Number of instalments', 'sal.sim.cost': 'Credit cost', 'sal.sim.total': 'Total to repay',
+        'sal.sim.inst': 'Each instalment', 'sal.sim.n': 'Number of instalments', 'sal.sim.cost': 'Total interest', 'sal.sim.rate': 'Interest rate per instalment', 'sal.sim.total': 'Total to repay',
         'sal.sim.keep': 'Balance needed before each due date', 'sal.sim.guar': 'Guarantee to set aside',
         'sal.sim.legal': 'Indicative, non-binding simulation. Final terms are set with CashPay and, where applicable, your partner company.',
         'sal.co.t': 'Companies: <span class="highlight">become a partner</span>', 'sal.co.sub': 'Schools, administrations, businesses: offer your teams salary on CashPay and salary advances.',
@@ -70,7 +70,9 @@
         var dash = '—';
         $('o-inst').textContent = ok ? money(inst) : dash;
         $('o-n').textContent = ok ? String(n) : dash;
-        $('o-cost').textContent = ok ? money(cost) + ' (' + Math.round(RATE * 100) + ' %)' : dash;
+        var pct = function (v) { return (Math.round(v * 10) / 10).toString().replace('.', document.documentElement.lang === 'en' ? '.' : ',') + ' %'; };
+        $('o-cost').textContent = ok ? money(cost) : dash;
+        $('o-rate').textContent = ok ? pct(RATE * 100 / n) : dash;
         $('o-total').textContent = ok ? money(total) : dash;
         $('o-keep').textContent = ok ? money(inst) : dash;
         $('o-guar').textContent = ok ? (mode === 'partner' ? money(0) : money(guar)) : dash;

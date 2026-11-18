@@ -11,8 +11,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css?v=20261118134606">
-    <link rel="stylesheet" href="css/salaire.css?v=20261118134606">
+    <link rel="stylesheet" href="css/style.css?v=20261118135400">
+    <link rel="stylesheet" href="css/salaire.css?v=20261118135400">
 </head>
 <body data-page="salary" class="salary-page">
     <header id="site-header"></header>
@@ -25,31 +25,17 @@
             </div>
         </section>
 
-        <section class="s-sec">
-            <div class="s-wrap">
-                <div class="s-head"><h2 data-i18n="sal.why.t">Un partenariat qui <span class="highlight">change tout</span></h2>
-                    <p data-i18n="sal.why.sub">Enseignants, fonctionnaires, employés : si votre employeur est partenaire de CashPay, vous avez droit à l'octroi de crédit.</p></div>
-                <div class="s-grid s-grid-3">
-                    <div class="s-card"><span class="s-ico"><i class="fa-solid fa-bolt"></i></span><h3 data-i18n="sal.b1t">Avance instantanée</h3><p data-i18n="sal.b1p">Vous demandez une avance sur salaire et vous la recevez immédiatement, sans déplacement ni paperasse.</p></div>
-                    <div class="s-card"><span class="s-ico"><i class="fa-solid fa-credit-card"></i></span><h3 data-i18n="sal.b2t">Carte de crédit</h3><p data-i18n="sal.b2p">Votre crédit est utilisable avec votre carte CashPay, en ligne comme en magasin.</p></div>
-                    <div class="s-card"><span class="s-ico"><i class="fa-solid fa-wand-magic-sparkles"></i></span><h3 data-i18n="sal.b3t">Octroi automatique</h3><p data-i18n="sal.b3p">La demande est soumise à votre entreprise, puis l'approbation et l'octroi se font automatiquement via CashPay.</p></div>
-                    <div class="s-card"><span class="s-ico"><i class="fa-solid fa-rotate"></i></span><h3 data-i18n="sal.b4t">Remboursement automatisé</h3><p data-i18n="sal.b4p">À chaque échéance, le montant dû est prélevé sur votre compte CashPay. Plus de retards, plus de pénalités.</p></div>
-                    <div class="s-card"><span class="s-ico"><i class="fa-solid fa-handshake"></i></span><h3 data-i18n="sal.b5t">Sans caution personnelle</h3><p data-i18n="sal.b5p">Pour un employé d'une entreprise partenaire, c'est l'entreprise qui se porte garante. Vous n'avez pas de caution à fournir.</p></div>
-                    <div class="s-card"><span class="s-ico"><i class="fa-solid fa-chart-pie"></i></span><h3 data-i18n="sal.b6t">Gestion du financement</h3><p data-i18n="sal.b6p">Suivez vos crédits, vos échéances et votre solde depuis l'application.</p></div>
-                </div>
-            </div>
-        </section>
-
         <section class="s-sec soft" id="comment">
             <div class="s-wrap">
                 <div class="s-head"><h2 data-i18n="sal.how.t">Comment obtenir <span class="highlight">une avance</span> ?</h2>
                     <p data-i18n="sal.how.sub">Vous êtes travailleur : voici les étapes, de la demande au remboursement.</p></div>
+                <div class="s-how"><div class="sal-home-photo s-how-photo"><img src="public/images/salaire.webp" alt="" width="736" height="905" onerror="this.parentNode.remove()"><div class="sal-badge"><i class="fa-solid fa-handshake" aria-hidden="true"></i> <span data-i18n="home.sal.badge">L'entreprise se porte garante</span></div></div>
                 <ol class="s-steps">
                     <li><span class="s-num">1</span><div><h3 data-i18n="sal.w1t">Faites une demande à votre entreprise</h3><p data-i18n="sal.w1p">Commencez par demander l'avance à l'entreprise (école, administration, société) où vous travaillez. Elle doit être partenaire de CashPay.</p></div></li>
                     <li><span class="s-num">2</span><div><h3 data-i18n="sal.w2t">L'approbation est automatique</h3><p data-i18n="sal.w2p">La demande est soumise et traitée automatiquement grâce à CashPay, sur la base du partenariat avec votre employeur.</p></div></li>
                     <li><span class="s-num">3</span><div><h3 data-i18n="sal.w3t">Vous êtes crédité instantanément</h3><p data-i18n="sal.w3p">Le montant arrive sur votre compte CashPay et vous pouvez l'utiliser tout de suite.</p></div></li>
                     <li><span class="s-num">4</span><div><h3 data-i18n="sal.w4t">Vous remboursez à l'échéance</h3><p data-i18n="sal.w4p">Déposez l'argent sur votre compte avant chaque échéance : le remboursement est prélevé automatiquement, ce qui évite pénalités et retards.</p></div></li>
-                </ol>
+                </ol></div>
             </div>
         </section>
 
@@ -79,10 +65,11 @@
                         <div class="sim-big"><small data-i18n="sal.sim.inst">Chaque échéance</small><strong id="o-inst">—</strong></div>
                         <dl>
                             <div><dt data-i18n="sal.sim.n">Nombre d'échéances</dt><dd id="o-n">—</dd></div>
-                            <div><dt data-i18n="sal.sim.cost">Frais du crédit</dt><dd id="o-cost">—</dd></div>
+                            <div><dt data-i18n="sal.sim.rate">Taux d'intérêt par échéance</dt><dd id="o-rate">—</dd></div>
+                            <div><dt data-i18n="sal.sim.cost">Intérêts totaux</dt><dd id="o-cost">—</dd></div>
                             <div><dt data-i18n="sal.sim.total">Total à rembourser</dt><dd id="o-total">—</dd></div>
                             <div><dt data-i18n="sal.sim.keep">À avoir sur le compte avant chaque échéance</dt><dd id="o-keep">—</dd></div>
-                            <div><dt data-i18n="sal.sim.guar">Garantie à constituer</dt><dd id="o-guar">—</dd></div>
+                            <div><dt data-i18n="sal.sim.guar">Garantie (caution) de 20 %</dt><dd id="o-guar">—</dd></div>
                         </dl>
                         <p class="sim-note" id="o-note"></p>
                         <ul class="sim-sched" id="o-sched"></ul>
@@ -143,9 +130,9 @@
         </section>
     </main>
     <footer id="site-footer"></footer>
-    <script src="js/i18n.js?v=20261118134606"></script>
-    <script src="js/salaire.js?v=20261118134606"></script>
-    <script src="js/layout.js?v=20261118134606"></script>
-    <script src="js/main.js?v=20261118134606"></script>
+    <script src="js/i18n.js?v=20261118135400"></script>
+    <script src="js/salaire.js?v=20261118135400"></script>
+    <script src="js/layout.js?v=20261118135400"></script>
+    <script src="js/main.js?v=20261118135400"></script>
 </body>
 </html>
