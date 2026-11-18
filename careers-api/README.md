@@ -1,75 +1,34 @@
-# Service « Carrières » (candidatures → info@cashpay-all.com)
+# Candidatures envoyées directement par CashPay Web
 
-Petit service Node.js (une seule dépendance : `nodemailer`) qui reçoit le formulaire de `emplois.html`,
-vérifie les champs et les fichiers (CV PDF/DOC/DOCX, 5 Mo max), garde une copie sur le disque,
-puis envoie un e-mail avec les pièces jointes à **info@cashpay-all.com**.
+Le formulaire de Main utilise exclusivement :
 
-Données du formulaire (pays, provinces, postes) : `../js/jobs-data.json` — pour ajouter un poste ou une province, modifier ce fichier seulement.
+```http
+POST https://app.cashpay-all.com/api/careers
+```
 
-## Installation en UNE commande (recommandé)
+CashPay Web reçoit le formulaire et les pièces jointes en mémoire, transmet le message au destinataire de recrutement,
+puis traite séparément l’accusé au candidat. Il n’enregistre aucun dossier, fichier, journal de candidature ou tâche d’envoi en base/disque.
+Le mot de passe du destinataire `info@cashpay-all.com` n’est jamais demandé. Les autorisations d’envoi existantes de CashPay Web restent côté serveur.
+
+Le succès exige l’acceptation SMTP du message interne. Si elle échoue, le formulaire et les fichiers sélectionnés restent dans le navigateur.
+Un accusé refusé après acceptation interne affiche une confirmation partielle et ne demande pas de soumettre à nouveau le dossier.
+
+## Déploiement
+
+Déployer d’abord la route Next.js selon `docs/careers-mail-only.md` du dépôt CashPay Web, vérifier son CORS et sa configuration nginx,
+puis mettre à jour Main. Le cache-buster de `js/jobs.js` est actualisé uniquement sur `emplois.html`.
+Arrêter ensuite le service local :
+
 ```bash
-cd /var/www/cashpay-all/cashpay-main && git pull origin main && bash careers-api/install.sh
+pm2 stop cashpay-careers
+pm2 save
 ```
-Le script copie les réglages SMTP du portail développeur, installe, démarre le service avec pm2 et ajoute la route dans nginx
-(avec test `nginx -t` et retour arrière automatique en cas d'erreur). Il peut être relancé sans risque.
 
-## Installation manuelle (équivalent, une fois)
-```bash
-cd /var/www/cashpay-all/cashpay-main/careers-api && npm install --omit=dev
+Ne pas arrêter les autres applications PM2. Aucun nouveau processus n’est nécessaire pour Main.
+`install.sh` est retiré : il ne copie plus de configuration SMTP, n’installe rien et ne modifie pas nginx.
+Si l’ancien `server.js` est démarré manuellement, il répond `410 endpoint_moved`, ne conserve aucun dossier et ne lance aucune reprise.
+Les outils SMTP historiques présents dans ce dossier ne sont plus utilisés par le formulaire ni par la nouvelle route Next.js.
 
-# Réglages (HORS du dossier du site, jamais dans git). On reprend les lignes SMTP du portail développeur :
-grep '^SMTP_' /var/www/cashpay-all/developer/.env > /etc/cashpay-careers.env
-cat >> /etc/cashpay-careers.env <<'ENV'
-MAIL_TO=info@cashpay-all.com
-TRUST_PROXY=1
-PORT=8010
-ENV
-chmod 600 /etc/cashpay-careers.env
-
-pm2 start server.js --name cashpay-careers && pm2 save
-```
-Variables : `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` (obligatoires pour l'e-mail), `MAIL_TO`, `MAIL_FROM` (défaut : SMTP_USER),
-`DATA_DIR` (défaut `/var/lib/cashpay-careers`), `PORT` (défaut 8010), `TRUST_PROXY=1` derrière nginx.
-
-## Accusé de réception automatique
-Après chaque candidature valide, le candidat reçoit un e-mail professionnel (français ou anglais selon la langue du site) avec sa référence,
-un récapitulatif et les prochaines étapes. Expéditeur : `noreply@cashpay-all.com` (variable `MAIL_NOREPLY`) ; les réponses vont à `info@cashpay-all.com`.
-- Par défaut l'envoi passe par le compte SMTP principal : le serveur de messagerie doit autoriser d'écrire « de la part de » noreply@ (alias ou boîte existante).
-- S'il refuse, créer la boîte `noreply@cashpay-all.com` et ajouter dans `/etc/cashpay-careers.env` : `NOREPLY_SMTP_USER=noreply@cashpay-all.com` et `NOREPLY_SMTP_PASSWORD=…`
-  (`NOREPLY_SMTP_HOST` / `NOREPLY_SMTP_PORT` si différents), puis `pm2 restart cashpay-careers`.
-- Si l'accusé échoue, la candidature n'est pas perdue : elle arrive quand même à info@ ; l'erreur est dans `pm2 logs cashpay-careers` (`accusé de réception non envoyé`).
-
-## nginx (dans le bloc `server` de cashpay-all.com)
-```nginx
-location /api/careers {
-    client_max_body_size 25m;
-    proxy_pass http://127.0.0.1:8010;
-    proxy_set_header X-Forwarded-For $remote_addr;
-}
-# Ne jamais exposer le code du service ni les fichiers cachés
-location ^~ /careers-api/ { return 404; }
-location ~ /\.(?!well-known) { deny all; }
-```
-Puis : `nginx -t && systemctl reload nginx`.
-
-## Vérifier
-`curl https://cashpay-all.com/api/careers/health` → `{"ok":true,"smtp":true,"dataDir":true}`
-Logs : `pm2 logs cashpay-careers`. Les candidatures sont aussi dans `DATA_DIR/AAAA-MM/<référence>/` (JSON + fichiers).
-
-## Sécurité
-Limites : 6 envois/heure par adresse IP, 3 candidatures/jour par e-mail ; champ piège anti-robots ; délai minimal de remplissage ;
-types de fichiers vérifiés sur le contenu ; l'accusé de réception n'est envoyé qu'après une candidature complète et valide (CV vérifié), avec les limites ci-dessus, pour éviter qu'on s'en serve pour spammer des tiers.
-
-
-## Champs du formulaire (mise à jour)
-Nom, prénom, sexe (M/F), âge, profession, téléphone, e-mail, ville, **photo de profil obligatoire** (JPG/PNG/WEBP, 3 Mo), CV (PDF/DOC/DOCX, 5 Mo), documents (3 max), message. Pas de liste de niveau d'études : il figure dans le CV. La photo est affichée dans l'e-mail interne.
-
-## Messagerie : ce qui doit être vrai pour recevoir les e-mails
-- `SMTP_USER` doit être une **vraie boîte mail** qui peut s'authentifier (ex. `noreply@cashpay-all.com`). Une simple **redirection** (comme `info@` → Gmail chez LWS) ne peut pas envoyer : le serveur refuse la connexion.
-- `MAIL_TO` = destinataire interne (par défaut `info@cashpay-all.com`, redirigé vers Gmail). Pour tester sans passer par la redirection, mettez directement l'adresse Gmail ; plusieurs adresses possibles séparées par des virgules.
-- DNS : SPF, DKIM (clé du panel LWS, enregistrement TXT `dkim._domainkey`) et DMARC. Sans eux, Gmail classe souvent en indésirable ou rejette.
-- Diagnostic en une commande : `bash careers-api/diagnose.sh [adresse_test]` (réglages, connexion SMTP, message d'essai, DNS, journaux).
-- `GET /api/careers/health` indique `smtp`, `database` et le dernier résultat d'envoi (`lastMail`).
-
-## Base de données (facultative mais conseillée)
-Appliquer `migrations/20261117_career_applications.sql` de cashpay_web (tables `career_applications` et `career_email_log`), puis mettre `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` dans `/etc/cashpay-careers.env` (install.sh les reprend du `.env` de CashPay Web s'il le trouve) et relancer `install.sh`. Chaque candidature et chaque e-mail (réussi ou non) y est enregistré. Suivi et envoi du résultat au candidat : route `GET/PATCH /api/internal/careers` de CashPay Web (en-tête `x-internal-job-secret`).
+Les dossiers précédemment créés sous `/var/lib/cashpay-careers` ne sont ni renvoyés ni supprimés par cette mise à jour.
+La configuration nginx propre à la route sur `app.cashpay-all.com` doit désactiver le tampon disque des requêtes, comme indiqué dans la documentation Web.
+Sur Main, remplacer aussi l'ancienne règle proxy `/api/careers` par une réponse immédiate `410`, pour éviter les uploads résiduels d'anciens formulaires en cache.

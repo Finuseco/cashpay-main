@@ -1,6 +1,6 @@
-/* Page Emplois : pays → province → poste → informations → documents, puis envoi à /api/careers. */
+/* Page Emplois : envoi direct par l’API CashPay Web, sans conservation du dossier sur le serveur. */
 (function () {
-    const API = '/api/careers';
+    const API = 'https://app.cashpay-all.com/api/careers';
     const L = (k, fr) => (window.I18N ? I18N.t(k, fr) : fr);
     const lang = () => (window.I18N ? I18N.lang : 'fr');
 
@@ -16,15 +16,21 @@
         'jb.msg': 'Message or description of your profile (optional)', 'jb.msg.ph': 'Tell us about your experience, your skills, your availability…',
         'jb.consent': 'I agree that my data and documents are sent to FINUSECO SARL to process my application.',
         'jb.send': 'Send my application', 'jb.sending': 'Sending…',
-        'jb.done.t': 'Application sent', 'jb.done.d': 'Thank you! Your file has been sent to our team. We will contact you if your profile matches our needs.',
+        'jb.done.t': 'Application transmitted', 'jb.done.d': 'The mail service has accepted your application for our team. We will contact you if your profile matches our needs.',
         'jb.done.ref': 'Your reference:', 'jb.done.home': 'Back to home',
+        'jb.delivery.accepted.t': 'Application transmitted',
+        'jb.delivery.accepted.d': 'The mail service has accepted the message to our team and your acknowledgement. Keep your reference for any follow-up.',
+        'jb.delivery.partial.t': 'Application transmitted — acknowledgement unconfirmed',
+        'jb.delivery.partial.d': 'The message to our team was accepted by the mail service, but your acknowledgement has not been confirmed. Keep your reference; you do not need to submit the application again.',
+        'jb.err.mail_unavailable': 'We could not confirm that your application was sent. Your form and selected documents are still on this page. Check receipt with our team before submitting again.',
+        'jb.err.receipt': 'The response did not confirm that your application was sent. Keep this page and your selected documents. Check for an acknowledgement or contact info@cashpay-all.com before submitting again.',
         'jb.help.t': 'A question about a position?', 'jb.help.d': 'Write to us, our team will answer.',
         'jb.choose': '— Choose —', 'jb.chooseCountry': '— Choose your country —', 'jb.chooseProvince': '— Choose your province —', 'jb.region.ph': 'Your province or region',
         'jb.pick': 'Select a position', 'jb.otherCountry': 'Applications outside the DR Congo are welcome: tell us your region.',
         'jb.err.country': 'Please choose a country.', 'jb.err.province': 'Please choose or enter a province.', 'jb.err.position': 'Please choose a position.',
         'jb.err.fields': 'Please fill in all the required fields correctly.', 'jb.err.cv': 'Please attach your CV (PDF, DOC or DOCX).', 'jb.err.consent': 'Please accept the consent box.',
         'jb.err.size': 'A file is larger than 5 MB.', 'jb.err.total_too_big': 'The files exceed 15 MB in total. Please reduce their size.', 'jb.err.type': 'A file has an unsupported format.', 'jb.err.docs': 'You can attach 3 other documents at most.',
-        'jb.err.net': 'We could not send your application. Check your connection or write to info@cashpay-all.com.',
+        'jb.err.net': 'We could not confirm the result of your submission. Keep this page and your selected documents. Check for an acknowledgement or contact info@cashpay-all.com before submitting again.',
         'jb.err.cv_missing': 'The CV is required.', 'jb.err.cv_bad_type': 'CV refused: use a PDF, DOC or DOCX file of 5 MB maximum.', 'jb.err.cv_too_big': 'The CV is larger than 5 MB.',
         'jb.photo': 'Profile photo *', 'jb.photo.btn': 'Choose a photo', 'jb.photo.hint': 'A clear photo of your face, JPG, PNG or WEBP, 3 MB maximum.',
         'jb.gender': 'Gender', 'jb.male': 'Male', 'jb.female': 'Female', 'jb.job': 'Current profession', 'jb.job.ph': 'E.g. accountant, teacher, sales…',
@@ -98,9 +104,36 @@
     function showError(msg) { const e = $('job-error'); e.textContent = msg; e.hidden = !msg; if (msg) e.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
     const MAX = 5 * 1024 * 1024;
     const okExt = (f, list) => list.indexOf((f.name.split('.').pop() || '').toLowerCase()) !== -1;
+    let receipt = null, submitting = false, submissionError = null;
+    function showSubmissionError(key, fallback) {
+        submissionError = { key, fallback };
+        showError(L(key, fallback));
+    }
+    function showReceipt(response) {
+        receipt = response;
+        const delivery = response.delivery || {};
+        const state = delivery.acknowledgement === 'accepted' ? 'accepted' : 'partial';
+        const copies = {
+            accepted: ['Candidature transmise', 'Le service de messagerie a accepté le message à notre équipe et votre accusé de réception. Conservez votre référence pour tout suivi.'],
+            partial: ['Dossier transmis — accusé non confirmé', 'Le service de messagerie a accepté le message à notre équipe, mais votre accusé de réception n’a pas été confirmé. Conservez votre référence ; il n’est pas nécessaire de renvoyer votre candidature.']
+        };
+        const box = $('job-done'), title = box.querySelector('h3'), description = box.querySelector('p[data-i18n="jb.done.d"]') || box.querySelector('[data-delivery-description]');
+        // This copy depends on the API receipt. The static i18n success text must
+        // never replace a partial acknowledgement when the language changes.
+        title.removeAttribute('data-i18n');
+        description.removeAttribute('data-i18n'); description.setAttribute('data-delivery-description', '');
+        title.textContent = L('jb.delivery.' + state + '.t', copies[state][0]);
+        description.textContent = L('jb.delivery.' + state + '.d', copies[state][1]);
+        const iconBox = box.querySelector('.job-done-ico');
+        iconBox.style.color = state === 'accepted' ? '#25D366' : '#b54708';
+        iconBox.querySelector('i').className = state === 'accepted' ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
+        box.setAttribute('data-delivery-state', state); box.setAttribute('role', 'status'); box.setAttribute('aria-live', 'polite'); box.setAttribute('tabindex', '-1');
+        $('job-ref').textContent = response.ref;
+        form.hidden = true; box.hidden = false;
+    }
 
     form.addEventListener('submit', async e => {
-        e.preventDefault(); showError('');
+        e.preventDefault(); if (submitting || receipt) return; submissionError = null; showError('');
         const prov = form.querySelector('[name=province]');
         if (!$('f-country').value) return showError(L('jb.err.country', 'Choisissez un pays.'));
         if (!prov || !prov.value.trim()) return showError(L('jb.err.province', 'Choisissez ou saisissez une province.'));
@@ -122,19 +155,25 @@
 
         const fd = new FormData(form);
         fd.set('lang', lang()); fd.set('t', String(startedAt));
-        const btn = $('job-submit'); btn.disabled = true; const old = btn.innerHTML;
+        const btn = $('job-submit'); submitting = true; btn.disabled = true; const old = btn.innerHTML;
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> ' + L('jb.sending', 'Envoi en cours…');
         try {
-            const r = await fetch(API, { method: 'POST', body: fd });
+            const r = await fetch(API, { method: 'POST', body: fd, credentials: 'omit' });
             let j = {}; try { j = await r.json(); } catch (x) {}
-            if (r.ok && j.ok) {
-                $('job-ref').textContent = j.ref || ''; form.hidden = true; $('job-done').hidden = false;
+            if (r.ok && j.ok && j.delivery && j.delivery.internal === 'accepted') {
+                if (typeof j.ref !== 'string' || !j.ref.trim() || j.ref === 'CP-OK') throw new Error('Invalid application receipt');
+                showReceipt(j);
                 $('job-done').scrollIntoView({ block: 'center', behavior: 'smooth' });
+                $('job-done').focus();
+            } else if (j.ok || j.saved === true || (j.delivery && j.delivery.internal === 'accepted')) {
+                showSubmissionError('jb.err.receipt', 'La réponse ne confirme pas l’envoi de votre candidature. Gardez cette page et les documents sélectionnés. Vérifiez si vous avez reçu un accusé ou contactez info@cashpay-all.com avant de soumettre à nouveau.');
+            } else if (j.error === 'mail_unavailable') {
+                showSubmissionError('jb.err.mail_unavailable', 'L’envoi de votre candidature n’a pas pu être confirmé. Le formulaire et les documents restent sur cette page. Vérifiez la réception auprès de notre équipe avant de soumettre à nouveau.');
             } else {
-                showError(L('jb.err.' + j.error, j.message || L('jb.err.net', "L'envoi a échoué. Écrivez-nous à info@cashpay-all.com.")));
+                showSubmissionError('jb.err.' + j.error, j.message || L('jb.err.receipt', 'Le résultat de votre soumission n’a pas pu être confirmé. Gardez cette page et les documents sélectionnés. Vérifiez si vous avez reçu un accusé ou contactez info@cashpay-all.com avant de soumettre à nouveau.'));
             }
-        } catch (x) { showError(L('jb.err.net', "L'envoi a échoué. Vérifiez votre connexion ou écrivez-nous à info@cashpay-all.com.")); }
-        btn.disabled = false; btn.innerHTML = old;
+        } catch (x) { showSubmissionError('jb.err.net', 'Le résultat de votre soumission n’a pas pu être confirmé. Gardez cette page et les documents sélectionnés. Vérifiez si vous avez reçu un accusé ou contactez info@cashpay-all.com avant de soumettre à nouveau.'); }
+        submitting = false; btn.disabled = false; btn.innerHTML = old;
     });
 
     // ---- Photo et noms de fichiers ----------------------------------------------
@@ -165,6 +204,6 @@
         startedAt = Date.now();
     }).catch(() => showError(L('jb.err.net', 'Impossible de charger la page. Réessayez.')));
 
-    document.addEventListener('langchange', () => { if (!DATA) return; renderRoles(); renderCountries(); renderProvince(); renderPositions(); fileNames(); });
+    document.addEventListener('langchange', () => { if (!DATA) return; renderRoles(); renderCountries(); renderProvince(); renderPositions(); fileNames(); if (receipt) showReceipt(receipt); else if (submissionError) showError(L(submissionError.key, submissionError.fallback)); });
     if (window.I18N) I18N.extend({ 'jb.role.cta': 'Apply' });
 })();
