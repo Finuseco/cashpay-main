@@ -65,3 +65,12 @@
 .salary-page .s-how-photo { position: sticky; top: 100px; min-height: 540px; }
 .salary-page .s-how .s-steps { margin: 0; max-width: none; }
 @media (max-width: 800px) { .salary-page .s-how { grid-template-columns: 1fr; } .salary-page .s-how-photo { position: relative; top: 0; min-height: 420px; } }
+
+/* Page partenariat : photo à droite, cartes à gauche */
+.salary-page .s-how-flip { grid-template-columns: 1.3fr .7fr; }
+.salary-page .s-offer { grid-template-columns: repeat(2, 1fr); }
+.salary-page .s-offer .s-card { padding: 22px 20px; }
+.salary-page a.s-card { display: block; transition: transform .2s, box-shadow .2s; }
+.salary-page a.s-card:hover { transform: translateY(-3px); box-shadow: 0 16px 34px rgba(89, 21, 141, .14); }
+.salary-page .s-how-flip .s-how-photo { min-height: 640px; }
+@media (max-width: 800px) { .salary-page .s-how-flip { grid-template-columns: 1fr; } .salary-page .s-offer { grid-template-columns: 1fr; } .salary-page .s-how-flip .s-how-photo { min-height: 460px; } }

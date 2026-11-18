@@ -75,6 +75,7 @@
                         <li><a href="apropos.html" data-i18n="nav.about.app">L'application</a></li>
                         <li><a href="entreprise.html" data-i18n="nav.about.co">L'entreprise FINUSECO</a></li>
                         <li><a href="salaire.html" data-i18n="nav.salary">Salaire</a></li>
+                        <li><a href="partenaires.html" data-i18n="nav.partners">Partenariat</a></li>
                         <li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
                         <li><a href="emplois.html" data-i18n="nav.jobs.short">Emplois</a></li>
                     </ul>
