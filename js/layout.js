@@ -7,7 +7,17 @@
     const APP_URL = 'https://app.cashpay-all.com';
     const CHANNEL_URL = 'https://whatsapp.com/channel/0029VbC4htiHAdNTdwakAX1Y'; // chaîne WhatsApp CashPay All
 
-    window.CASHPAY = { WA_NUMBER, WA_DISPLAY, EMAIL, APP_URL, CHANNEL_URL };
+    window.CASHPAY = { WA_NUMBER, WA_DISPLAY, EMAIL, APP_URL, CHANNEL_URL, MAIN_API: APP_URL + '/api/main' };
+
+    if (window.I18N) I18N.extend({
+        'foot.services': 'Services & solutions', 'foot.financing': 'Financing & business',
+        'foot.company': 'About CashPay', 'foot.help': 'Help & information',
+        'foot.news.title': 'Keep up with CashPay All',
+        'foot.news.desc': 'News, practical guides and new services, delivered to your inbox.',
+        'foot.news.open': 'Subscribe to the newsletter', 'foot.news.manage': 'Newsletter & preferences',
+        'foot.articles': 'Articles & news', 'foot.guides': 'Financing & business guides',
+        'nav.admin.login': 'Sign in to administration'
+    });
 
     function headerHTML() {
         return `
@@ -21,6 +31,7 @@
                 <li><a href="ateliers.html" data-page-link="workshops" data-i18n="nav.workshops">Ateliers</a></li>
                 <li><a href="developpeurs.html" data-page-link="developers" data-i18n="nav.developers">Développeurs</a></li>
                 <li><a href="cartes-b2b.html" data-page-link="cards" data-i18n="nav.cards">Cartes B2B</a></li>
+                <li><a href="salaire.html" data-page-link="salary" data-i18n="nav.salary">Salaire</a></li>
                 <li class="has-dd">
                     <button type="button" aria-haspopup="true" aria-expanded="false">
                         <span data-i18n="nav.about">À propos</span> <i class="fa-solid fa-chevron-down chev" aria-hidden="true"></i>
@@ -40,7 +51,6 @@
                         </a>
                     </div>
                 </li>
-                <li><a href="salaire.html" data-page-link="salary" data-i18n="nav.salary">Salaire</a></li>
                 <li><a href="faq.html" data-page-link="faq" data-i18n="nav.faq">FAQ</a></li>
                 <li><a href="contact.html" data-page-link="contact" data-i18n="nav.contact">Contact</a></li>
             </ul>
@@ -50,6 +60,10 @@
                     <button type="button" data-lang="en">EN</button>
                 </div>
                 <a class="btn btn-primary" href="${APP_URL}" data-i18n="nav.open">Ouvrir un compte</a>
+                <a class="nav-admin-login" href="dashboard.html" title="Administration · Connexion / Sign in">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="3.2"></circle><path d="M5 21v-2a7 7 0 0 1 14 0v2"></path></svg>
+                    <span class="sr-only" data-i18n="nav.admin.login">Se connecter à l’administration</span>
+                </a>
                 <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Menu" aria-expanded="false">
                     <i class="fa-solid fa-bars" aria-hidden="true"></i>
                 </button>
@@ -60,27 +74,32 @@
     function footerHTML() {
         return `
         <div class="container">
-            <div class="footer-grid">
+            <section class="footer-newsletter" aria-labelledby="footer-news-title">
+                <div><span class="newsletter-eyebrow">CASHPAY ALL · NEWSLETTER</span><h2 id="footer-news-title" data-i18n="foot.news.title">Gardez le lien avec CashPay All</h2><p data-i18n="foot.news.desc">Actualités, conseils pratiques et nouveaux services, directement dans votre boîte mail.</p></div>
+                <div class="footer-newsletter-actions"><button type="button" class="btn btn-light" data-newsletter-open><i class="fa-regular fa-envelope" aria-hidden="true"></i><span data-i18n="foot.news.open">S'inscrire à la newsletter</span></button><a href="newsletter.html" data-i18n="foot.news.manage">Newsletter et préférences</a></div>
+            </section>
+            <div class="footer-grid footer-primary">
                 <div class="footer-brand">
                     <img class="footer-logo" src="public/images/logo.png" alt="CashPay All">
                     <p data-i18n="foot.desc">Le réseau financier numérique qui réduit le cash et connecte paiements, cartes, crypto et services développeurs. Une marque de FINUSECO SARL.</p>
                 </div>
                 <div class="footer-col">
-                    <h5 data-i18n="foot.explore">Explorer</h5>
+                    <h5 data-i18n="foot.services">Services et solutions</h5>
                     <ul>
                         <li><a href="services.html" data-i18n="nav.services">Services</a></li>
                         <li><a href="ateliers.html" data-i18n="nav.workshops">Ateliers</a></li>
                         <li><a href="developpeurs.html" data-i18n="nav.developers">Développeurs</a></li>
                         <li><a href="cartes-b2b.html" data-i18n="nav.cards">Cartes B2B</a></li>
-                        <li><a href="apropos.html" data-i18n="nav.about.app">L'application</a></li>
-                        <li><a href="entreprise.html" data-i18n="nav.about.co">L'entreprise FINUSECO</a></li>
                         <li><a href="salaire.html" data-i18n="nav.salary">Salaire</a></li>
-                        <li><a href="partenaires.html" data-i18n="nav.partners">Partenariat</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5 data-i18n="foot.financing">Financement et commerce</h5>
+                    <ul>
                         <li><a href="financement-pme.html" data-i18n="nav.fin.sme">Financement des PME</a></li>
-                        <li><a href="livraison-paiement.html" data-i18n="nav.fin.deliv">Livraisons et paiements</a></li>
                         <li><a href="financement-startups.html" data-i18n="nav.fin.startup">Financement des startups</a></li>
-                        <li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
-                        <li><a href="emplois.html" data-i18n="nav.jobs.short">Emplois</a></li>
+                        <li><a href="livraison-paiement.html" data-i18n="nav.fin.deliv">Livraisons et paiements</a></li>
+                        <li><a href="partenaires.html" data-i18n="nav.partners">Partenariat</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -89,17 +108,27 @@
                         <li><a href="${APP_URL}" data-i18n="foot.app">Application web</a></li>
                         <li><a href="https://developer.cashpay-all.com" data-i18n="foot.devportal">Portail développeurs</a></li>
                         <li><a href="index.html#download" data-i18n="foot.dl">Télécharger l'app</a></li>
-                        <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
+                        <li><a href="articles.html" data-i18n="foot.articles">Articles et actualités</a></li>
                     </ul>
                 </div>
-                <div class="footer-col footer-contact">
-                    <h5 data-i18n="foot.contact">Nous joindre</h5>
-                    <ul>
-                        <li><i class="fa-solid fa-envelope" aria-hidden="true"></i><a href="mailto:${EMAIL}">${EMAIL}</a></li>
-                        <li><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><a href="https://wa.me/${WA_NUMBER}" target="_blank" rel="noopener">${WA_DISPLAY}</a></li>
-                        <li><i class="fa-solid fa-globe" aria-hidden="true"></i><a href="https://www.cashpay-all.com">www.cashpay-all.com</a></li>
-                    </ul>
-                </div>
+            </div>
+            <div class="footer-grid footer-secondary">
+                <div class="footer-col"><h5 data-i18n="foot.company">À propos de CashPay</h5><ul>
+                    <li><a href="apropos.html" data-i18n="nav.about.app">L'application</a></li>
+                    <li><a href="entreprise.html" data-i18n="nav.about.co">L'entreprise FINUSECO</a></li>
+                    <li><a href="emplois.html" data-i18n="nav.jobs.short">Emplois</a></li>
+                </ul></div>
+                <div class="footer-col"><h5 data-i18n="foot.help">Aide et informations</h5><ul>
+                    <li><a href="faq.html" data-i18n="nav.faq">FAQ</a></li>
+                    <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
+                    <li><a href="articles.html#guides" data-i18n="foot.guides">Guides du financement et du commerce</a></li>
+                    <li><a href="newsletter.html" data-i18n="foot.news.manage">Newsletter et préférences</a></li>
+                </ul></div>
+                <div class="footer-col footer-contact"><h5 data-i18n="foot.contact">Nous joindre</h5><ul>
+                    <li><i class="fa-solid fa-envelope" aria-hidden="true"></i><a href="mailto:${EMAIL}">${EMAIL}</a></li>
+                    <li><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><a href="https://wa.me/${WA_NUMBER}" target="_blank" rel="noopener">${WA_DISPLAY}</a></li>
+                    <li><i class="fa-solid fa-globe" aria-hidden="true"></i><a href="https://www.cashpay-all.com">www.cashpay-all.com</a></li>
+                </ul></div>
             </div>
             <div class="footer-follow">
                 <h5 data-i18n="foot.follow">Suivez CashPay All</h5>
@@ -126,44 +155,19 @@
         </a>`;
     }
 
-    function popupHTML() {
-        return `<div class="welcome-pop" id="welcome-pop" role="dialog" aria-modal="true" aria-labelledby="welcome-title" hidden>
-            <div class="welcome-card">
-                <button type="button" class="welcome-close" id="welcome-close" aria-label="Fermer"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
-                <div class="welcome-ico"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
-                <h3 id="welcome-title" data-i18n="pop.title">Rejoignez la communauté CashPay All</h3>
-                <p data-i18n="pop.desc">Abonnez-vous d'abord à notre chaîne WhatsApp pour suivre nos nouveautés, nos offres et nos services, et écrivez-nous sur notre page WhatsApp pour toute question.</p>
-                <div class="welcome-btns">
-                    <a class="btn btn-wa" href="${CHANNEL_URL}" target="_blank" rel="noopener" data-welcome-go><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> <span data-i18n="pop.channel">Suivre la chaîne WhatsApp</span></a>
-                    <a class="btn btn-outline" href="https://wa.me/${WA_NUMBER}" target="_blank" rel="noopener" data-welcome-go><i class="fa-solid fa-comment-dots" aria-hidden="true"></i> <span data-i18n="pop.page">Écrire sur WhatsApp</span></a>
-                </div>
-                <button type="button" class="welcome-later" id="welcome-later" data-i18n="pop.later">Plus tard</button>
-            </div>
-        </div>`;
-    }
-
-    function initWelcome() {
-        const KEY = 'cashpay-welcome', DAYS = 7;
-        try { const t = parseInt(localStorage.getItem(KEY) || '0', 10); if (t && Date.now() - t < DAYS * 864e5) return; } catch (e) {}
-        if (!document.getElementById('welcome-pop')) document.body.insertAdjacentHTML('beforeend', popupHTML());
-        const pop = document.getElementById('welcome-pop');
-        let last = null;
-        function close() {
-            pop.classList.remove('show'); setTimeout(() => { pop.hidden = true; }, 300);
-            try { localStorage.setItem(KEY, String(Date.now())); } catch (e) {}
-            document.removeEventListener('keydown', onKey);
-            if (last && last.focus) last.focus();
+    function loadNewsletter() {
+        if (!document.getElementById('cashpay-newsletter-css')) {
+            const style = document.createElement('link');
+            style.id = 'cashpay-newsletter-css'; style.rel = 'stylesheet';
+            style.href = 'css/newsletter.css?v=20261118-newsletter-v1';
+            document.head.appendChild(style);
         }
-        function onKey(e) { if (e.key === 'Escape') close(); }
-        pop.addEventListener('click', e => { if (e.target === pop || e.target.closest('#welcome-close, #welcome-later, [data-welcome-go]')) close(); });
-        setTimeout(() => {
-            if (document.getElementById('welcome-pop') !== pop) return;
-            last = document.activeElement; pop.hidden = false;
-            if (window.I18N) I18N.apply(I18N.lang);
-            requestAnimationFrame(() => pop.classList.add('show'));
-            document.addEventListener('keydown', onKey);
-            const b = pop.querySelector('.btn'); if (b) b.focus();
-        }, 3500);
+        if (!document.getElementById('cashpay-newsletter-js')) {
+            const script = document.createElement('script');
+            script.id = 'cashpay-newsletter-js';
+            script.src = 'js/newsletter.js?v=20261118-newsletter-v1';
+            document.body.appendChild(script);
+        }
     }
 
     window.renderLayout = function () {
@@ -181,7 +185,7 @@
             const dd = document.querySelector('.has-dd > button');
             if (dd) dd.classList.add('active');
         }
-        initWelcome();
+        loadNewsletter();
         const y = document.getElementById('year');
         if (y) y.textContent = new Date().getFullYear();
     };
