@@ -3,7 +3,9 @@
 Cette application reste une vitrine statique, sans nouveau backend ni secret.
 Elle utilise `https://app.cashpay-all.com/api/main` dans CashPay Web.
 
-- `newsletter.html` : inscription et confirmation/désinscription par lien mail.
+- `newsletter.html` : inscription avec popup de réception ; confirmation automatique
+  depuis le lien mail avec popup de succès après validation serveur. La
+  désinscription garde une validation explicite.
 - `articles.html` : catalogue, recherche et filtres ; `article.html?slug=…` : lecture.
 - `index.html` : une seule publication récente ; liens vers le catalogue.
 - `dashboard.html` : accès par l’icône de connexion du menu, puis authentification administrateur Wallet ID → OTP → PIN, éditeur,

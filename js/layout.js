@@ -159,13 +159,13 @@
         if (!document.getElementById('cashpay-newsletter-css')) {
             const style = document.createElement('link');
             style.id = 'cashpay-newsletter-css'; style.rel = 'stylesheet';
-            style.href = 'css/newsletter.css?v=20261118-newsletter-v1';
+            style.href = 'css/newsletter.css?v=20261119-newsletter-feedback-v1';
             document.head.appendChild(style);
         }
         if (!document.getElementById('cashpay-newsletter-js')) {
             const script = document.createElement('script');
             script.id = 'cashpay-newsletter-js';
-            script.src = 'js/newsletter.js?v=20261118-newsletter-v1';
+            script.src = 'js/newsletter.js?v=20261119-newsletter-feedback-v1';
             document.body.appendChild(script);
         }
     }

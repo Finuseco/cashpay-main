@@ -12,10 +12,13 @@
             email: 'Votre adresse e-mail', placeholder: 'vous@exemple.com', consent: 'J’accepte de recevoir la newsletter CashPay All par e-mail.',
             privacy: 'Votre adresse sert uniquement à notre newsletter. Confirmez votre inscription par e-mail. Vous pourrez vous désinscrire à tout moment depuis chaque message.',
             subscribe: 'M’inscrire', later: 'Plus tard', close: 'Fermer la newsletter', sending: 'Envoi en cours…',
+            pendingTitle: 'Vérifiez votre boîte mail', confirmedTitle: 'Inscription confirmée !', unsubscribedTitle: 'Désinscription confirmée',
+            errorTitle: 'Une action est nécessaire', invalidTitle: 'Vérifiez votre inscription', understood: 'J’ai compris', retry: 'Réessayer',
+            confirming: 'Confirmation de votre inscription en cours…', readArticles: 'Découvrir nos publications',
             pending: 'Consultez votre boîte mail pour confirmer votre inscription. Pensez aussi aux courriers indésirables.',
-            error: 'L’inscription n’a pas pu aboutir. Réessayez dans un instant.', limited: 'Trop de demandes. Patientez quelques minutes avant de réessayer.',
+            error: 'Nous n’avons pas pu confirmer votre demande. Vérifiez votre boîte mail avant de réessayer dans un instant.', limited: 'Trop de demandes. Patientez quelques minutes avant de réessayer.',
             invalid: 'Renseignez une adresse e-mail valide et acceptez de recevoir la newsletter.',
-            confirmTitle: 'Confirmez votre inscription', confirmDescription: 'Un dernier clic pour recevoir les nouvelles de CashPay All.', confirm: 'Confirmer mon inscription',
+            confirmTitle: 'Confirmez votre inscription', confirmDescription: 'Nous vérifions votre lien pour confirmer votre inscription.', confirm: 'Confirmer mon inscription',
             confirmed: 'Votre inscription est confirmée. Bienvenue dans la newsletter CashPay All !',
             unsubscribeTitle: 'Gérer votre abonnement', unsubscribeDescription: 'Vous pouvez arrêter de recevoir la newsletter CashPay All avec le bouton ci-dessous.', unsubscribe: 'Me désinscrire',
             unsubscribed: 'Votre désinscription est confirmée. Vous ne recevrez plus notre newsletter.',
@@ -29,10 +32,13 @@
             email: 'Your email address', placeholder: 'you@example.com', consent: 'I agree to receive the CashPay All newsletter by email.',
             privacy: 'We use your address only for our newsletter. Confirm your subscription by email. You can unsubscribe at any time from any message.',
             subscribe: 'Subscribe', later: 'Maybe later', close: 'Close newsletter', sending: 'Sending…',
+            pendingTitle: 'Check your inbox', confirmedTitle: 'Subscription confirmed!', unsubscribedTitle: 'You have unsubscribed',
+            errorTitle: 'Please try again', invalidTitle: 'Check your subscription', understood: 'Got it', retry: 'Try again',
+            confirming: 'Confirming your subscription…', readArticles: 'Explore our publications',
             pending: 'Check your inbox to confirm your subscription. Please check your spam folder too.',
-            error: 'We couldn’t complete your subscription. Please try again shortly.', limited: 'Too many requests. Please wait a few minutes before trying again.',
+            error: 'We couldn’t confirm your request. Check your inbox before trying again shortly.', limited: 'Too many requests. Please wait a few minutes before trying again.',
             invalid: 'Enter a valid email address and agree to receive the newsletter.',
-            confirmTitle: 'Confirm your subscription', confirmDescription: 'One final click to receive news from CashPay All.', confirm: 'Confirm my subscription',
+            confirmTitle: 'Confirm your subscription', confirmDescription: 'We are checking your link to confirm your subscription.', confirm: 'Confirm my subscription',
             confirmed: 'Your subscription is confirmed. Welcome to the CashPay All newsletter!',
             unsubscribeTitle: 'Manage your subscription', unsubscribeDescription: 'Use the button below to stop receiving the CashPay All newsletter.', unsubscribe: 'Unsubscribe',
             unsubscribed: 'You have unsubscribed. You will no longer receive our newsletter.',
@@ -44,7 +50,7 @@
     };
     const language = () => document.documentElement.lang === 'en' ? 'en' : 'fr';
     const t = key => words[language()][key] || key;
-    let modal, previousFocus, savedOverflow = '', automaticTimer;
+    let modal, formView, noticeView, noticeTitle, noticeMessage, noticeButton, noticeRetry, previousFocus, savedOverflow = '', automaticTimer;
     const read = key => { try { return localStorage.getItem(key); } catch (_) { return null; } };
     const write = (key, value) => { try { localStorage.setItem(key, value); } catch (_) {} };
     const remove = key => { try { localStorage.removeItem(key); } catch (_) {} };
@@ -73,7 +79,7 @@
     }
     async function post(path, body) {
         const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 15000);
+        const timer = setTimeout(() => controller.abort(), 30000);
         try {
             const response = await fetch(API + path, {
                 method: 'POST', mode: 'cors', credentials: 'omit',
@@ -99,7 +105,8 @@
             email.value = email.value.trim();
             if (!email.checkValidity() || !form.elements.consent.checked) {
                 status(message, 'invalid', true);
-                (!email.checkValidity() ? email : form.elements.consent).focus();
+                const invalidField = !email.checkValidity() ? email : form.elements.consent;
+                showNotice('invalidTitle', 'invalid', true, invalidField, form);
                 return;
             }
             button.disabled = true; button.dataset.nl = 'sending'; button.textContent = t('sending');
@@ -109,22 +116,55 @@
                 status(message, 'pending', false);
                 form.reset();
                 write(CLOSED_KEY, String(Date.now()));
+                showNotice('pendingTitle', 'pending', false, button);
             } catch (error) {
-                status(message, error.status === 429 ? 'limited' : 'error', true);
+                const key = error.status === 429 ? 'limited' : 'error';
+                status(message, key, true);
+                showNotice('errorTitle', key, true, button, form);
             } finally {
                 button.disabled = false; button.dataset.nl = 'subscribe'; button.textContent = t('subscribe');
             }
         });
     }
-    function open(trigger) {
-        if (!modal || !modal.hidden) return;
+    function revealModal(trigger) {
         clearTimeout(automaticTimer);
-        previousFocus = trigger && trigger.focus ? trigger : document.activeElement;
-        savedOverflow = document.body.style.overflow;
-        modal.hidden = false;
-        document.body.style.overflow = 'hidden';
-        translate(modal);
+        if (modal.hidden) {
+            const outsideTrigger = trigger && trigger.focus && !modal.contains(trigger) ? trigger : null;
+            previousFocus = outsideTrigger || (previousFocus && previousFocus.isConnected && !modal.contains(previousFocus) ? previousFocus : document.activeElement);
+            savedOverflow = document.body.style.overflow;
+            modal.hidden = false;
+            document.body.style.overflow = 'hidden';
+        }
+        modal.scrollTop = 0;
+        const card = modal.querySelector('.newsletter-card');
+        if (card) card.scrollTop = 0;
+    }
+    function showForm() {
+        formView.hidden = false; noticeView.hidden = true; noticeRetry = null;
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-labelledby', 'newsletter-modal-title');
+        modal.setAttribute('aria-describedby', 'newsletter-modal-description');
+    }
+    function open(trigger) {
+        if (!modal) return;
+        showForm(); revealModal(trigger); translate(modal);
         modal.querySelector('input[type="email"]').focus();
+    }
+    function showNotice(titleKey, messageKey, error, trigger, retryForm) {
+        if (!modal) return;
+        revealModal(trigger);
+        formView.hidden = true; noticeView.hidden = false;
+        noticeView.classList.toggle('is-error', !!error);
+        noticeTitle.dataset.nl = titleKey; noticeMessage.dataset.nl = messageKey;
+        noticeRetry = error && retryForm && modal.contains(retryForm) ? trigger : null;
+        noticeButton.dataset.nl = noticeRetry ? 'retry' : 'understood';
+        modal.setAttribute('role', 'alertdialog');
+        modal.setAttribute('aria-labelledby', 'newsletter-notice-title');
+        modal.setAttribute('aria-describedby', 'newsletter-notice-description');
+        translate(modal);
+        noticeTitle.textContent = t(titleKey); noticeMessage.textContent = t(messageKey);
+        noticeButton.textContent = t(noticeButton.dataset.nl);
+        noticeTitle.focus();
     }
     function close() {
         if (!modal || modal.hidden) return;
@@ -137,12 +177,23 @@
         const holder = document.createElement('div');
         holder.innerHTML = `<div class="newsletter-modal" id="newsletter-modal" role="dialog" aria-modal="true" aria-labelledby="newsletter-modal-title" aria-describedby="newsletter-modal-description" hidden>
             <div class="newsletter-card"><button type="button" class="newsletter-close" data-newsletter-close data-nl-label="close"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
-            <span class="newsletter-symbol" aria-hidden="true"><i class="fa-regular fa-envelope"></i></span><span class="newsletter-eyebrow">CASHPAY ALL · NEWSLETTER</span>
+            <div data-newsletter-form-view><span class="newsletter-symbol" aria-hidden="true"><i class="fa-regular fa-envelope"></i></span><span class="newsletter-eyebrow">CASHPAY ALL · NEWSLETTER</span>
             <h2 id="newsletter-modal-title" data-nl="title"></h2><p id="newsletter-modal-description" data-nl="description"></p>
-            ${formHTML('newsletter-popup')}<button type="button" class="newsletter-later" data-newsletter-close data-nl="later"></button></div></div>`;
+            ${formHTML('newsletter-popup')}<button type="button" class="newsletter-later" data-newsletter-close data-nl="later"></button></div>
+            <div class="newsletter-notice" data-newsletter-notice hidden><span class="newsletter-notice-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"></path></svg><span class="newsletter-notice-error">!</span></span><span class="newsletter-eyebrow">CASHPAY ALL · NEWSLETTER</span>
+            <h2 id="newsletter-notice-title" data-newsletter-notice-title tabindex="-1"></h2><p id="newsletter-notice-description" data-newsletter-notice-message></p><button type="button" class="btn btn-primary" data-newsletter-notice-button></button></div></div></div>`;
         modal = holder.firstElementChild;
         document.body.appendChild(modal);
+        formView = modal.querySelector('[data-newsletter-form-view]');
+        noticeView = modal.querySelector('[data-newsletter-notice]');
+        noticeTitle = modal.querySelector('[data-newsletter-notice-title]');
+        noticeMessage = modal.querySelector('[data-newsletter-notice-message]');
+        noticeButton = modal.querySelector('[data-newsletter-notice-button]');
         bindForm(modal.querySelector('form'));
+        noticeButton.addEventListener('click', () => {
+            if (noticeRetry) { const target = noticeRetry; showForm(); target.focus(); }
+            else close();
+        });
         modal.addEventListener('click', event => {
             if (event.target === modal || event.target.closest('[data-newsletter-close]')) close();
         });
@@ -150,54 +201,96 @@
             if (modal.hidden) return;
             if (event.key === 'Escape') { event.preventDefault(); close(); return; }
             if (event.key !== 'Tab') return;
-            const items = [...modal.querySelectorAll('button:not([disabled]), input:not([tabindex="-1"]):not([disabled]), a[href]')].filter(el => !el.hidden);
+            const items = [...modal.querySelectorAll('button:not([disabled]), input:not([tabindex="-1"]):not([disabled]), a[href]')].filter(el => !el.hidden && !el.closest('[hidden]'));
             const first = items[0], last = items[items.length - 1];
+            if (!first) return;
             if (event.shiftKey && (document.activeElement === first || !modal.contains(document.activeElement))) { event.preventDefault(); last.focus(); }
             else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
         });
         document.addEventListener('focusin', event => {
-            if (!modal.hidden && !modal.contains(event.target)) modal.querySelector('input[type="email"]').focus();
+            if (!modal.hidden && !modal.contains(event.target)) {
+                (noticeView.hidden ? modal.querySelector('input[type="email"]') : noticeTitle).focus();
+            }
         });
     }
     function renderPage() {
         const root = document.querySelector('[data-newsletter-page]');
         if (!root) return;
-        root.innerHTML = `<div class="newsletter-page-card"><span class="newsletter-symbol" aria-hidden="true"><i class="fa-regular fa-envelope"></i></span><div data-newsletter-action hidden><h2 data-newsletter-action-title></h2><p data-newsletter-action-description></p><button type="button" class="btn btn-primary" data-newsletter-action-button></button><p class="newsletter-status" data-newsletter-action-status role="status" aria-live="polite" aria-atomic="true" hidden></p><hr></div><h2 data-nl="newSubscription"></h2>${formHTML('newsletter-page')}<a href="contact.html" class="newsletter-help" data-nl="help"></a></div>`;
+        root.innerHTML = `<div class="newsletter-page-card"><span class="newsletter-symbol" aria-hidden="true"><i class="fa-regular fa-envelope"></i></span><div data-newsletter-action hidden><h2 data-newsletter-action-title tabindex="-1"></h2><p data-newsletter-action-description></p><button type="button" class="btn btn-primary" data-newsletter-action-button></button><p class="newsletter-status" data-newsletter-action-status role="status" aria-live="polite" aria-atomic="true" hidden></p><a class="btn btn-primary newsletter-read-link" href="articles.html" data-newsletter-read data-nl="readArticles" hidden></a><hr></div><div data-newsletter-page-signup><h2 data-nl="newSubscription"></h2>${formHTML('newsletter-page')}</div><a href="contact.html" class="newsletter-help" data-nl="help"></a></div>`;
         bindForm(root.querySelector('form'));
         const params = new URLSearchParams(window.location.search);
         const action = params.get('action');
         if (action !== 'confirm' && action !== 'unsubscribe') return;
         let fragmentToken = '';
         try { fragmentToken = decodeURIComponent(window.location.hash.slice(1)); } catch (_) {}
-        const token = fragmentToken || params.get('token') || '';
-        // Keep bearer tokens out of the visible URL once the page has read them.
+        let token = fragmentToken || params.get('token') || '';
+        // Read the capability once, then remove it before any API request.
         const privateURL = new URL(window.location.href); privateURL.searchParams.delete('token'); privateURL.hash = '';
         window.history.replaceState(null, '', privateURL.pathname + privateURL.search);
         const block = root.querySelector('[data-newsletter-action]');
         const button = block.querySelector('button');
         const message = block.querySelector('[data-newsletter-action-status]');
+        const heading = block.querySelector('[data-newsletter-action-title]');
+        const description = block.querySelector('[data-newsletter-action-description]');
         block.hidden = false;
-        block.querySelector('[data-newsletter-action-title]').dataset.nl = action + 'Title';
-        block.querySelector('[data-newsletter-action-description]').dataset.nl = action + 'Description';
+        heading.dataset.nl = action + 'Title'; description.dataset.nl = action + 'Description';
         button.dataset.nl = action;
-        if (token.length < 20 || token.length > 2048 || /\s/.test(token)) { button.hidden = true; status(message, 'tokenError', true); return; }
-        button.addEventListener('click', async () => {
-            if (button.disabled) return;
-            button.disabled = true;
+        if (!/^[A-Za-z0-9_-]{43}$/.test(token)) {
+            button.hidden = true; status(message, 'tokenError', true);
+            showNotice('errorTitle', 'tokenError', true, heading); return;
+        }
+        let busy = false, completed = false;
+        const executeAction = async () => {
+            if (busy || completed) return;
+            busy = true; button.disabled = true;
+            block.setAttribute('aria-busy', 'true');
             button.dataset.nl = 'sending'; button.textContent = t('sending');
+            if (action === 'confirm') status(message, 'confirming', false);
             try {
-                await post('/newsletter/' + action, { token });
-                status(message, action === 'confirm' ? 'confirmed' : 'unsubscribed', false);
-                if (action === 'confirm') write(SUBSCRIBED_KEY, '1'); else remove(SUBSCRIBED_KEY);
+                const result = await post('/newsletter/' + action, { token });
+                if (result.status !== (action === 'confirm' ? 'active' : 'unsubscribed')) throw new Error('invalid_result');
+                completed = true; token = '';
+                const titleKey = action === 'confirm' ? 'confirmedTitle' : 'unsubscribedTitle';
+                const messageKey = action === 'confirm' ? 'confirmed' : 'unsubscribed';
+                heading.dataset.nl = titleKey; heading.textContent = t(titleKey);
+                description.dataset.nl = messageKey; description.textContent = t(messageKey);
+                status(message, messageKey, false);
+                if (action === 'confirm') {
+                    write(SUBSCRIBED_KEY, '1');
+                    const signup = root.querySelector('[data-newsletter-page-signup]'); if (signup) signup.hidden = true;
+                    const readLink = root.querySelector('[data-newsletter-read]'); if (readLink) readLink.hidden = false;
+                } else remove(SUBSCRIBED_KEY);
                 write(CLOSED_KEY, String(Date.now()));
                 button.hidden = true;
-                const clean = new URL(window.location.href); clean.searchParams.delete('token'); clean.searchParams.delete('action');
-                window.history.replaceState(null, '', clean.pathname + clean.search + clean.hash);
+                const clean = new URL(window.location.href); clean.searchParams.delete('token'); clean.searchParams.delete('action'); clean.hash = '';
+                window.history.replaceState(null, '', clean.pathname + clean.search);
+                showNotice(titleKey, messageKey, false, heading);
             } catch (error) {
-                status(message, [400, 404, 410].includes(error.status) ? 'tokenError' : 'actionError', true);
-                button.disabled = false; button.dataset.nl = action; button.textContent = t(action);
+                const invalidToken = [400, 404, 410].includes(error.status);
+                const messageKey = invalidToken ? 'tokenError' : 'actionError';
+                status(message, messageKey, true);
+                button.hidden = invalidToken;
+                button.disabled = false; button.dataset.nl = 'retry'; button.textContent = t('retry');
+                showNotice('errorTitle', messageKey, true, heading);
+            } finally {
+                busy = false; block.setAttribute('aria-busy', 'false');
             }
-        });
+        };
+        button.addEventListener('click', executeAction);
+        // An email confirmation link validates immediately when actually opened.
+        // Prefetched/prerendered or background pages wait until visible. Unsubscribe
+        // always keeps its explicit confirmation button.
+        if (action === 'confirm') {
+            const confirmWhenVisible = () => {
+                if (document.hidden || document.prerendering) return;
+                document.removeEventListener('visibilitychange', confirmWhenVisible);
+                document.removeEventListener('prerenderingchange', confirmWhenVisible);
+                executeAction();
+            };
+            document.addEventListener('visibilitychange', confirmWhenVisible);
+            document.addEventListener('prerenderingchange', confirmWhenVisible);
+            confirmWhenVisible();
+        }
     }
     function init() {
         createModal(); renderPage(); translate();
