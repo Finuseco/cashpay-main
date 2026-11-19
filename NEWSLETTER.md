@@ -6,7 +6,7 @@ Elle utilise `https://app.cashpay-all.com/api/main` dans CashPay Web.
 - `newsletter.html` : inscription et confirmation/désinscription par lien mail.
 - `articles.html` : catalogue, recherche et filtres ; `article.html?slug=…` : lecture.
 - `index.html` : une seule publication récente ; liens vers le catalogue.
-- `dashboard.html` : accès administrateur Wallet ID → OTP → PIN, éditeur,
+- `dashboard.html` : accès par l’icône de connexion du menu, puis authentification administrateur Wallet ID → OTP → PIN, éditeur,
   publications programmées, suivi des newsletters, contacts et réponses.
 - Footer partagé : services/financement/écosystème, puis entreprise/aide/FAQ,
   avec accès permanent à la newsletter. Popup accessible après 6 secondes,

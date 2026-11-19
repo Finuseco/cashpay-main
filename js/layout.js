@@ -15,7 +15,8 @@
         'foot.news.title': 'Keep up with CashPay All',
         'foot.news.desc': 'News, practical guides and new services, delivered to your inbox.',
         'foot.news.open': 'Subscribe to the newsletter', 'foot.news.manage': 'Newsletter & preferences',
-        'foot.articles': 'Articles & news', 'foot.guides': 'Financing & business guides'
+        'foot.articles': 'Articles & news', 'foot.guides': 'Financing & business guides',
+        'nav.admin.login': 'Sign in to administration'
     });
 
     function headerHTML() {
@@ -59,6 +60,10 @@
                     <button type="button" data-lang="en">EN</button>
                 </div>
                 <a class="btn btn-primary" href="${APP_URL}" data-i18n="nav.open">Ouvrir un compte</a>
+                <a class="nav-admin-login" href="dashboard.html" title="Administration · Connexion / Sign in">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="3.2"></circle><path d="M5 21v-2a7 7 0 0 1 14 0v2"></path></svg>
+                    <span class="sr-only" data-i18n="nav.admin.login">Se connecter à l’administration</span>
+                </a>
                 <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Menu" aria-expanded="false">
                     <i class="fa-solid fa-bars" aria-hidden="true"></i>
                 </button>
